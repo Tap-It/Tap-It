@@ -85,6 +85,7 @@ extension ColorServiceManager: MCNearbyServiceAdvertiserDelegate {
 		invitationHandler(isPeerOlder, self.session)
 		if isPeerOlder {
 			print(#line, "accepting invitation from \(peerID)")
+			self.browser.stopBrowsingForPeers()
 		}
 		invitationHandler(true, self.session)
 	}

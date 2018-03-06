@@ -13,6 +13,7 @@
 		7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED62204F43E7004815B5 /* Assets.xcassets */; };
 		7A57ED66204F43E7004815B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */; };
 		7A57ED71204F43E7004815B5 /* Tap_ItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */; };
+		7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		7A57ED6C204F43E7004815B5 /* Tap-ItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tap-ItTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap_ItTests.swift; sourceTree = "<group>"; };
 		7A57ED72204F43E7004815B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorServiceManagerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
 				7A57ED5D204F43E7004815B5 /* ViewController.swift */,
+				7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
 				7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */,
@@ -201,6 +204,7 @@
 			files = (
 				7A57ED5E204F43E7004815B5 /* ViewController.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
+				7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,6 +4,7 @@ import MultipeerConnectivity
 
 protocol ButtonGameServiceDelegate {
 	func addData(manager: ButtonGameService, dataString: String)
+	func updateRandom(manager: ButtonGameService, dataString: String)
 	func updateData(manager: ButtonGameService, dataString: String)
 }
 
@@ -12,6 +13,7 @@ class ButtonGameService: NSObject {
 	enum Event: String {
 		case Add = "Add",
 		HostAdd = "HostAdd",
+		Random = "Random",
 		Update = "Update"
 	}
 	
@@ -165,6 +167,9 @@ extension ButtonGameService: MCSessionDelegate {
 				replicateData["replicate"] = "replicate"
 				replicateData["data"] = result["data"]!
 				self.replicateToHost(peerData: replicateData)
+			}
+			if result["event"] == Event.Random.rawValue {
+				self.delegate?.updateRandom(manager: self, dataString: result["data"]!)
 			}
 		}
 	}

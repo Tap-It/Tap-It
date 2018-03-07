@@ -19,8 +19,14 @@ class ButtonsViewController: UIViewController {
     }
 	
 	private func generateNumber() {
-		let random = arc4random_uniform(8)+1
-		self.randomLabel.text = String(random)
+		if self.buttonGame.isHost {
+			let random = arc4random_uniform(8)+1
+			self.randomLabel.text = String(random)
+			var data = [String:String]()
+			data["event"] = ButtonGameService.Event.Random.rawValue
+			data["data"] = String(random)
+			buttonGame.send(peerData: data)
+		}
 	}
 	
 	
@@ -30,17 +36,17 @@ class ButtonsViewController: UIViewController {
 			let name = buttonGame.myPeerId.displayName
 			var data = [String:String]()
 			if buttonGame.isHost {
-				data["event"] = ColorServiceManager.Event.HostAdd.rawValue
+				data["event"] = ButtonGameService.Event.HostAdd.rawValue
 				buttonGame.didUpdate = false
 			} else {
-				data["event"] =  ColorServiceManager.Event.Add.rawValue
+				data["event"] =  ButtonGameService.Event.Add.rawValue
 			}
 			data["data"] = name
 			buttonGame.send(peerData: data)
+//			self.generateNumber()
 		} else {
 			print("wrong")
 		}
-		self.generateNumber()
 	}
 }
 
@@ -48,16 +54,23 @@ extension ButtonsViewController: ButtonGameServiceDelegate {
 	
 	func addData(manager: ButtonGameService, dataString: String) {
 		OperationQueue.main.addOperation {
-			var data: [String:String] = ["event": ColorServiceManager.Event.Update.rawValue]
+			var data: [String:String] = ["event": ButtonGameService.Event.Update.rawValue]
 			data ["data"] = dataString
 			self.buttonGame.send(peerData: data)
 			self.winnerLabel.text = dataString
+			self.generateNumber()
 		}
 	}
 	
 	func updateData(manager: ButtonGameService, dataString: String) {
 		OperationQueue.main.addOperation {
 			self.winnerLabel.text = dataString
+		}
+	}
+	
+	func updateRandom(manager: ButtonGameService, dataString: String) {
+		OperationQueue.main.addOperation {
+			self.randomLabel.text = dataString
 		}
 	}
 }

@@ -25,7 +25,12 @@ class ViewController: UIViewController {
     @IBAction func addTapped() {
         let peerName = colorService.session.myPeerID.displayName
         let string = "\(peerName) - \(Date())"
-        var data: [String:String] = ["event": ColorServiceManager.Event.Add.rawValue]
+		var data = [String:String]()
+		if colorService.isHost {
+			data["event"] = ColorServiceManager.Event.HostAdd.rawValue
+		} else {
+			data["event"] = ColorServiceManager.Event.Add.rawValue
+		}
         data["data"] = string
         colorService.send(peerData: data)
     }
@@ -56,6 +61,7 @@ extension ViewController : ColorServiceManagerDelegate {
             data ["data"] = dataString
             
             self.colorService.send(peerData: data)
+			self.data.insert(dataString, at: 0)
         }
     }
 

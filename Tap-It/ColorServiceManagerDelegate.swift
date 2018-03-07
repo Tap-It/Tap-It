@@ -12,6 +12,7 @@ class ColorServiceManager: NSObject {
 	
     enum Event: String {
         case Add = "Add",
+		     HostAdd = "HostAdd",
              Update = "Update"
     }
 
@@ -22,6 +23,7 @@ class ColorServiceManager: NSObject {
 	var sessionInitTime = Date()
 	var delegate: ColorServiceManagerDelegate?
 	var isHost = true
+	var hostID: MCPeerID!
 	
 	lazy var session: MCSession = {
 		let session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
@@ -62,8 +64,6 @@ class ColorServiceManager: NSObject {
         if session.connectedPeers.count > 0 {
             do {
                 let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-//                var peerIds = session.connectedPeers
-//                peerIds.append(myPeerId)
                 try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
             }
             catch let error {
@@ -71,6 +71,18 @@ class ColorServiceManager: NSObject {
             }
         }
     }
+	func replicateToHost(peerData: [String:String]) {
+		NSLog("peerData: \(peerData) to \(session.connectedPeers.count) peers")
+//		if session.connectedPeers.count > 0 {
+			do {
+				let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+				try self.session.send(data, toPeers: [self.hostID], with: .reliable)
+			}
+			catch let error {
+				NSLog("Error for sending: \(error)")
+			}
+//		}
+	}
 
 }
 
@@ -97,6 +109,7 @@ extension ColorServiceManager: MCNearbyServiceAdvertiserDelegate {
 			print(#line, "accepting invitation from \(peerID)")
 			self.browser.stopBrowsingForPeers()
             self.isHost = false
+			self.hostID = peerID
 		}
 //        invitationHandler(true, self.session)
 	}
@@ -141,7 +154,9 @@ extension ColorServiceManager: MCSessionDelegate {
             if result["event"] == Event.Update.rawValue {
                 self.delegate?.updateData(manager: self, dataString: result["data"]!)
             }
-
+			if result["event"] == Event.HostAdd.rawValue {
+				
+			}
         }
 	}
 	

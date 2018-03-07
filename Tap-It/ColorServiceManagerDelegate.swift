@@ -155,6 +155,7 @@ extension ColorServiceManager: MCSessionDelegate {
 				} else {
 					if !self.didUpdate {
 						self.delegate?.addData(manager: self, dataString: result["data"]!)
+						self.didUpdate = true
 					}
 				}
             }

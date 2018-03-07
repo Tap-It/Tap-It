@@ -4,6 +4,7 @@ import MultipeerConnectivity
 protocol ColorServiceManagerDelegate {
 	func connectedDevicesChanged(manager : ColorServiceManager, connectedDevices: [String])
 	func colorChanged(manager : ColorServiceManager, colorString: String)
+    func addData(manager: ColorServiceManager, dataString: String)
 }
 
 class ColorServiceManager: NSObject {
@@ -61,7 +62,19 @@ class ColorServiceManager: NSObject {
 			}
 		}
 	}
-	
+
+    func send(peerData: String) {
+        NSLog("peerData: \(peerData) to \(session.connectedPeers.count) peers")
+        if session.connectedPeers.count > 0 && self.isHost {
+            do {
+                try self.session.send(peerData.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
+            }
+            catch let error {
+                NSLog("Error for sending: \(error)")
+            }
+        }
+    }
+
 }
 
 extension ColorServiceManager: MCNearbyServiceAdvertiserDelegate {
@@ -124,7 +137,8 @@ extension ColorServiceManager: MCSessionDelegate {
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
 		print("didReceiveData: \(data)")
 		let str = String(data: data, encoding: .utf8)!
-		self.delegate?.colorChanged(manager: self, colorString: str)
+		//self.delegate?.colorChanged(manager: self, colorString: str)
+        self.delegate?.addData(manager: self, dataString: str)
 	}
 	
 	func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

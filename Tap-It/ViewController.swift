@@ -17,7 +17,14 @@ class ViewController: UIViewController {
 		// Dispose of any resources that can be recreated.
 	}
 	
-	@IBAction func yellowTapped() {
+    @IBAction func addTapped() {
+        let date = Date()
+        let peerName = colorService.session.myPeerID.displayName
+        let string = "\(peerName) - \(date)"
+        colorService.send(peerData: string)
+    }
+    
+    @IBAction func yellowTapped() {
 		self.change(color: .yellow)
 		colorService.send(colorName: "yellow")
 	}
@@ -39,7 +46,10 @@ extension ViewController : ColorServiceManagerDelegate {
 	
 	func connectedDevicesChanged(manager: ColorServiceManager, connectedDevices: [String]) {
 		OperationQueue.main.addOperation {
-			self.data = connectedDevices
+            for device in connectedDevices {
+                self.data.append(device)
+            }
+//            self.data = connectedDevices
 			self.tableView.reloadData()
 		}
 	}
@@ -56,6 +66,13 @@ extension ViewController : ColorServiceManagerDelegate {
 			}
 		}
 	}
+    
+    func addData(manager: ColorServiceManager, dataString: String) {
+        OperationQueue.main.addOperation {
+            self.data.append(dataString)
+            self.tableView.reloadData()
+        }
+    }
 	
 }
 
@@ -68,6 +85,7 @@ extension ViewController: UITableViewDataSource {
 		let selected = self.data[indexPath.row]
 		let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 		cell.textLabel?.text = selected
+//        cell.backgroundColor = UIColor.random()
 		return cell
 	}
 }

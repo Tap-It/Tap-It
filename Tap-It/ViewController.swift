@@ -28,8 +28,10 @@ class ViewController: UIViewController {
 		var data = [String:String]()
 		if colorService.isHost {
 			data["event"] = ColorServiceManager.Event.HostAdd.rawValue
+			colorService.didUpdate = false
+			data["replicate"] = "replicate"
 		} else {
-			data["event"] = ColorServiceManager.Event.Add.rawValue
+			data["event"] =  ColorServiceManager.Event.Add.rawValue
 		}
         data["data"] = string
         colorService.send(peerData: data)

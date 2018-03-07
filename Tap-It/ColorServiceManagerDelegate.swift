@@ -23,6 +23,7 @@ class ColorServiceManager: NSObject {
 	var sessionInitTime = Date()
 	var delegate: ColorServiceManagerDelegate?
 	var isHost = true
+	var didUpdate = true
 	var hostID: MCPeerID!
 	
 	lazy var session: MCSession = {

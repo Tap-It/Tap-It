@@ -29,7 +29,6 @@ class ViewController: UIViewController {
 		if colorService.isHost {
 			data["event"] = ColorServiceManager.Event.HostAdd.rawValue
 			colorService.didUpdate = false
-			data["replicate"] = "replicate"
 		} else {
 			data["event"] =  ColorServiceManager.Event.Add.rawValue
 		}

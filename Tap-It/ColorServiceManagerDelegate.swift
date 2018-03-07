@@ -150,7 +150,13 @@ extension ColorServiceManager: MCSessionDelegate {
 		print("didReceiveData: \(data)")
         if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:String] {
             if result["event"] == Event.Add.rawValue && isHost {
-                self.delegate?.addData(manager: self, dataString: result["data"]!)
+				if result.count == 2 {
+					self.delegate?.addData(manager: self, dataString: result["data"]!)
+				} else {
+					if !self.didUpdate {
+						self.delegate?.addData(manager: self, dataString: result["data"]!)
+					}
+				}
             }
             if result["event"] == Event.Update.rawValue {
                 self.delegate?.updateData(manager: self, dataString: result["data"]!)
@@ -158,6 +164,7 @@ extension ColorServiceManager: MCSessionDelegate {
 			if result["event"] == Event.HostAdd.rawValue {
 				var replicateData = [String:String]()
 				replicateData["event"] = ColorServiceManager.Event.Add.rawValue
+				replicateData["replicate"] = "replicate"
 				replicateData["data"] = result["data"]!
 				self.replicateToHost(peerData: replicateData)
 			}

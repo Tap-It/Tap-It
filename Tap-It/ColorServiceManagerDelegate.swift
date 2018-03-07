@@ -1,21 +1,27 @@
 import Foundation
 import MultipeerConnectivity
 
+
 protocol ColorServiceManagerDelegate {
 	func connectedDevicesChanged(manager : ColorServiceManager, connectedDevices: [String])
-	func colorChanged(manager : ColorServiceManager, colorString: String)
     func addData(manager: ColorServiceManager, dataString: String)
+    func updateData(manager: ColorServiceManager, dataString: String)
 }
 
 class ColorServiceManager: NSObject {
 	
-	private let ClickServiceType = "example-click"
+    enum Event: String {
+        case Add = "Add",
+             Update = "Update"
+    }
+
+    private let ClickServiceType = "example-click"
 	private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
 	private let service: MCNearbyServiceAdvertiser
 	private let browser: MCNearbyServiceBrowser
 	var sessionInitTime = Date()
 	var delegate: ColorServiceManagerDelegate?
-	var isHost = false
+	var isHost = true
 	
 	lazy var session: MCSession = {
 		let session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
@@ -51,23 +57,14 @@ class ColorServiceManager: NSObject {
 		self.browser.startBrowsingForPeers()
 	}
 	
-	func send(colorName : String) {
-		NSLog("sendColor: \(colorName) to \(session.connectedPeers.count) peers")
-		if session.connectedPeers.count > 0 {
-			do {
-				try self.session.send(colorName.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
-			}
-			catch let error {
-				NSLog("Error for sending: \(error)")
-			}
-		}
-	}
-
-    func send(peerData: String) {
+    func send(peerData: [String:String]) {
         NSLog("peerData: \(peerData) to \(session.connectedPeers.count) peers")
-        if session.connectedPeers.count > 0 && self.isHost {
+        if session.connectedPeers.count > 0 {
             do {
-                try self.session.send(peerData.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
+                let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+//                var peerIds = session.connectedPeers
+//                peerIds.append(myPeerId)
+                try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
             }
             catch let error {
                 NSLog("Error for sending: \(error)")
@@ -99,8 +96,9 @@ extension ColorServiceManager: MCNearbyServiceAdvertiserDelegate {
 		if isPeerOlder {
 			print(#line, "accepting invitation from \(peerID)")
 			self.browser.stopBrowsingForPeers()
+            self.isHost = false
 		}
-		invitationHandler(true, self.session)
+//        invitationHandler(true, self.session)
 	}
 }
 
@@ -136,9 +134,15 @@ extension ColorServiceManager: MCSessionDelegate {
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
 		print("didReceiveData: \(data)")
-		let str = String(data: data, encoding: .utf8)!
-		//self.delegate?.colorChanged(manager: self, colorString: str)
-        self.delegate?.addData(manager: self, dataString: str)
+        if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:String] {
+            if result["event"] == Event.Add.rawValue && isHost {
+                self.delegate?.addData(manager: self, dataString: result["data"]!)
+            }
+            if result["event"] == Event.Update.rawValue {
+                self.delegate?.updateData(manager: self, dataString: result["data"]!)
+            }
+
+        }
 	}
 	
 	func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

@@ -2,7 +2,12 @@ import UIKit
 
 class ViewController: UIViewController {
 	
-	var data = [String]()
+    var data = [String]() {
+        didSet {
+            let indexPath = IndexPath(item: 0, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.top)
+        }
+    }
 	let colorService = ColorServiceManager()
 	
 	@IBOutlet weak var tableView: UITableView!
@@ -18,21 +23,12 @@ class ViewController: UIViewController {
 	}
 	
     @IBAction func addTapped() {
-        let date = Date()
         let peerName = colorService.session.myPeerID.displayName
-        let string = "\(peerName) - \(date)"
-        colorService.send(peerData: string)
+        let string = "\(peerName) - \(Date())"
+        var data: [String:String] = ["event": ColorServiceManager.Event.Add.rawValue]
+        data["data"] = string
+        colorService.send(peerData: data)
     }
-    
-    @IBAction func yellowTapped() {
-		self.change(color: .yellow)
-		colorService.send(colorName: "yellow")
-	}
-	
-	@IBAction func redTapped() {
-		self.change(color: .red)
-		colorService.send(colorName: "red")
-	}
 	
 	func change(color : UIColor) {
 		UIView.animate(withDuration: 0.2) {
@@ -53,27 +49,22 @@ extension ViewController : ColorServiceManagerDelegate {
 			self.tableView.reloadData()
 		}
 	}
-	
-	func colorChanged(manager: ColorServiceManager, colorString: String) {
-		OperationQueue.main.addOperation {
-			switch colorString {
-			case "red":
-				self.change(color: .red)
-			case "yellow":
-				self.change(color: .yellow)
-			default:
-				NSLog("%@", "Unknown color value received: \(colorString)")
-			}
-		}
-	}
     
     func addData(manager: ColorServiceManager, dataString: String) {
         OperationQueue.main.addOperation {
-            self.data.append(dataString)
-            self.tableView.reloadData()
+            var data: [String:String] = ["event": ColorServiceManager.Event.Update.rawValue]
+            data ["data"] = dataString
+            
+            self.colorService.send(peerData: data)
         }
     }
-	
+
+    func updateData(manager: ColorServiceManager, dataString: String) {
+        OperationQueue.main.addOperation {
+            self.data.insert(dataString, at: 0)
+        }
+    }
+
 }
 
 extension ViewController: UITableViewDataSource {

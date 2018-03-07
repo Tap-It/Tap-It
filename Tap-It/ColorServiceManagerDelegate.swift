@@ -155,7 +155,10 @@ extension ColorServiceManager: MCSessionDelegate {
                 self.delegate?.updateData(manager: self, dataString: result["data"]!)
             }
 			if result["event"] == Event.HostAdd.rawValue {
-				
+				var replicateData = [String:String]()
+				replicateData["event"] = ColorServiceManager.Event.Add.rawValue
+				replicateData["data"] = result["data"]!
+				self.replicateToHost(peerData: replicateData)
 			}
         }
 	}

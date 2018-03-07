@@ -16,7 +16,7 @@ class ButtonGameService: NSObject {
 	}
 	
 	private let ClickServiceType = "button-game"
-	private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
+	let myPeerId = MCPeerID(displayName: UIDevice.current.name)
 	private let service: MCNearbyServiceAdvertiser
 	private let browser: MCNearbyServiceBrowser
 	var sessionInitTime = Date()

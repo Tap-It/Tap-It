@@ -9,6 +9,7 @@ class ButtonsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		self.generateNumber()
+		buttonGame.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -26,6 +27,16 @@ class ButtonsViewController: UIViewController {
 	@IBAction func handleClick(_ sender: UIButton) {
 		if sender.titleLabel?.text == self.randomLabel.text {
 			print("correct")
+			let name = buttonGame.myPeerId.displayName
+			var data = [String:String]()
+			if buttonGame.isHost {
+				data["event"] = ColorServiceManager.Event.HostAdd.rawValue
+				buttonGame.didUpdate = false
+			} else {
+				data["event"] =  ColorServiceManager.Event.Add.rawValue
+			}
+			data["data"] = name
+			buttonGame.send(peerData: data)
 		} else {
 			print("wrong")
 		}

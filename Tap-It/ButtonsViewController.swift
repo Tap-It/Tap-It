@@ -61,7 +61,9 @@ class ButtonsViewController: UIViewController {
 	
 	func updateButton(button: UIButton) {
 		let pos = Int(arc4random_uniform(UInt32(numbers.count)))
-		button.titleLabel?.text = numbers[pos]
+//		button.titleLabel?.text = numbers[pos]
+		button.setTitle(numbers[pos], for: .normal)
+		print(numbers[pos])
 		numbers.remove(at: pos)
 	}
 }

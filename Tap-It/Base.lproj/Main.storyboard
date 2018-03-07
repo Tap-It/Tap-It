@@ -212,6 +212,12 @@
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5mE-vB-A4h">
+                                <rect key="frame" x="16" y="374" width="343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -219,7 +225,11 @@
                             <constraint firstItem="qOI-3o-oS4" firstAttribute="leading" secondItem="ZKk-Z1-8Z0" secondAttribute="leading" constant="16" id="73w-dB-gYj"/>
                             <constraint firstItem="wJr-oH-G3B" firstAttribute="leading" secondItem="ZKk-Z1-8Z0" secondAttribute="leading" constant="16" id="BbX-Ua-gpk"/>
                             <constraint firstItem="ZKk-Z1-8Z0" firstAttribute="trailing" secondItem="wJr-oH-G3B" secondAttribute="trailing" constant="16" id="BmE-qm-8WE"/>
+                            <constraint firstItem="wJr-oH-G3B" firstAttribute="top" secondItem="5mE-vB-A4h" secondAttribute="bottom" constant="132" id="Chf-JR-An8"/>
                             <constraint firstItem="qOI-3o-oS4" firstAttribute="top" secondItem="zGa-C0-Y26" secondAttribute="bottom" constant="8" id="Clr-rp-1uz"/>
+                            <constraint firstItem="5mE-vB-A4h" firstAttribute="leading" secondItem="ZKk-Z1-8Z0" secondAttribute="leading" constant="16" id="HTP-w2-VPu"/>
+                            <constraint firstItem="ZKk-Z1-8Z0" firstAttribute="trailing" secondItem="5mE-vB-A4h" secondAttribute="trailing" constant="16" id="LWL-Pf-Kvi"/>
+                            <constraint firstItem="5mE-vB-A4h" firstAttribute="top" secondItem="8rH-Bk-abg" secondAttribute="bottom" constant="94" id="Lyj-hh-DK9"/>
                             <constraint firstItem="8rH-Bk-abg" firstAttribute="centerX" secondItem="ZKk-Z1-8Z0" secondAttribute="centerX" id="OBw-vO-iVP"/>
                             <constraint firstItem="ZKk-Z1-8Z0" firstAttribute="bottom" secondItem="qOI-3o-oS4" secondAttribute="bottom" constant="32" id="YWz-Uc-cgp"/>
                             <constraint firstItem="8rH-Bk-abg" firstAttribute="top" secondItem="ZKk-Z1-8Z0" secondAttribute="top" constant="87" id="b3M-Id-8bX"/>
@@ -228,6 +238,7 @@
                     </view>
                     <connections>
                         <outlet property="randomLabel" destination="8rH-Bk-abg" id="tQH-D1-cXN"/>
+                        <outlet property="winnerLabel" destination="5mE-vB-A4h" id="dSM-HU-iAc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="puH-uy-qca" userLabel="First Responder" sceneMemberID="firstResponder"/>

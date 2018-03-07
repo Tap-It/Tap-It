@@ -15,6 +15,7 @@
 		7A57ED71204F43E7004815B5 /* Tap_ItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */; };
 		7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */; };
 		7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */; };
+		7A57ED8020508060004815B5 /* ButtonGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7F20508060004815B5 /* ButtonGameService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		7A57ED72204F43E7004815B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorServiceManagerDelegate.swift; sourceTree = "<group>"; };
 		7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
+		7A57ED7F20508060004815B5 /* ButtonGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGameService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
 				7A57ED5D204F43E7004815B5 /* ViewController.swift */,
 				7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */,
+				7A57ED7F20508060004815B5 /* ButtonGameService.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
@@ -209,6 +212,7 @@
 				7A57ED5E204F43E7004815B5 /* ViewController.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
 				7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */,
+				7A57ED8020508060004815B5 /* ButtonGameService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

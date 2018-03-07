@@ -2,7 +2,10 @@ import UIKit
 
 class ButtonsViewController: UIViewController {
 
+	@IBOutlet weak var winnerLabel: UILabel!
 	@IBOutlet weak var randomLabel: UILabel!
+	let buttonGame = ButtonGameService()
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		self.generateNumber()
@@ -27,5 +30,23 @@ class ButtonsViewController: UIViewController {
 			print("wrong")
 		}
 		self.generateNumber()
+	}
+}
+
+extension ButtonsViewController: ButtonGameServiceDelegate {
+	
+	func addData(manager: ButtonGameService, dataString: String) {
+		OperationQueue.main.addOperation {
+			var data: [String:String] = ["event": ColorServiceManager.Event.Update.rawValue]
+			data ["data"] = dataString
+			self.buttonGame.send(peerData: data)
+			self.winnerLabel.text = dataString
+		}
+	}
+	
+	func updateData(manager: ButtonGameService, dataString: String) {
+		OperationQueue.main.addOperation {
+			self.winnerLabel.text = dataString
+		}
 	}
 }

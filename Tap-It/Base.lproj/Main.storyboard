@@ -237,6 +237,14 @@
                         <viewLayoutGuide key="safeArea" id="ZKk-Z1-8Z0"/>
                     </view>
                     <connections>
+                        <outlet property="button1" destination="zGa-C0-Y26" id="DHS-3t-k0p"/>
+                        <outlet property="button2" destination="zFg-sP-FJx" id="0PQ-dr-5ux"/>
+                        <outlet property="button3" destination="Ai8-Gh-ZXr" id="xvD-RF-mDq"/>
+                        <outlet property="button4" destination="X98-jp-ROz" id="PSh-zd-8e2"/>
+                        <outlet property="button5" destination="fLe-nL-uYr" id="HS2-40-Nwl"/>
+                        <outlet property="button6" destination="Txb-G3-DQJ" id="WZh-fu-8vg"/>
+                        <outlet property="button7" destination="fCM-NB-kAK" id="iZG-4S-eNd"/>
+                        <outlet property="button8" destination="Xwo-PM-9Qy" id="g8s-tx-ziA"/>
                         <outlet property="randomLabel" destination="8rH-Bk-abg" id="tQH-D1-cXN"/>
                         <outlet property="winnerLabel" destination="5mE-vB-A4h" id="dSM-HU-iAc"/>
                     </connections>

@@ -6,6 +6,7 @@ protocol ButtonGameServiceDelegate {
 	func addData(manager: ButtonGameService, dataString: String)
 	func updateRandom(manager: ButtonGameService, dataString: String)
 	func updateData(manager: ButtonGameService, dataString: String)
+	func generateNumber()
 }
 
 class ButtonGameService: NSObject {
@@ -143,6 +144,7 @@ extension ButtonGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		print("peer: \(peerID), didChangeState: \(state)")
+		self.delegate?.generateNumber()
 	}
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {

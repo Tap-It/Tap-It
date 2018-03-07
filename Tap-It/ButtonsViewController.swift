@@ -18,16 +18,7 @@ class ButtonsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 	
-	private func generateNumber() {
-		if self.buttonGame.isHost {
-			let random = arc4random_uniform(8)+1
-			self.randomLabel.text = String(random)
-			var data = [String:String]()
-			data["event"] = ButtonGameService.Event.Random.rawValue
-			data["data"] = String(random)
-			buttonGame.send(peerData: data)
-		}
-	}
+
 	
 	
 	@IBAction func handleClick(_ sender: UIButton) {
@@ -59,6 +50,17 @@ extension ButtonsViewController: ButtonGameServiceDelegate {
 			self.buttonGame.send(peerData: data)
 			self.winnerLabel.text = dataString
 			self.generateNumber()
+		}
+	}
+	
+	func generateNumber() {
+		if self.buttonGame.isHost {
+			let random = arc4random_uniform(8)+1
+			self.randomLabel.text = String(random)
+			var data = [String:String]()
+			data["event"] = ButtonGameService.Event.Random.rawValue
+			data["data"] = String(random)
+			buttonGame.send(peerData: data)
 		}
 	}
 	

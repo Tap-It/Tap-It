@@ -48,17 +48,10 @@ class ButtonsViewController: UIViewController {
 }
 
 extension ButtonsViewController: GameManagerProtocol {
-    func addData(dataString: String) {
-        
+    func updateWinner(dataString: String) {
+        winnerLabel.text = dataString
     }
     
-    func updateData(dataString: String) {
-        
-    }
-    
-    func updateRandom(dataString: String) {
-        
-    }
     
     
 }

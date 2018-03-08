@@ -8,15 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		071716962051D7770089A340 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716952051D7770089A340 /* GameManager.swift */; };
+		071716982051E4970089A340 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716972051E4970089A340 /* GameService.swift */; };
 		7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED5B204F43E7004815B5 /* AppDelegate.swift */; };
-		7A57ED5E204F43E7004815B5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED5D204F43E7004815B5 /* ViewController.swift */; };
 		7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED5F204F43E7004815B5 /* Main.storyboard */; };
 		7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED62204F43E7004815B5 /* Assets.xcassets */; };
 		7A57ED66204F43E7004815B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */; };
 		7A57ED71204F43E7004815B5 /* Tap_ItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */; };
-		7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */; };
 		7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */; };
-		7A57ED8020508060004815B5 /* ButtonGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7F20508060004815B5 /* ButtonGameService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,9 +29,9 @@
 
 /* Begin PBXFileReference section */
 		071716952051D7770089A340 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		071716972051E4970089A340 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		7A57ED58204F43E7004815B5 /* Tap-It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tap-It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED5B204F43E7004815B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7A57ED5D204F43E7004815B5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7A57ED60204F43E7004815B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7A57ED62204F43E7004815B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A57ED65204F43E7004815B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,9 +39,7 @@
 		7A57ED6C204F43E7004815B5 /* Tap-ItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tap-ItTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap_ItTests.swift; sourceTree = "<group>"; };
 		7A57ED72204F43E7004815B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorServiceManagerDelegate.swift; sourceTree = "<group>"; };
 		7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
-		7A57ED7F20508060004815B5 /* ButtonGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGameService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,9 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
-				7A57ED5D204F43E7004815B5 /* ViewController.swift */,
-				7A57ED7B204F4418004815B5 /* ColorServiceManagerDelegate.swift */,
-				7A57ED7F20508060004815B5 /* ButtonGameService.swift */,
+				071716972051E4970089A340 /* GameService.swift */,
 				071716952051D7770089A340 /* GameManager.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */,
@@ -212,11 +206,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */,
+				071716982051E4970089A340 /* GameService.swift in Sources */,
 				071716962051D7770089A340 /* GameManager.swift in Sources */,
-				7A57ED5E204F43E7004815B5 /* ViewController.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
-				7A57ED7C204F4418004815B5 /* ColorServiceManagerDelegate.swift in Sources */,
-				7A57ED8020508060004815B5 /* ButtonGameService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

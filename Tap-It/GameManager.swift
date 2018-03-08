@@ -1,9 +1,12 @@
 import Foundation
 
 protocol GameManagerProtocol {
-    func addData(dataString: String)
-    func updateData(dataString: String)
-    func updateRandom(dataString: String)
+    func updateWinner(dataString: String)
+}
+
+protocol ServiceProtocol {
+    func send(_ data: [String:String])
+    func setDelegate(_ gameManager: GameManager)
 }
 
 class GameManager {
@@ -16,6 +19,12 @@ class GameManager {
     
     var question: String!
     var delegate: GameManagerProtocol?
+    let service: ServiceProtocol
+    
+    init() {
+        self.service = GameService()
+        self.service.setDelegate(self)
+    }
     
     func checkAnswer(_ answer: String) {
         if answer == question {
@@ -24,7 +33,7 @@ class GameManager {
             var data = [String:String]()
             data["event"] = Event.Click.rawValue
             data["data"] = name
-//            service.send(data)
+            service.send(data)
         } else {
             print("wrong. blocked!")
         }
@@ -40,7 +49,19 @@ class GameManager {
         }
         return numbers
     }
-
-
-
 }
+
+extension GameManager: GameServiceDelegate {
+    func receive(_ data: [String : String]) {
+        if data["event"] == Event.Click.rawValue {
+            if let winner = data["data"] {
+                delegate?.updateWinner(dataString: winner)
+            }
+        }
+    }
+}
+
+
+
+
+

@@ -52,7 +52,9 @@ extension ButtonsViewController: GameManagerProtocol {
         winnerLabel.text = dataString
     }
     
-    
+    func updateQuestion(question: String) {
+        randomLabel.text = question
+    }
     
 }
 

@@ -2,6 +2,7 @@ import Foundation
 
 protocol GameManagerProtocol {
     func updateWinner(dataString: String)
+    func updateQuestion(question: String)
 }
 
 protocol ServiceProtocol {
@@ -9,13 +10,13 @@ protocol ServiceProtocol {
     func setDelegate(_ gameManager: GameManager)
 }
 
+enum Event: String {
+    case Click = "Click",
+    Update = "Update"
+}
+
 class GameManager {
     
-    enum Event: String {
-        case Click = "Click",
-        Random = "Random",
-        Update = "Update"
-    }
     
     var question: String!
     var delegate: GameManagerProtocol?
@@ -39,6 +40,14 @@ class GameManager {
         }
     }
     
+    private func generateRandomQuestion() -> [String:String] {
+        let random = arc4random_uniform(8)+1
+        var data = [String:String]()
+        data["event"] = Event.Update.rawValue
+        data["data"] = String(random)
+        return data
+    }
+    
     func randomButtons() -> [String] {
         var answers = ["1","2","3","4","5","6","7","8"]
         var numbers = [String]()
@@ -56,6 +65,12 @@ extension GameManager: GameServiceDelegate {
         if data["event"] == Event.Click.rawValue {
             if let winner = data["data"] {
                 delegate?.updateWinner(dataString: winner)
+                service.send(generateRandomQuestion())
+            }
+        }
+        if data["event"] == Event.Update.rawValue {
+            if let question = data["data"] {
+                delegate?.updateQuestion(question: question)
             }
         }
     }

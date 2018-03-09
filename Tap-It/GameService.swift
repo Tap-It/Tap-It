@@ -46,16 +46,15 @@ class GameService: NSObject {
         self.browser.stopBrowsingForPeers()
     }
     
-    //    func replicateToHost(peerData: [String:String]) {
-    //        NSLog("peerData: \(peerData) to \(session.connectedPeers.count) peers")
-    //        do {
-    //            let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-    //            try self.session.send(data, toPeers: [self.hostID], with: .reliable)
-    //        }
-    //        catch let error {
-    //            NSLog("Error for sending: \(error)")
-    //        }
-    //    }
+    private func replicateFromHost(_ peerData: [String:String]) {
+        do {
+            let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+            try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        }
+        catch let error {
+            NSLog("Error for sending: \(error)")
+        }
+    }
     
 }
 
@@ -84,7 +83,6 @@ extension GameService: MCNearbyServiceAdvertiserDelegate {
             self.isHost = false
             self.hostID = peerID
         }
-        //        invitationHandler(true, self.session)
     }
 }
 
@@ -95,16 +93,34 @@ extension GameService: ServiceProtocol {
     }
     
     func send(_ peerData: [String:String]) {
-        if !isHost {
-            do {
-                let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-                try self.session.send(data, toPeers: [hostID], with: .reliable)
+        let event = peerData["event"]!
+        switch event {
+        case Event.Click.rawValue:
+                if !isHost {
+                    do {
+                        let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+                        try self.session.send(data, toPeers: [hostID], with: .reliable)
+                    }
+                    catch let error {
+                        NSLog("Error for sending: \(error)")
+                    }
+                }
+                else {
+                    delegate?.receive(peerData)
             }
-            catch let error {
-                NSLog("Error for sending: \(error)")
+        case Event.Update.rawValue:
+            if isHost {
+                do {
+                    let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+                    try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+                    delegate?.receive(peerData)
+                }
+                catch let error {
+                    NSLog("Error for sending: \(error)")
+                }
             }
-        } else {
-            delegate?.receive(peerData)
+        default:
+            return
         }
     }
     
@@ -136,7 +152,6 @@ extension GameService: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer: \(peerID), didChangeState: \(state)")
-//        self.delegate?.generateNumber()
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -145,36 +160,11 @@ extension GameService: MCSessionDelegate {
         
         if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:String] {
             if isHost {
-                send(result)
+                self.replicateFromHost(result)
             }
             delegate?.receive(result)
         }
-        
-        
-//            if result["event"] == Event.Add.rawValue && isHost {
-//                if result.count == 2 {
-//                    self.delegate?.addData(manager: self, dataString: result["data"]!)
-//                } else {
-//                    if !self.didUpdate {
-//                        self.delegate?.addData(manager: self, dataString: result["data"]!)
-//                        self.didUpdate = true
-//                    }
-//                }
-//            }
-//            if result["event"] == Event.Update.rawValue {
-//                self.delegate?.updateData(manager: self, dataString: result["data"]!)
-//            }
-//            if result["event"] == Event.HostAdd.rawValue {
-//                var replicateData = [String:String]()
-//                replicateData["event"] = ColorServiceManager.Event.Add.rawValue
-//                replicateData["replicate"] = "replicate"
-//                replicateData["data"] = result["data"]!
-//                self.replicateToHost(peerData: replicateData)
-//            }
-//            if result["event"] == Event.Random.rawValue {
-//                self.delegate?.updateRandom(manager: self, dataString: result["data"]!)
-//            }
-//        }
+
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

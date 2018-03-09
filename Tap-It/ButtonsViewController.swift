@@ -54,6 +54,7 @@ extension ButtonsViewController: GameManagerProtocol {
     
     func updateQuestion(question: String) {
         randomLabel.text = question
+        updateButtons()
     }
     
 }

@@ -74,6 +74,10 @@ extension GameManager: GameServiceDelegate {
             }
         }
     }
+    
+    func startGame() {
+        service.send(generateRandomQuestion())
+    }
 }
 
 

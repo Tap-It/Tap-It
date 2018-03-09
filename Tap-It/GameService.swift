@@ -8,6 +8,7 @@ protocol GameServiceDelegate {
 //    func updateData(manager: GameService, dataString: String)
 //    func generateNumber()
     func receive(_ data: [String:String])
+    func startGame()
 }
 
 class GameService: NSObject {
@@ -152,6 +153,9 @@ extension GameService: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer: \(peerID), didChangeState: \(state)")
+        if isHost {
+            delegate?.startGame()
+        }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {

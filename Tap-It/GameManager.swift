@@ -1,7 +1,7 @@
 import Foundation
 
 protocol GameManagerProtocol {
-    func updateWinner(dataString: String)
+	func updateScoreboard(scoreboard: [String])
     func updateQuestion(question: String)
 }
 
@@ -13,15 +13,27 @@ protocol ServiceProtocol {
 
 enum Event: String {
     case Click = "Click",
-    Update = "Update"
+    Update = "Update",
+	Score = "Score"
 }
 
 class GameManager {
     
-    
     var question: String!
     var delegate: GameManagerProtocol?
     let service: ServiceProtocol
+	var scoreBoard = [String:Int]() {
+		didSet {
+			var data = [String:String]()
+			data["event"] = Event.Score.rawValue
+			for (player, score) in scoreBoard {
+				let bundleScore = "\(player): \(score)"
+				data[player] = bundleScore
+			}
+			service.send(data)
+		}
+	}
+	var backupScore = [String:Int]()
     
     init() {
         self.service = GameService()
@@ -59,26 +71,60 @@ class GameManager {
         }
         return numbers
     }
+	
+	private func updateScore(winner: String) {
+		if self.scoreBoard.keys.contains(winner) {
+			self.scoreBoard[winner] = self.scoreBoard[winner]! + 1
+		}
+	}
 }
 
 extension GameManager: GameServiceDelegate {
+	
+	func addPlayer(player: String) {
+		if !self.scoreBoard.keys.contains(player) {
+			self.scoreBoard[player] = self.backupScore.keys.contains(player) ? self.backupScore[player]! : 0
+		}
+	}
+	
+	func removePlayer(player: String) {
+		if self.scoreBoard.keys.contains(player) {
+			if self.scoreBoard[player]! > 0 {
+				self.backupScore[player] = self.scoreBoard[player]!
+			}
+			self.scoreBoard.removeValue(forKey: player)
+		}
+	}
+	
     func receive(_ data: [String : String]) {
-        if data["event"] == Event.Click.rawValue {
-            if let winner = data["data"] {
-                DispatchQueue.main.async {
-                    self.delegate?.updateWinner(dataString: winner)
-                }
-                service.send(generateRandomQuestion())
-            }
-        }
-        if data["event"] == Event.Update.rawValue {
-            if let question = data["data"] {
-                DispatchQueue.main.async {
-                    self.delegate?.updateQuestion(question: question)
-                    self.question = question
-                }
-            }
-        }
+		let event = data["event"]!
+		switch event {
+		case Event.Click.rawValue:
+			if let winner = data["data"] {
+				self.updateScore(winner: winner)
+				service.send(generateRandomQuestion())
+			}
+		case Event.Update.rawValue:
+			if let question = data["data"] {
+				DispatchQueue.main.async {
+					self.delegate?.updateQuestion(question: question)
+					self.question = question
+				}
+			}
+		case Event.Score.rawValue:
+			var scoreDisplay = [String]()
+			for (player, score) in data {
+				if player == "event" {continue}
+				scoreDisplay.append(score)
+			}
+			if scoreDisplay.count > 0 {
+				DispatchQueue.main.async {
+					self.delegate?.updateScoreboard(scoreboard: scoreDisplay)
+				}
+			}
+		default:
+			return
+		}
     }
     
     func startGame() {

@@ -4,7 +4,7 @@ class ButtonsViewController: UIViewController {
 
     let gameManager = GameManager()
     
-	@IBOutlet weak var winnerLabel: UILabel!
+	@IBOutlet weak var scoreTableView: UITableView!
 	@IBOutlet weak var randomLabel: UILabel!
 	
 	@IBOutlet weak var button1: UIButton!
@@ -16,6 +16,11 @@ class ButtonsViewController: UIViewController {
 	@IBOutlet weak var button7: UIButton!
 	@IBOutlet weak var button8: UIButton!
 	
+	var scoreBoard = [String]() {
+		didSet {
+			self.scoreTableView.reloadData()
+		}
+	}
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,54 +53,27 @@ class ButtonsViewController: UIViewController {
 }
 
 extension ButtonsViewController: GameManagerProtocol {
-    func updateWinner(dataString: String) {
-        winnerLabel.text = dataString
-    }
-    
+	func updateScoreboard(scoreboard: [String]) {
+		self.scoreBoard = scoreboard
+	}
+	
     func updateQuestion(question: String) {
         randomLabel.text = question
         updateButtons()
     }
-    
 }
 
-//extension ButtonsViewController: ButtonGameServiceDelegate {
-//
-//    func addData(manager: ButtonGameService, dataString: String) {
-//        OperationQueue.main.addOperation {
-//            var data: [String:String] = ["event": ButtonGameService.Event.Update.rawValue]
-//            data ["data"] = dataString
-//            self.buttonGame.send(peerData: data)
-//            self.winnerLabel.text = dataString
-//            self.generateNumber()
-//        }
-//    }
-//
-//    func generateNumber() {
-//        OperationQueue.main.addOperation {
-//            if self.buttonGame.isHost {
-//                let random = arc4random_uniform(8)+1
-//                self.randomLabel.text = String(random)
-//                var data = [String:String]()
-//                data["event"] = ButtonGameService.Event.Random.rawValue
-//                data["data"] = String(random)
-//                self.buttonGame.send(peerData: data)
-//                self.randomButtons()
-//            }
-//        }
-//    }
-//
-//    func updateData(manager: ButtonGameService, dataString: String) {
-//        OperationQueue.main.addOperation {
-//            self.winnerLabel.text = dataString
-//        }
-//    }
-//
-//    func updateRandom(manager: ButtonGameService, dataString: String) {
-//        OperationQueue.main.addOperation {
-//            self.randomLabel.text = dataString
-//            self.randomButtons()
-//        }
-//    }
-//}
-
+extension ButtonsViewController: UITableViewDataSource {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return self.scoreBoard.count
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let score = self.scoreBoard[indexPath.row]
+		let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+		cell.textLabel?.text = score
+		return cell
+	}
+	
+	
+}

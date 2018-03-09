@@ -3,18 +3,13 @@ import MultipeerConnectivity
 
 
 protocol GameServiceDelegate {
-    //    func addData(manager: GameService, dataString: String)
-    //    func updateRandom(manager: GameService, dataString: String)
-    //    func updateData(manager: GameService, dataString: String)
-    //    func generateNumber()
     func receive(_ data: [String:String])
     func startGame()
+	func addPlayer(player: String)
+	func removePlayer(player: String)
 }
 
 class GameService: NSObject {
-    
-    
-    // toDo: se nao for host, enviar dados somente para o host
     
     private let ClickServiceType = "button-game"
     let myPeerId = MCPeerID(displayName: UIDevice.current.name)
@@ -65,8 +60,6 @@ extension GameService: MCNearbyServiceAdvertiserDelegate {
         print("didNotStartAdvertisingPeer \(error)")
     }
     
-    //    This code accepts all incoming connections automatically.
-    //    To keep sessions private the user should be notified and asked to confirm incoming connections. This can be implemented using the MCAdvertiserAssistant classes.
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         print("didReceiveInvitationFromPeer \(peerID)")
         var hostTimer = TimeInterval()
@@ -124,6 +117,19 @@ extension GameService: ServiceProtocol {
                     NSLog("Error for sending: \(error)")
                 }
             }
+			
+		case Event.Score.rawValue:
+			if isHost {
+				do {
+					let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+					delegate?.receive(peerData)
+				}
+				catch let error {
+					NSLog("Error for sending: \(error)")
+				}
+			}
+			
         default:
             return
         }
@@ -139,6 +145,7 @@ extension GameService: MCNearbyServiceBrowserDelegate {
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         print("lostPeer \(peerID)")
+		delegate?.removePlayer(player: peerID.displayName)
     }
     
     //    This code invites any peer automatically. The MCBrowserViewController class could be used to scan for peers and invite them manually.
@@ -164,6 +171,7 @@ extension GameService: MCSessionDelegate {
         if isHost {
             delegate?.startGame()
         }
+		delegate?.addPlayer(player: peerID.displayName)
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {

@@ -8,6 +8,7 @@ protocol GameManagerProtocol {
 protocol ServiceProtocol {
     func send(_ data: [String:String])
     func setDelegate(_ gameManager: GameManager)
+    func getName() -> String
 }
 
 enum Event: String {
@@ -30,7 +31,7 @@ class GameManager {
     func checkAnswer(_ answer: String) {
         if answer == question {
             // get my name from the gameservice
-            let name = "nameFromGameService"
+            let name = service.getName()
             var data = [String:String]()
             data["event"] = Event.Click.rawValue
             data["data"] = name

@@ -129,6 +129,10 @@ extension GameService: ServiceProtocol {
         }
     }
     
+    func getName() -> String {
+        return myPeerId.displayName
+    }
+    
 }
 
 extension GameService: MCNearbyServiceBrowserDelegate {

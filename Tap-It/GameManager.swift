@@ -38,6 +38,7 @@ class GameManager {
     init() {
         self.service = GameService()
         self.service.setDelegate(self)
+		self.addPlayer(player: service.getName())
     }
     
     func checkAnswer(_ answer: String) {

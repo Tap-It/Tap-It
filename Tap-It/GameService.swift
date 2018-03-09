@@ -111,11 +111,11 @@ extension GameService: ServiceProtocol {
                 do {
                     let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
                     try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
-                    delegate?.receive(peerData)
                 }
                 catch let error {
                     NSLog("Error for sending: \(error)")
                 }
+				delegate?.receive(peerData)
             }
 			
 		case Event.Score.rawValue:
@@ -123,11 +123,11 @@ extension GameService: ServiceProtocol {
 				do {
 					let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
 					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
-					delegate?.receive(peerData)
 				}
 				catch let error {
 					NSLog("Error for sending: \(error)")
 				}
+				delegate?.receive(peerData)
 			}
 			
         default:

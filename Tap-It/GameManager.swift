@@ -64,13 +64,17 @@ extension GameManager: GameServiceDelegate {
     func receive(_ data: [String : String]) {
         if data["event"] == Event.Click.rawValue {
             if let winner = data["data"] {
-                delegate?.updateWinner(dataString: winner)
+                DispatchQueue.main.async {
+                    self.delegate?.updateWinner(dataString: winner)
+                }
                 service.send(generateRandomQuestion())
             }
         }
         if data["event"] == Event.Update.rawValue {
             if let question = data["data"] {
-                delegate?.updateQuestion(question: question)
+                DispatchQueue.main.async {
+                    self.delegate?.updateQuestion(question: question)
+                }
             }
         }
     }

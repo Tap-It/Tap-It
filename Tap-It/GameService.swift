@@ -3,10 +3,10 @@ import MultipeerConnectivity
 
 
 protocol GameServiceDelegate {
-//    func addData(manager: GameService, dataString: String)
-//    func updateRandom(manager: GameService, dataString: String)
-//    func updateData(manager: GameService, dataString: String)
-//    func generateNumber()
+    //    func addData(manager: GameService, dataString: String)
+    //    func updateRandom(manager: GameService, dataString: String)
+    //    func updateData(manager: GameService, dataString: String)
+    //    func generateNumber()
     func receive(_ data: [String:String])
     func startGame()
 }
@@ -97,18 +97,22 @@ extension GameService: ServiceProtocol {
         let event = peerData["event"]!
         switch event {
         case Event.Click.rawValue:
-                if !isHost {
-                    do {
-                        let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-                        try self.session.send(data, toPeers: [hostID], with: .reliable)
-                    }
-                    catch let error {
-                        NSLog("Error for sending: \(error)")
-                    }
-                }
-                else {
-                    delegate?.receive(peerData)
+            var peers = [MCPeerID]()
+            if !isHost {
+                peers = [hostID]
+            } else {
+                peers = session.connectedPeers
+                delegate?.receive(peerData)
             }
+            
+            do {
+                let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+                try self.session.send(data, toPeers: peers, with: .reliable)
+            }
+            catch let error {
+                NSLog("Error for sending: \(error)")
+            }
+            
         case Event.Update.rawValue:
             if isHost {
                 do {
@@ -168,7 +172,7 @@ extension GameService: MCSessionDelegate {
             }
             delegate?.receive(result)
         }
-
+        
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

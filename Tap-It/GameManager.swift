@@ -74,6 +74,7 @@ extension GameManager: GameServiceDelegate {
             if let question = data["data"] {
                 DispatchQueue.main.async {
                     self.delegate?.updateQuestion(question: question)
+                    self.question = question
                 }
             }
         }

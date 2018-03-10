@@ -71,7 +71,6 @@
 		7A57ED4F204F43E7004815B5 = {
 			isa = PBXGroup;
 			children = (
-				079CD92420534FF000CF91DD /* FigureGameService.swift */,
 				7A57ED5A204F43E7004815B5 /* Tap-It */,
 				7A57ED6F204F43E7004815B5 /* Tap-ItTests */,
 				7A57ED59204F43E7004815B5 /* Products */,
@@ -96,6 +95,7 @@
 				079CD91E20531A2C00CF91DD /* Card.swift */,
 				079CD92220534DF200CF91DD /* FigureGameManager.swift */,
 				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
+				079CD92420534FF000CF91DD /* FigureGameService.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,

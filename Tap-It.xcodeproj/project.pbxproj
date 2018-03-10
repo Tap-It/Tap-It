@@ -93,6 +93,7 @@
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
 				071716972051E4970089A340 /* GameService.swift */,
 				071716952051D7770089A340 /* GameManager.swift */,
+				079CD91E20531A2C00CF91DD /* Card.swift */,
 				079CD92220534DF200CF91DD /* FigureGameManager.swift */,
 				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
@@ -100,7 +101,6 @@
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
 				7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */,
 				7A57ED67204F43E7004815B5 /* Info.plist */,
-				079CD91E20531A2C00CF91DD /* Card.swift */,
 			);
 			path = "Tap-It";
 			sourceTree = "<group>";

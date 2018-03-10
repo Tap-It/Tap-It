@@ -9,7 +9,7 @@
 import UIKit
 
 class FigureViewController: UIViewController {
-
+    
     @IBOutlet weak var figure0: UIImageView!
     @IBOutlet weak var figure1: UIImageView!
     @IBOutlet weak var figure2: UIImageView!
@@ -25,20 +25,23 @@ class FigureViewController: UIViewController {
         super.viewDidLoad()
         
         gameManager.delegate = self
-
+        
     }
-
+    
 }
 
 extension FigureViewController : FigureProtocol {
     func updateDeck(_ card: Card) {
-        figure0.image = card.face[0].loadImage()
-        figure0.image = card.face[1].loadImage()
-        figure0.image = card.face[2].loadImage()
-        figure0.image = card.face[3].loadImage()
-        figure0.image = card.face[4].loadImage()
-        figure0.image = card.face[5].loadImage()
-        figure0.image = card.face[6].loadImage()
-        figure0.image = card.face[7].loadImage()
+        DispatchQueue.main.async {
+            self.figure0.image = card.face[0].loadImage()
+            self.figure1.image = card.face[1].loadImage()
+            self.figure2.image = card.face[2].loadImage()
+            self.figure3.image = card.face[3].loadImage()
+            self.figure4.image = card.face[4].loadImage()
+            self.figure5.image = card.face[5].loadImage()
+            self.figure6.image = card.face[6].loadImage()
+            self.figure7.image = card.face[7].loadImage()
+        }
+        
     }
 }

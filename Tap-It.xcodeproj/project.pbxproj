@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		071716962051D7770089A340 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716952051D7770089A340 /* GameManager.swift */; };
 		071716982051E4970089A340 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716972051E4970089A340 /* GameService.swift */; };
+		079CD91F20531A2C00CF91DD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD91E20531A2C00CF91DD /* Card.swift */; };
+		079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92020534ADC00CF91DD /* FigureViewController.swift */; };
+		079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92220534DF200CF91DD /* FigureGameManager.swift */; };
+		079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92420534FF000CF91DD /* FigureGameService.swift */; };
 		7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED5B204F43E7004815B5 /* AppDelegate.swift */; };
 		7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED5F204F43E7004815B5 /* Main.storyboard */; };
 		7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED62204F43E7004815B5 /* Assets.xcassets */; };
@@ -30,6 +34,10 @@
 /* Begin PBXFileReference section */
 		071716952051D7770089A340 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		071716972051E4970089A340 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
+		079CD91E20531A2C00CF91DD /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		079CD92020534ADC00CF91DD /* FigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureViewController.swift; sourceTree = "<group>"; };
+		079CD92220534DF200CF91DD /* FigureGameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameManager.swift; sourceTree = "<group>"; };
+		079CD92420534FF000CF91DD /* FigureGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameService.swift; sourceTree = "<group>"; };
 		7A57ED58204F43E7004815B5 /* Tap-It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tap-It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED5B204F43E7004815B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A57ED60204F43E7004815B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,6 +71,7 @@
 		7A57ED4F204F43E7004815B5 = {
 			isa = PBXGroup;
 			children = (
+				079CD92420534FF000CF91DD /* FigureGameService.swift */,
 				7A57ED5A204F43E7004815B5 /* Tap-It */,
 				7A57ED6F204F43E7004815B5 /* Tap-ItTests */,
 				7A57ED59204F43E7004815B5 /* Products */,
@@ -84,11 +93,14 @@
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
 				071716972051E4970089A340 /* GameService.swift */,
 				071716952051D7770089A340 /* GameManager.swift */,
+				079CD92220534DF200CF91DD /* FigureGameManager.swift */,
+				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
 				7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */,
 				7A57ED67204F43E7004815B5 /* Info.plist */,
+				079CD91E20531A2C00CF91DD /* Card.swift */,
 			);
 			path = "Tap-It";
 			sourceTree = "<group>";
@@ -207,8 +219,12 @@
 			files = (
 				7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */,
 				071716982051E4970089A340 /* GameService.swift in Sources */,
+				079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */,
+				079CD91F20531A2C00CF91DD /* Card.swift in Sources */,
 				071716962051D7770089A340 /* GameManager.swift in Sources */,
+				079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
+				079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,20 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		071716962051D7770089A340 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716952051D7770089A340 /* GameManager.swift */; };
-		071716982051E4970089A340 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071716972051E4970089A340 /* GameService.swift */; };
 		079CD91F20531A2C00CF91DD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD91E20531A2C00CF91DD /* Card.swift */; };
 		079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92020534ADC00CF91DD /* FigureViewController.swift */; };
 		079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92220534DF200CF91DD /* FigureGameManager.swift */; };
 		079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92420534FF000CF91DD /* FigureGameService.swift */; };
 		7A420D2C2055A43C00B50C6A /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A420D2B2055A43C00B50C6A /* CardView.xib */; };
 		7A420D2E2055A7C400B50C6A /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2D2055A7C400B50C6A /* CardView.swift */; };
+		7A420D302055BA9700B50C6A /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2F2055BA9700B50C6A /* Player.swift */; };
+		7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D312055C52300B50C6A /* Scoreboard.swift */; };
 		7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED5B204F43E7004815B5 /* AppDelegate.swift */; };
 		7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED5F204F43E7004815B5 /* Main.storyboard */; };
 		7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED62204F43E7004815B5 /* Assets.xcassets */; };
 		7A57ED66204F43E7004815B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */; };
 		7A57ED71204F43E7004815B5 /* Tap_ItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */; };
-		7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,14 +33,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		071716952051D7770089A340 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
-		071716972051E4970089A340 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		079CD91E20531A2C00CF91DD /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		079CD92020534ADC00CF91DD /* FigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureViewController.swift; sourceTree = "<group>"; };
 		079CD92220534DF200CF91DD /* FigureGameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameManager.swift; sourceTree = "<group>"; };
 		079CD92420534FF000CF91DD /* FigureGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameService.swift; sourceTree = "<group>"; };
 		7A420D2B2055A43C00B50C6A /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		7A420D2D2055A7C400B50C6A /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		7A420D2F2055BA9700B50C6A /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		7A420D312055C52300B50C6A /* Scoreboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoreboard.swift; sourceTree = "<group>"; };
 		7A57ED58204F43E7004815B5 /* Tap-It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tap-It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED5B204F43E7004815B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A57ED60204F43E7004815B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -51,7 +50,6 @@
 		7A57ED6C204F43E7004815B5 /* Tap-ItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tap-ItTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap_ItTests.swift; sourceTree = "<group>"; };
 		7A57ED72204F43E7004815B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +70,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A420D332055D67C00B50C6A /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				079CD92220534DF200CF91DD /* FigureGameManager.swift */,
+				079CD92420534FF000CF91DD /* FigureGameService.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		7A420D342055D69E00B50C6A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				079CD91E20531A2C00CF91DD /* Card.swift */,
+				7A420D2F2055BA9700B50C6A /* Player.swift */,
+				7A420D312055C52300B50C6A /* Scoreboard.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7A420D352055D6AF00B50C6A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
+				7A420D2D2055A7C400B50C6A /* CardView.swift */,
+				7A420D2B2055A43C00B50C6A /* CardView.xib */,
+				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		7A57ED4F204F43E7004815B5 = {
 			isa = PBXGroup;
 			children = (
@@ -94,16 +122,9 @@
 			isa = PBXGroup;
 			children = (
 				7A57ED5B204F43E7004815B5 /* AppDelegate.swift */,
-				071716972051E4970089A340 /* GameService.swift */,
-				071716952051D7770089A340 /* GameManager.swift */,
-				079CD91E20531A2C00CF91DD /* Card.swift */,
-				079CD92220534DF200CF91DD /* FigureGameManager.swift */,
-				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
-				7A420D2D2055A7C400B50C6A /* CardView.swift */,
-				079CD92420534FF000CF91DD /* FigureGameService.swift */,
-				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
-				7A420D2B2055A43C00B50C6A /* CardView.xib */,
-				7A57ED7D20507C8A004815B5 /* ButtonsViewController.swift */,
+				7A420D332055D67C00B50C6A /* Game */,
+				7A420D342055D69E00B50C6A /* Model */,
+				7A420D352055D6AF00B50C6A /* Controller */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
 				7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */,
 				7A57ED67204F43E7004815B5 /* Info.plist */,
@@ -224,14 +245,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A57ED7E20507C8B004815B5 /* ButtonsViewController.swift in Sources */,
 				7A420D2E2055A7C400B50C6A /* CardView.swift in Sources */,
-				071716982051E4970089A340 /* GameService.swift in Sources */,
 				079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */,
 				079CD91F20531A2C00CF91DD /* Card.swift in Sources */,
-				071716962051D7770089A340 /* GameManager.swift in Sources */,
 				079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
+				7A420D302055BA9700B50C6A /* Player.swift in Sources */,
+				7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */,
 				079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

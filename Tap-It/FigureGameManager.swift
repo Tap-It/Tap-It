@@ -2,6 +2,7 @@ import Foundation
 
 protocol FigureProtocol {
     func updateDeck(_ card: Card)
+    func updatePlayerCard(_ card: Card)
 }
 
 protocol FigureServiceProtocol {
@@ -172,6 +173,7 @@ extension FigureGameManager {
 		deck.append(card)
 
 		delegate?.updateDeck(deck[0])
+		delegate?.updatePlayerCard(deck[1])
 		service.send(deck: deck)
 	}
 }

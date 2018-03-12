@@ -20,6 +20,8 @@
 		7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED62204F43E7004815B5 /* Assets.xcassets */; };
 		7A57ED66204F43E7004815B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */; };
 		7A57ED71204F43E7004815B5 /* Tap_ItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */; };
+		7AF0AC742056C02E00734EF1 /* WaitingRoom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AF0AC732056C02E00734EF1 /* WaitingRoom.storyboard */; };
+		7AF0AC762056C2CB00734EF1 /* WaitingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0AC752056C2CB00734EF1 /* WaitingRoomViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,8 @@
 		7A57ED6C204F43E7004815B5 /* Tap-ItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tap-ItTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A57ED70204F43E7004815B5 /* Tap_ItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap_ItTests.swift; sourceTree = "<group>"; };
 		7A57ED72204F43E7004815B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AF0AC732056C02E00734EF1 /* WaitingRoom.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WaitingRoom.storyboard; sourceTree = "<group>"; };
+		7AF0AC752056C2CB00734EF1 /* WaitingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingRoomViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 				7A420D2D2055A7C400B50C6A /* CardView.swift */,
 				7A420D2B2055A43C00B50C6A /* CardView.xib */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
+				7AF0AC732056C02E00734EF1 /* WaitingRoom.storyboard */,
+				7AF0AC752056C2CB00734EF1 /* WaitingRoomViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 				7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */,
 				7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */,
 				7A420D2C2055A43C00B50C6A /* CardView.xib in Resources */,
+				7AF0AC742056C02E00734EF1 /* WaitingRoom.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +256,7 @@
 				079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */,
 				079CD91F20531A2C00CF91DD /* Card.swift in Sources */,
 				079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */,
+				7AF0AC762056C2CB00734EF1 /* WaitingRoomViewController.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,
 				7A420D302055BA9700B50C6A /* Player.swift in Sources */,
 				7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */,

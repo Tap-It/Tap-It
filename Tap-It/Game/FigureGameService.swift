@@ -20,7 +20,7 @@ class FigureGameService: NSObject {
 	var isHost = true
 	var didUpdate = true
 	var hostID: MCPeerID!
-	
+
 	lazy var session: MCSession = {
 		let session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
 		session.delegate = self

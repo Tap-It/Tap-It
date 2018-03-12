@@ -12,12 +12,17 @@ protocol FigureServiceProtocol {
     func getName() -> String
 }
 
+protocol GameManagerWaitingRoomProtocol {
+	func updateConnectedPeers(name:String)
+}
+
 enum Event: Int {
 	case Card = 1,
     Click = 2,
 	Update = 3,
 	Score = 4,
-	Deck = 5
+	Deck = 5,
+	Peer = 6
 }
 
 class FigureGameManager {
@@ -29,7 +34,9 @@ class FigureGameManager {
     let service: FigureServiceProtocol
     var scoreBoard = Scoreboard()
     var backupScore = [String:Int]()
-    
+	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
+//	var allPeers = [String]()
+	
     init() {
         self.service = FigureGameService()
         self.service.setDelegate(self)
@@ -119,8 +126,12 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			
 			if event == Event.Card.rawValue {
 				delegate?.updatePlayerCard(deck[card])
-			} else {
+			}
+			if event == Event.Deck.rawValue {
 				delegate?.updateDeck(deck[card])
+			}
+			if event == Event.Peer.rawValue {
+				
 			}
 		}
     }

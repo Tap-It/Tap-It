@@ -2,7 +2,8 @@ import UIKit
 
 class FigureViewController: UIViewController {
     
-    let gameManager = FigureGameManager()
+//    let gameManager = FigureGameManager()
+	let gameManager = FigureGameManager(playerName: "test")
 	var deckView: CardView!
 	var cardView: CardView!
     

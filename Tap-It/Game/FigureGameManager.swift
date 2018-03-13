@@ -6,12 +6,14 @@ protocol FigureProtocol {
 }
 
 protocol FigureServiceProtocol {
-    func send(_ data: [String:Any])
+    func sendBlob(_ data: [String:Any])
     func send(deck: [Card])
+	func send(peerData: [String:Any])
     func setDelegate(_ gameManager: FigureGameManager)
     func getName() -> String
 	func shouldStartGame()
 	func stopAdvertising()
+	func getHashFromPeer() -> Int
 }
 
 protocol GameManagerWaitingRoomProtocol {
@@ -31,6 +33,7 @@ enum Event: Int {
 	Peers = 8,
 	JoinGame = 9,
 	Startgame = 10
+	// TODO: create a new event to send the player ID
 }
 
 class FigureGameManager {
@@ -44,13 +47,12 @@ class FigureGameManager {
     var scoreBoard = Scoreboard()
     var backupScore = [String:Int]()
 	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
-	
-//	var allPeers = [String]()
+	// TODO: create a variable to store your gameID
 	
 	init(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
         self.service.setDelegate(self)
-        self.addPlayer(player: service.getName())
+		self.addPlayer(name: service.getName(), serviceId: self.service.getHashFromPeer())
     }
     
     func checkAnswer(_ answer: Int) {
@@ -68,7 +70,7 @@ class FigureGameManager {
             var data = [String:Any]()
             data["event"] = Event.Click.rawValue
             data["data"] = name
-            service.send(data)
+            //service.send(data)
             print("got it!")
         } else {
             print("wrong. blocked!")
@@ -88,7 +90,7 @@ class FigureGameManager {
 			data["event"] = Event.Card.rawValue
 			data["data"] = player
 			
-			service.send(data)
+			service.sendBlob(data)
 
 			self.currentCard += 1
 		}
@@ -97,16 +99,15 @@ class FigureGameManager {
 	func joinGame() {
 		var data = [String:Any]()
 		data["event"] = Event.JoinGame.rawValue
-		data["data"] = self.service.getName()
-		service.send(data)
+		data["data"] = self.service.getHashFromPeer()
+		service.send(peerData: data)
 	}
 	
 	func checkStartGame() {
 		if self.scoreBoard.hasEverybodyJoined() {
-			// create an event to startGame
 			var data = [String:Int]()
 			data["event"] = Event.Startgame.rawValue
-			service.send(data)
+			service.send(peerData: data)
 		}
 	}
 	
@@ -114,7 +115,7 @@ class FigureGameManager {
 		var data = [String:Int]()
 		data["event"] = Event.Deck.rawValue
 		data["data"] = currentCard
-		service.send(data)
+		service.sendBlob(data)
 		
 		self.currentCard += 1
 	}
@@ -130,54 +131,54 @@ class FigureGameManager {
         return numbers
     }
     
-    private func updateScore(winner: String) {
-//        if self.scoreBoard.keys.contains(winner) {
-//            self.scoreBoard[winner] = self.scoreBoard[winner]! + 1
-//        }
-    }
 }
 
 extension FigureGameManager: FigureGameServiceDelegate {
-    
-    func addPlayer(player: String) {
-		self.scoreBoard.addPlayer(name: player)
+
+	func addPlayer(name: String, serviceId:Int) {
+		// TODO: make this method return the created ID
+		self.scoreBoard.addPlayer(name: name, serviceId: serviceId)
+		// TODO: create the new event and send it to the peerData
 		let players = self.scoreBoard.players
 		let names = players.map { (player) -> String in
 			return player.name
 		}
 		let data:[String:Any] = ["event":Event.Peers.rawValue , "data":names]
-//		let data:[String:Any] = ["event":Event.AddPeer.rawValue , "data":player]
-		self.service.send(data)
+		self.service.send(peerData: data)
     }
     
-    func removePlayer(player: String) {
-		self.scoreBoard.deletePlayer(name: player)
+    func removePlayer(serviceId: Int) {
+		self.scoreBoard.deletePlayer(serviceId: serviceId)
 		let players = self.scoreBoard.players
 		let names = players.map { (player) -> String in
 			return player.name
 		}
 		let data:[String:Any] = ["event":Event.Peers.rawValue , "data":names]
-//		let data:[String:Any] = ["event":Event.RemovePeer.rawValue , "data":player]
-		self.service.send(data)
+		self.service.send(peerData: data)
     }
-    
-    func receive(_ data: Any) {
-        if let data = data as? [Card] {
-            deck = data
-        }
-		
-		if let data = data as? [String:Any] {
-			let event = data["event"] as! Int
-			if event == Event.Peers.rawValue, let peers = data["data"] as? [String] {
-				self.delegateWatingRomm?.updatePeersList(peers)
-				// call delegate method
-			}
-			if event == Event.JoinGame.rawValue, let peer = data["data"] as? String {
-				self.scoreBoard.playerIsJoining(playerName: peer)
-				self.checkStartGame()
-			}
+	
+	func handleDeck(deck:[Card]) {
+		self.deck = deck
+	}
+
+	func handleInWaitingRoom(data:[String:Any]) {
+		let event = data["event"] as! Int
+		if event == Event.Peers.rawValue, let peers = data["data"] as? [String] {
+			self.delegateWatingRomm?.updatePeersList(peers)
 		}
-		
+//		if event == Event.JoinGame.rawValue, let peer = data["data"] as? String {
+//			self.scoreBoard.playerIsJoining(playerName: peer)
+//			self.checkStartGame()
+//		}
+		if event == Event.Startgame.rawValue {
+			delegateWatingRomm?.callGameView()
+		}
+		// TODO: create the event check
+		// TODO: update the proper variable with the id
+	}
+	
+	func handleGameData(data: Any) {
+
 		if let data = data as? [String:Int] {
 			let event = data["event"]!
 			
@@ -191,11 +192,26 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				delegate?.updateDeck(deck[card])
                 currentDeckCard = card
 			}
-			if event == Event.Startgame.rawValue {
-				delegateWatingRomm?.callGameView()
+			if event == Event.JoinGame.rawValue, let peer = data["data"] {
+				self.scoreBoard.playerIsJoining(serviceId: peer)
+				self.checkStartGame()
 			}
 		}
     }
+	
+	func receive(_ data: Any) {
+		if let data = data as? [String:Int] {
+			self.handleGameData(data: data)
+		}
+		
+		if let data = data as? [String:Any] {
+			self.handleInWaitingRoom(data: data)
+		}
+		
+		if let data = data as? [Card] {
+			self.handleDeck(deck: data)
+		}
+	}
     
     func startGame() {
         createDeck(order: 7)
@@ -248,9 +264,7 @@ extension FigureGameManager {
 	}
 }
 
-
 extension MutableCollection {
-	/// Shuffles the contents of this collection.
 	mutating func shuffle() {
 		let c = count
 		guard c > 1 else { return }
@@ -264,16 +278,9 @@ extension MutableCollection {
 }
 
 extension Sequence {
-	/// Returns an array with the contents of this sequence, shuffled.
 	func shuffled() -> [Element] {
 		var result = Array(self)
 		result.shuffle()
 		return result
 	}
 }
-
-
-
-
-
-

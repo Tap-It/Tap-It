@@ -3,20 +3,30 @@ import Foundation
 class Scoreboard {
 	
 	var players = [Player]()
+	var availableIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] {
+		didSet {
+			self.availableIds.sort()
+		}
+	}
 	
-	func addPlayer(name:String) {
+	func addPlayer(name:String, serviceId:Int) {
+		// TODO: always add since we are making sure that the names are unique
 		if !self.players.contains(where: { (player) -> Bool in
-			player.name == name
+			return serviceId == player.serviceId
 		}) {
-			let player = Player(id: self.players.count, name: name)
+			let id = self.availableIds[0]
+			self.availableIds.remove(at: 0)
+			let player = Player(id: id, name: name, serviceId:serviceId)
 			self.players.append(player)
 		}
 	}
 	
-	func deletePlayer(name:String) {
+	func deletePlayer(serviceId:Int) {
 		if let position = self.players.index(where: { (player) -> Bool in
-			player.name == name
+			return serviceId == player.serviceId
 		}) {
+			let id = self.players[position].id
+			self.availableIds.append(id)
 			self.players.remove(at: position)
 		}
 	}
@@ -30,9 +40,9 @@ class Scoreboard {
 		return true
 	}
 	
-	func playerIsJoining(playerName: String) {
+	func playerIsJoining(serviceId: Int) {
 		if let index = self.players.index(where: { (player) -> Bool in
-			return player.name == playerName
+			return player.serviceId == serviceId
 		}) {
 			self.players[index].hasJoined = true
 		}

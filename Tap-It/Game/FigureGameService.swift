@@ -8,8 +8,6 @@ protocol FigureGameServiceDelegate {
 	func addPlayer(player: String)
 	func removePlayer(player: String)
 	func lostHost()
-	func receiveInWaitingRoom(_ data:[String:Any])
-	func receiveDeck(_ deck:[Card])
 }
 
 class FigureGameService: NSObject {
@@ -109,15 +107,15 @@ extension FigureGameService: FigureServiceProtocol {
 		catch let error {
 			NSLog("Error for sending: \(error)")
 		}
-		self.delegate?.receiveDeck(deck)
+		self.delegate?.receive(deck)
 	}
 	
-	func sendd(peerData: [String:Any]) {
+	func send(peerData: [String:Any]) {
 		if let event = peerData["event"] as? Int {
 			switch event {
 			case Event.JoinGame.rawValue:
 				if isHost {
-					delegate?.receiveInWaitingRoom(peerData)
+					self.delegate?.receive(peerData)
 				} else {
 					do {
 						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
@@ -136,7 +134,7 @@ extension FigureGameService: FigureServiceProtocol {
 					catch let error {
 						NSLog("Error for sending: \(error)")
 					}
-					delegate?.receiveInWaitingRoom(peerData)
+					delegate?.receive(peerData)
 				}
 			default:
 				return
@@ -147,29 +145,6 @@ extension FigureGameService: FigureServiceProtocol {
 	func send(_ data: [String:Any]) {
 		if let event = data["event"] as? Int {
 			switch event {
-//			case Event.JoinGame.rawValue:
-//				if isHost {
-//					delegate?.receive(peerData)
-//				} else {
-//					do {
-//						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-//						try self.session.send(data, toPeers: [hostID], with: .reliable)
-//					}
-//					catch let error {
-//						NSLog("Error for sending: \(error)")
-//					}
-//				}
-//			case Event.Peers.rawValue, Event.Startgame.rawValue:
-//				if isHost {
-//					do {
-//						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
-//						try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
-//					}
-//					catch let error {
-//						NSLog("Error for sending: \(error)")
-//					}
-//					delegate?.receive(peerData)
-//				}
 			case Event.Card.rawValue:
 				if isHost {
 					if let player = data["data"] as? Player {
@@ -271,7 +246,6 @@ extension FigureGameService: MCNearbyServiceBrowserDelegate {
 		delegate?.removePlayer(player: peerID.displayName)
 	}
 	
-	//    This code invites any peer automatically. The MCBrowserViewController class could be used to scan for peers and invite them manually.
 	func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
 		print("foundPeer \(peerID)")
 		print("invitePeer \(peerID)")
@@ -291,9 +265,6 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		print("peer: \(peerID), didChangeState: \(state)")
-//		if isHost {
-//			delegate?.startGame()
-//		}
 		if state == .connected {
 			delegate?.addPlayer(player: peerID.displayName)
 		}
@@ -306,18 +277,9 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
 		print("didReceiveData: \(data)")
-		// TODO: implement a stupid did receive method. All brains should be inside the game manager
-		
-		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Int] {
-			delegate?.receive(result)
-		}
-		
-		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Any] {
-			delegate?.receiveInWaitingRoom(result)
-		}
 
-		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Card] {
-			delegate?.receiveDeck(result)
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) {
+			delegate?.receive(result)
 		}
 	}
 	

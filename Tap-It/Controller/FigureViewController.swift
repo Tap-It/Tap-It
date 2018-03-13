@@ -33,13 +33,8 @@ class FigureViewController: UIViewController {
 		vertStack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0).isActive = true
 		vertStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0).isActive = true
 		vertStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0).isActive = true
-<<<<<<< HEAD
-		
-        gameManager.delegate = self
-=======
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
->>>>>>> master
     }
 	
 }

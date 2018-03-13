@@ -132,7 +132,7 @@ extension FigureGameService: FigureServiceProtocol {
 					}
 				}
 			case Event.Peers.rawValue, Event.Startgame.rawValue:
-				if !isHost {
+				if isHost {
 					do {
 						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
 						try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)

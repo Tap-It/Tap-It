@@ -65,11 +65,11 @@ class FigureGameManager {
         }
 
         if deckFigures.contains(answer) && playerFigures.contains(answer) {
-            // get my name from the gameservice
             let peer = service.getHashFromPeer()
             var data = [String:Int]()
             data["event"] = Event.Click.rawValue
             data["data"] = peer
+            data["deck"] = currentDeckCard
             service.sendBlob(data)
             print("got it!")
         } else {
@@ -196,13 +196,15 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				self.scoreBoard.playerIsJoining(serviceId: peer)
 				self.checkStartGame()
 			}
-            if event == Event.Click.rawValue, let peer = data["data"] {
+            if event == Event.Click.rawValue, let peer = data["data"], let playerDeckCard = data["deck"] {
                 let player = self.scoreBoard.players.filter({ (player) -> Bool in
                     player.serviceId == peer
                 })
-                player[0].cards.append(currentDeckCard)
-                distributeCard(players: [player[0]])
-                updateDeckCard(players: self.scoreBoard.players)
+                
+                if currentDeckCard == playerDeckCard {
+                    distributeCard(players: [player.first!])
+                    updateDeckCard(players: self.scoreBoard.players)
+                }
             }
 		}
     }

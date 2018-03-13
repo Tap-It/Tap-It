@@ -66,11 +66,11 @@ class FigureGameManager {
 
         if deckFigures.contains(answer) && playerFigures.contains(answer) {
             // get my name from the gameservice
-            let name = service.getName()
-            var data = [String:Any]()
+            let peer = service.getHashFromPeer()
+            var data = [String:Int]()
             data["event"] = Event.Click.rawValue
-            data["data"] = name
-            //service.send(data)
+            data["data"] = peer
+            service.sendBlob(data)
             print("got it!")
         } else {
             print("wrong. blocked!")
@@ -117,7 +117,7 @@ class FigureGameManager {
 		data["data"] = currentCard
 		service.sendBlob(data)
 		
-		self.currentCard += 1
+	//	self.currentCard += 1
 	}
 
     func randomButtons() -> [String] {
@@ -196,6 +196,14 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				self.scoreBoard.playerIsJoining(serviceId: peer)
 				self.checkStartGame()
 			}
+            if event == Event.Click.rawValue, let peer = data["data"] {
+                let player = self.scoreBoard.players.filter({ (player) -> Bool in
+                    player.serviceId == peer
+                })
+                player[0].cards.append(currentDeckCard)
+                distributeCard(players: [player[0]])
+                updateDeckCard(players: self.scoreBoard.players)
+            }
 		}
     }
 	

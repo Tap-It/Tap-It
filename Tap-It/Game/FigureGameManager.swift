@@ -37,7 +37,8 @@ class FigureGameManager {
     
     var deck = [Card]()
 	var currentCard:Int = 0
-    var question: String!
+    var currentDeckCard:Int = 0
+    var currentPlayerCard:Int = 0
     var delegate: FigureProtocol?
     let service: FigureServiceProtocol
     var scoreBoard = Scoreboard()
@@ -52,14 +53,23 @@ class FigureGameManager {
         self.addPlayer(player: service.getName())
     }
     
-    func checkAnswer(_ answer: String) {
-        if answer == question {
+    func checkAnswer(_ answer: Int) {
+        
+        let deckFigures = deck[currentDeckCard].face.map { (figure) -> Int in
+            return figure.imageNumber
+        }
+        let playerFigures = deck[currentPlayerCard].face.map { (figure) -> Int in
+            return figure.imageNumber
+        }
+
+        if deckFigures.contains(answer) && playerFigures.contains(answer) {
             // get my name from the gameservice
-//            let name = service.getName()
-//            var data = [String:String]()
-//            data["event"] = Event.Click.rawValue
-//            data["data"] = name
-//            service.send(data)
+            let name = service.getName()
+            var data = [String:Any]()
+            data["event"] = Event.Click.rawValue
+            data["data"] = name
+            service.send(data)
+            print("got it!")
         } else {
             print("wrong. blocked!")
         }
@@ -174,10 +184,12 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			if event == Event.Card.rawValue {
 				let card = data["data"]!
 				delegate?.updatePlayerCard(deck[card])
+                currentPlayerCard = card
 			}
 			if event == Event.Deck.rawValue {
 				let card = data["data"]!
 				delegate?.updateDeck(deck[card])
+                currentDeckCard = card
 			}
 			if event == Event.Startgame.rawValue {
 				delegateWatingRomm?.callGameView()

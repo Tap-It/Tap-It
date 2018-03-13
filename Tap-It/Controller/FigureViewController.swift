@@ -56,6 +56,6 @@ extension FigureViewController : FigureProtocol {
 
 extension FigureViewController : CardViewProtocol {
     func getTapped(figureNumber: Int) {
-//        gameManager.
+        gameManager?.checkAnswer(figureNumber)
     }
 }

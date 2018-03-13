@@ -109,7 +109,7 @@ extension FigureGameService: FigureServiceProtocol {
 		}
 		self.delegate?.receive(deck)
 	}
-	
+
 	func send(peerData: [String:Any]) {
 		if let event = peerData["event"] as? Int {
 			switch event {
@@ -142,7 +142,7 @@ extension FigureGameService: FigureServiceProtocol {
 		}
 	}
 	
-	func send(_ data: [String:Any]) {
+	func sendBlob(_ data: [String:Any]) {
 		if let event = data["event"] as? Int {
 			switch event {
 			case Event.Card.rawValue:

@@ -6,7 +6,7 @@ protocol FigureProtocol {
 }
 
 protocol FigureServiceProtocol {
-    func send(_ data: [String:Any])
+    func sendBlob(_ data: [String:Any])
     func send(deck: [Card])
 	func send(peerData: [String:Any])
     func setDelegate(_ gameManager: FigureGameManager)
@@ -71,7 +71,7 @@ class FigureGameManager {
 			data["event"] = Event.Card.rawValue
 			data["data"] = player
 			
-			service.send(data)
+			service.sendBlob(data)
 
 			self.currentCard += 1
 		}
@@ -96,7 +96,7 @@ class FigureGameManager {
 		var data = [String:Int]()
 		data["event"] = Event.Deck.rawValue
 		data["data"] = currentCard
-		service.send(data)
+		service.sendBlob(data)
 		
 		self.currentCard += 1
 	}

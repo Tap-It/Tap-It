@@ -10,14 +10,18 @@ class FigureViewController: UIViewController {
         super.viewDidLoad()
 		if let objects = Bundle.main.loadNibNamed("CardView", owner: self, options: nil), let deckview = objects.first as? CardView {
 			self.deckView = deckview
+            self.deckView.delegate = self
 		}
+        
 		if let objects = Bundle.main.loadNibNamed("CardView", owner: self, options: nil), let cardview = objects.first as? CardView {
 			self.cardView = cardview
-		}
-		let vertStack = UIStackView()
+            self.cardView.delegate = self
+        }
+        
+        let vertStack = UIStackView()
 		vertStack.axis = .vertical
 		vertStack.distribution = .equalSpacing
-		vertStack.spacing = 300.0
+		vertStack.spacing = 100.0
 		vertStack.backgroundColor = .black
 		vertStack.addArrangedSubview(self.deckView)
 		vertStack.addArrangedSubview(self.cardView)
@@ -28,16 +32,9 @@ class FigureViewController: UIViewController {
 		vertStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0).isActive = true
 		vertStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0).isActive = true
 		
-		
-		
-		
         gameManager.delegate = self
     }
 	
-//	@objc func figureTapped(_ sender: UIImage) {
-//		print(sender)
-//	}
-
 }
 
 extension FigureViewController : FigureProtocol {
@@ -52,5 +49,11 @@ extension FigureViewController : FigureProtocol {
         DispatchQueue.main.async {
 			self.deckView.setupFigures(figures: card.face)
         }
+    }
+}
+
+extension FigureViewController : CardViewProtocol {
+    func getTapped(figureNumber: Int) {
+//        gameManager.
     }
 }

@@ -122,6 +122,7 @@
                     <connections>
                         <outlet property="playButton" destination="BQN-Ph-tbO" id="d2u-yq-UBr"/>
                         <outlet property="tableView" destination="EjM-AQ-Q03" id="alq-hP-BKq"/>
+                        <segue destination="Wz2-9e-0YV" kind="presentation" identifier="start" id="qoM-qf-Es3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iQv-kU-JJ7" userLabel="First Responder" sceneMemberID="firstResponder"/>

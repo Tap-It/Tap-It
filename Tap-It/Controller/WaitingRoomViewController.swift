@@ -55,7 +55,17 @@ class WaitingRoomViewController: UIViewController {
 		present(alert, animated: true, completion: nil)
 	}
 	
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "start" {
+			if let dest = segue.destination as? FigureViewController {
+				dest.gameManager = self.manager!
+			}
+		}
+	}
+	
 	@IBAction func handleClick(_ sender: UIButton) {
+		sender.backgroundColor = .green
+		self.manager!.joinGame()
 	}
 }
 
@@ -71,15 +81,17 @@ extension WaitingRoomViewController: UITableViewDataSource {
 		cell.textLabel?.text = peer
 		return cell
 	}
-	
 }
 
 extension WaitingRoomViewController: GameManagerWaitingRoomProtocol {
 	
+	func callGameView() {
+		performSegue(withIdentifier: "start", sender: nil)
+	}
+
 	func closeWaitingRoom() {
 		dismiss(animated: true, completion: nil)
 	}
-	
 
 	func updatePeersList(_ peers: [String]) {
 		DispatchQueue.main.async {

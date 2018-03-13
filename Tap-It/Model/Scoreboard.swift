@@ -20,4 +20,21 @@ class Scoreboard {
 			self.players.remove(at: position)
 		}
 	}
+	
+	func hasEverybodyJoined() -> Bool {
+		for player in self.players {
+			if !player.hasJoined {
+				return false
+			}
+		}
+		return true
+	}
+	
+	func playerIsJoining(playerName: String) {
+		if let index = self.players.index(where: { (player) -> Bool in
+			return player.name == playerName
+		}) {
+			self.players[index].hasJoined = true
+		}
+	}
 }

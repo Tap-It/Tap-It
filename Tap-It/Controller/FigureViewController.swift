@@ -3,7 +3,8 @@ import UIKit
 class FigureViewController: UIViewController {
     
 //    let gameManager = FigureGameManager()
-	let gameManager = FigureGameManager(playerName: "test")
+	var gameManager:FigureGameManager?
+//	let gameManager = FigureGameManager(playerName: "test")
 	var deckView: CardView!
 	var cardView: CardView!
     
@@ -28,17 +29,10 @@ class FigureViewController: UIViewController {
 		vertStack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0).isActive = true
 		vertStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0).isActive = true
 		vertStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0).isActive = true
-		
-		
-		
-		
-        gameManager.delegate = self
+        gameManager!.delegate = self
+		gameManager!.shouldStartGame()
     }
 	
-//	@objc func figureTapped(_ sender: UIImage) {
-//		print(sender)
-//	}
-
 }
 
 extension FigureViewController : FigureProtocol {

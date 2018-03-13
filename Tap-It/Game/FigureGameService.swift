@@ -170,7 +170,6 @@ extension FigureGameService: FigureServiceProtocol {
 							catch let error {
 								NSLog("Error for sending: \(error)")
 							}
-							
 						}
 					}
 				}
@@ -203,7 +202,6 @@ extension FigureGameService: FigureServiceProtocol {
 		}
 		return nil
 	}
-	
 }
 
 extension FigureGameService: MCNearbyServiceBrowserDelegate {

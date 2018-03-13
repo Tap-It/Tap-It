@@ -7,12 +7,15 @@ protocol FigureGameServiceDelegate {
 	func startGame()
 	func addPlayer(player: String)
 	func removePlayer(player: String)
+	func lostHost()
 }
 
 class FigureGameService: NSObject {
 	
 	private let ClickServiceType = "figure-game"
-	let myPeerId = MCPeerID(displayName: UIDevice.current.name)
+	let myPeerId:MCPeerID!
+//	let myPeerId = MCPeerID(displayName: "Player ")
+//	let myPeerId = MCPeerID(displayName: UIDevice.current.name)
 	private let service: MCNearbyServiceAdvertiser
 	private let browser: MCNearbyServiceBrowser
 	var sessionInitTime = Date()
@@ -20,14 +23,15 @@ class FigureGameService: NSObject {
 	var isHost = true
 	var didUpdate = true
 	var hostID: MCPeerID!
-	
+
 	lazy var session: MCSession = {
 		let session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
 		session.delegate = self
 		return session
 	}()
 	
-	override init() {
+	init(playerName:String) {
+		self.myPeerId = MCPeerID(displayName: playerName)
 		self.service = MCNearbyServiceAdvertiser(peer: self.myPeerId, discoveryInfo: nil, serviceType: self.ClickServiceType)
 		self.browser = MCNearbyServiceBrowser(peer: self.myPeerId, serviceType: self.ClickServiceType)
 		super.init()
@@ -82,6 +86,17 @@ extension FigureGameService: MCNearbyServiceAdvertiserDelegate {
 
 extension FigureGameService: FigureServiceProtocol {
 	
+	func stopAdvertising() {
+		self.service.stopAdvertisingPeer()
+	}
+
+	func shouldStartGame() {
+		if isHost {
+			delegate?.startGame()
+			self.browser.stopBrowsingForPeers()
+		}
+	}
+	
 	func setDelegate(_ gameManager: FigureGameManager) {
 		self.delegate = gameManager
 	}
@@ -100,25 +115,49 @@ extension FigureGameService: FigureServiceProtocol {
 	func send(_ peerData: [String:Any]) {
 		if let event = peerData["event"] as? Int {
 			switch event {
+			case Event.JoinGame.rawValue:
+				if isHost {
+					delegate?.receive(peerData)
+				} else {
+					do {
+						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+						try self.session.send(data, toPeers: [hostID], with: .reliable)
+					}
+					catch let error {
+						NSLog("Error for sending: \(error)")
+					}
+				}
+			case Event.Peers.rawValue, Event.Startgame.rawValue:
+				if isHost {
+					do {
+						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+						try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+					}
+					catch let error {
+						NSLog("Error for sending: \(error)")
+					}
+					delegate?.receive(peerData)
+				}
 			case Event.Card.rawValue:
 				if isHost {
 					if let player = peerData["data"] as? Player {
 						let dict = ["event":Event.Card.rawValue ,"data":player.cards.last!]
-						delegate?.receive(dict)
-					}
-				} else {
-					if let player = peerData["data"] as? Player {
-						guard let peer = self.getPeerId(peerName: player.name) else {
-							print("Fatal error")
-							return
-						}
-						do {
-							let dict = ["event":Event.Card.rawValue ,"data":player.cards.last!]
-							let data = NSKeyedArchiver.archivedData(withRootObject: dict)
-							try self.session.send(data, toPeers: [peer], with: .reliable)
-						}
-						catch let error {
-							NSLog("Error for sending: \(error)")
+						if player.name == self.myPeerId.displayName {
+							delegate?.receive(dict)
+						} else {
+							guard let peer = self.getPeerId(peerName: player.name) else {
+								print("Fatal error")
+								return
+							}
+							do {
+//								let dict = ["event":Event.Card.rawValue ,"data":player.cards.last!]
+								let data = NSKeyedArchiver.archivedData(withRootObject: dict)
+								try self.session.send(data, toPeers: [peer], with: .reliable)
+							}
+							catch let error {
+								NSLog("Error for sending: \(error)")
+							}
+							
 						}
 					}
 				}
@@ -222,10 +261,17 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		print("peer: \(peerID), didChangeState: \(state)")
-		if isHost {
-			delegate?.startGame()
+//		if isHost {
+//			delegate?.startGame()
+//		}
+		if state == .connected {
+			delegate?.addPlayer(player: peerID.displayName)
 		}
-		delegate?.addPlayer(player: peerID.displayName)
+		if state == .notConnected {
+			if peerID == self.hostID {
+				delegate?.lostHost()
+			}
+		}
 	}
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -235,15 +281,11 @@ extension FigureGameService: MCSessionDelegate {
 		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Int] {
 			delegate?.receive(result)
 		}
+		
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Any] {
+			delegate?.receive(result)
+		}
 
-		
-//		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:String] {
-//			if isHost {
-//				self.replicateFromHost(result)
-//			}
-//			delegate?.receive(result)
-//		}
-		
 		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Card] {
 			delegate?.receive(result)
 		}

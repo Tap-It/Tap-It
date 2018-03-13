@@ -10,6 +10,14 @@ protocol FigureServiceProtocol {
     func send(deck: [Card])
     func setDelegate(_ gameManager: FigureGameManager)
     func getName() -> String
+	func shouldStartGame()
+	func stopAdvertising()
+}
+
+protocol GameManagerWaitingRoomProtocol {
+	func updatePeersList(_ peers:[String])
+	func closeWaitingRoom()
+	func callGameView()
 }
 
 enum Event: Int {
@@ -17,7 +25,12 @@ enum Event: Int {
     Click = 2,
 	Update = 3,
 	Score = 4,
-	Deck = 5
+	Deck = 5,
+	AddPeer = 6,
+	RemovePeer = 7,
+	Peers = 8,
+	JoinGame = 9,
+	Startgame = 10
 }
 
 class FigureGameManager {
@@ -29,9 +42,12 @@ class FigureGameManager {
     let service: FigureServiceProtocol
     var scoreBoard = Scoreboard()
     var backupScore = [String:Int]()
-    
-    init() {
-        self.service = FigureGameService()
+	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
+	
+//	var allPeers = [String]()
+	
+	init(playerName: String) {
+		self.service = FigureGameService(playerName: playerName)
         self.service.setDelegate(self)
         self.addPlayer(player: service.getName())
     }
@@ -49,6 +65,11 @@ class FigureGameManager {
         }
     }
 	
+	func shouldStartGame() {
+		self.service.shouldStartGame()
+		self.service.stopAdvertising()
+	}
+	
 	private func distributeCard(players: [Player]) {
 		for player in players {
 			player.cards.append(self.currentCard)
@@ -63,6 +84,22 @@ class FigureGameManager {
 		}
 	}
 	
+	func joinGame() {
+		var data = [String:Any]()
+		data["event"] = Event.JoinGame.rawValue
+		data["data"] = self.service.getName()
+		service.send(data)
+	}
+	
+	func checkStartGame() {
+		if self.scoreBoard.hasEverybodyJoined() {
+			// create an event to startGame
+			var data = [String:Int]()
+			data["event"] = Event.Startgame.rawValue
+			service.send(data)
+		}
+	}
+	
 	private func updateDeckCard(players: [Player]) {
 		var data = [String:Int]()
 		data["event"] = Event.Deck.rawValue
@@ -72,14 +109,6 @@ class FigureGameManager {
 		self.currentCard += 1
 	}
 
-//    private func generateRandomQuestion() -> [String:String] {
-//        let random = arc4random_uniform(8)+1
-//        var data = [String:String]()
-//        data["event"] = Event.Update.rawValue
-//        data["data"] = String(random)
-//        return data
-//    }
-	
     func randomButtons() -> [String] {
         var answers = ["1","2","3","4","5","6","7","8"]
         var numbers = [String]()
@@ -102,10 +131,24 @@ extension FigureGameManager: FigureGameServiceDelegate {
     
     func addPlayer(player: String) {
 		self.scoreBoard.addPlayer(name: player)
+		let players = self.scoreBoard.players
+		let names = players.map { (player) -> String in
+			return player.name
+		}
+		let data:[String:Any] = ["event":Event.Peers.rawValue , "data":names]
+//		let data:[String:Any] = ["event":Event.AddPeer.rawValue , "data":player]
+		self.service.send(data)
     }
     
     func removePlayer(player: String) {
 		self.scoreBoard.deletePlayer(name: player)
+		let players = self.scoreBoard.players
+		let names = players.map { (player) -> String in
+			return player.name
+		}
+		let data:[String:Any] = ["event":Event.Peers.rawValue , "data":names]
+//		let data:[String:Any] = ["event":Event.RemovePeer.rawValue , "data":player]
+		self.service.send(data)
     }
     
     func receive(_ data: Any) {
@@ -113,14 +156,31 @@ extension FigureGameManager: FigureGameServiceDelegate {
             deck = data
         }
 		
+		if let data = data as? [String:Any] {
+			let event = data["event"] as! Int
+			if event == Event.Peers.rawValue, let peers = data["data"] as? [String] {
+				self.delegateWatingRomm?.updatePeersList(peers)
+				// call delegate method
+			}
+			if event == Event.JoinGame.rawValue, let peer = data["data"] as? String {
+				self.scoreBoard.playerIsJoining(playerName: peer)
+				self.checkStartGame()
+			}
+		}
+		
 		if let data = data as? [String:Int] {
-			let card = data["data"]!
 			let event = data["event"]!
 			
 			if event == Event.Card.rawValue {
+				let card = data["data"]!
 				delegate?.updatePlayerCard(deck[card])
-			} else {
+			}
+			if event == Event.Deck.rawValue {
+				let card = data["data"]!
 				delegate?.updateDeck(deck[card])
+			}
+			if event == Event.Startgame.rawValue {
+				delegateWatingRomm?.callGameView()
 			}
 		}
     }
@@ -131,6 +191,10 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		self.distributeCard(players: self.scoreBoard.players)
 		self.updateDeckCard(players: self.scoreBoard.players)
     }
+	
+	func lostHost() {
+		self.delegateWatingRomm?.closeWaitingRoom()
+	}
 }
 
 

@@ -13,6 +13,7 @@ protocol FigureServiceProtocol {
     func getName() -> String
 	func shouldStartGame()
 	func stopAdvertising()
+	func getHashFromPeer() -> Int
 }
 
 protocol GameManagerWaitingRoomProtocol {
@@ -32,6 +33,7 @@ enum Event: Int {
 	Peers = 8,
 	JoinGame = 9,
 	Startgame = 10
+	// TODO: create a new event to send the player ID
 }
 
 class FigureGameManager {
@@ -44,11 +46,12 @@ class FigureGameManager {
     var scoreBoard = Scoreboard()
     var backupScore = [String:Int]()
 	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
+	// TODO: create a variable to store your gameID
 	
 	init(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
         self.service.setDelegate(self)
-        self.addPlayer(player: service.getName())
+		self.addPlayer(name: service.getName(), serviceId: self.service.getHashFromPeer())
     }
     
     func checkAnswer(_ answer: String) {
@@ -80,7 +83,7 @@ class FigureGameManager {
 	func joinGame() {
 		var data = [String:Any]()
 		data["event"] = Event.JoinGame.rawValue
-		data["data"] = self.service.getName()
+		data["data"] = self.service.getHashFromPeer()
 		service.send(peerData: data)
 	}
 	
@@ -116,8 +119,10 @@ class FigureGameManager {
 
 extension FigureGameManager: FigureGameServiceDelegate {
 
-    func addPlayer(player: String) {
-		self.scoreBoard.addPlayer(name: player)
+	func addPlayer(name: String, serviceId:Int) {
+		// TODO: make this method return the created ID
+		self.scoreBoard.addPlayer(name: name, serviceId: serviceId)
+		// TODO: create the new event and send it to the peerData
 		let players = self.scoreBoard.players
 		let names = players.map { (player) -> String in
 			return player.name
@@ -126,8 +131,8 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		self.service.send(peerData: data)
     }
     
-    func removePlayer(player: String) {
-		self.scoreBoard.deletePlayer(name: player)
+    func removePlayer(serviceId: Int) {
+		self.scoreBoard.deletePlayer(serviceId: serviceId)
 		let players = self.scoreBoard.players
 		let names = players.map { (player) -> String in
 			return player.name
@@ -145,13 +150,15 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		if event == Event.Peers.rawValue, let peers = data["data"] as? [String] {
 			self.delegateWatingRomm?.updatePeersList(peers)
 		}
-		if event == Event.JoinGame.rawValue, let peer = data["data"] as? String {
-			self.scoreBoard.playerIsJoining(playerName: peer)
-			self.checkStartGame()
-		}
+//		if event == Event.JoinGame.rawValue, let peer = data["data"] as? String {
+//			self.scoreBoard.playerIsJoining(playerName: peer)
+//			self.checkStartGame()
+//		}
 		if event == Event.Startgame.rawValue {
 			delegateWatingRomm?.callGameView()
 		}
+		// TODO: create the event check
+		// TODO: update the proper variable with the id
 	}
 	
 	func handleGameData(data: Any) {
@@ -166,6 +173,10 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			if event == Event.Deck.rawValue {
 				let card = data["data"]!
 				delegate?.updateDeck(deck[card])
+			}
+			if event == Event.JoinGame.rawValue, let peer = data["data"] {
+				self.scoreBoard.playerIsJoining(serviceId: peer)
+				self.checkStartGame()
 			}
 		}
     }

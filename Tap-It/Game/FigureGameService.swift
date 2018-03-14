@@ -132,7 +132,7 @@ extension FigureGameService: FigureServiceProtocol {
 					}
 				}
 			case Event.Peers.rawValue, Event.Startgame.rawValue:
-				if !isHost {
+				if isHost {
 					do {
 						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
 						try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
@@ -142,7 +142,19 @@ extension FigureGameService: FigureServiceProtocol {
 					}
 					delegate?.receive(peerData)
 				}
-			// TODO: create a new event with the peerid
+			case Event.PlayerId.rawValue:
+				let serviceId = peerData["peer"] as? Int
+				if serviceId! == self.myPeerId.hashValue {
+					delegate?.receive(peerData)
+				} else {
+					do {
+						let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
+						try self.session.send(data, toPeers: [self.getPeerId(serviceId: serviceId!)!], with: .reliable)
+					}
+					catch let error {
+						NSLog("Error for sending: \(error)")
+					}
+				}
 			default:
 				return
 			}

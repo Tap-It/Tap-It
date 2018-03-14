@@ -216,15 +216,31 @@ extension FigureGameService: FigureServiceProtocol {
 	}
 	
 	func sendBlobb(_ data: Data) {
-		if !isHost {
-			do {
-				try self.session.send(data, toPeers: [hostID], with: .reliable)
+		let event = Int(data[0])
+		switch event {
+		case Event.Click.rawValue:
+			if !isHost {
+				do {
+					try self.session.send(data, toPeers: [hostID], with: .reliable)
+				}
+				catch let error {
+					NSLog("Error for sending: \(error)")
+				}
+			} else {
+				delegate?.receivee(data)
 			}
-			catch let error {
-				NSLog("Error for sending: \(error)")
+		case Event.Cards.rawValue:
+			if isHost {
+				do {
+					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+				}
+				catch let error {
+					NSLog("Error for sending: \(error)")
+				}
+				delegate?.receivee(data)
 			}
-		} else {
-			delegate?.receivee(data)
+		default:
+			return
 		}
 	}
 	

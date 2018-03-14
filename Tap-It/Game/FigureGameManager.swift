@@ -34,7 +34,8 @@ enum Event: Int {
 	Peers = 8,
 	JoinGame = 9,
 	Startgame = 10,
-	PlayerId = 11
+	PlayerId = 11,
+	Cards = 12
 }
 
 class FigureGameManager {
@@ -71,12 +72,6 @@ class FigureGameManager {
 			let peer:UInt8 = UInt8(self.myGameId)
 			let data = Data(bytes: [event,card,peer])
 			self.service.sendBlobb(data)
-//            let peer = service.getHashFromPeer()
-//            var data = [String:Int]()
-//            data["event"] = Event.Click.rawValue
-//            data["data"] = peer
-//            data["deck"] = currentDeckCard
-//            service.sendBlob(data)
             print("got it!")
         } else {
             print("wrong. blocked!")
@@ -88,17 +83,31 @@ class FigureGameManager {
 		self.service.stopAdvertising()
 	}
 	
-	private func distributeCard(players: [Player]) {
-		print(players)
+	private func runDeck(players: [Player]) {
+		let event = UInt8(Event.Cards.rawValue)
 		for player in players {
 			player.cards.append(self.currentCard)
-
+			self.currentCard += 1
+		}
+		let deckCard = UInt8(self.currentCard)
+		let cardsInDeck = UInt8(self.deck.count - currentCard)
+		var data = Data(bytes: [event, deckCard, cardsInDeck])
+		for player in self.scoreBoard.players {
+			let id = UInt8(player.id)
+			let playerCard = UInt8(player.cards.last!)
+			let numPlayerCards = UInt8(player.cards.count)
+			data.append(contentsOf: [id, playerCard, numPlayerCards])
+		}
+		service.sendBlobb(data)
+	}
+	
+	private func distributeCard(players: [Player]) {
+		for player in players {
+			player.cards.append(self.currentCard)
 			var data = [String:Any]()
 			data["event"] = Event.Card.rawValue
 			data["data"] = player
-			
 			service.sendBlob(data)
-
 			self.currentCard += 1
 		}
 	}
@@ -124,17 +133,20 @@ class FigureGameManager {
 		data["data"] = currentCard
 		service.sendBlob(data)
 	}
-
-    func randomButtons() -> [String] {
-        var answers = ["1","2","3","4","5","6","7","8"]
-        var numbers = [String]()
-        while answers.count > 0 {
-            let pos = Int(arc4random_uniform(UInt32(answers.count)))
-            numbers.append(answers[pos])
-            answers.remove(at: pos)
-        }
-        return numbers
-    }
+	
+	private func readPlayerData(_ data:Data) {
+		var counter = 0
+		let iterator = 3
+		while data.count > (counter + iterator + 2) {
+			counter = counter + iterator
+			let id = Int(data[counter])
+			if self.myGameId == id {
+				let card = Int(data[counter + 1])
+				self.currentPlayerCard = card
+				delegate?.updatePlayerCard(deck[card])
+			}
+		}
+	}
     
 }
 
@@ -209,16 +221,6 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				delegate?.updateDeck(deck[card])
                 currentDeckCard = card
 			}
-//            if event == Event.Click.rawValue, let peer = data["data"], let playerDeckCard = data["deck"] {
-//                let player = self.scoreBoard.players.filter({ (player) -> Bool in
-//                    player.serviceId == peer
-//                })
-//
-//                if currentDeckCard == playerDeckCard {
-//                    distributeCard(players: [player.first!])
-//                    updateDeckCard(players: self.scoreBoard.players)
-//                }
-//            }
 		}
     }
 	
@@ -232,9 +234,13 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				player.id == id
 			})
 			if currentDeckCard == playerDeckCard {
-				distributeCard(players: [player.first!])
-				updateDeckCard(players: self.scoreBoard.players)
+				runDeck(players: [player.first!])
 			}
+		case Event.Cards.rawValue:
+			let deckCard = Int(data[1])
+			self.currentDeckCard = deckCard
+			delegate?.updateDeck(deck[deckCard])
+			self.readPlayerData(data)
 		default:
 			return
 		}
@@ -251,8 +257,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			self.handleGameData(data: data)
 			return
 		}
-		
-		
+
 		if let data = data as? [Card] {
 			self.handleDeck(deck: data)
 			return
@@ -262,8 +267,10 @@ extension FigureGameManager: FigureGameServiceDelegate {
     func startGame() {
         createDeck(order: 7)
 		service.send(deck: deck)
-		self.distributeCard(players: self.scoreBoard.players)
-		self.updateDeckCard(players: self.scoreBoard.players)
+		// TODO: do I need this call now?
+		self.runDeck(players: self.scoreBoard.players)
+//		self.distributeCard(players: self.scoreBoard.players)
+//		self.updateDeckCard(players: self.scoreBoard.players)
     }
 	
 	func lostHost() {

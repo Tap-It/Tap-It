@@ -9,8 +9,7 @@ class Scoreboard {
 		}
 	}
 	
-	func addPlayer(name:String, serviceId:Int) {
-		// TODO: always add since we are making sure that the names are unique
+	func addPlayer(name:String, serviceId:Int) -> Int? {
 		if !self.players.contains(where: { (player) -> Bool in
 			return serviceId == player.serviceId
 		}) {
@@ -18,7 +17,9 @@ class Scoreboard {
 			self.availableIds.remove(at: 0)
 			let player = Player(id: id, name: name, serviceId:serviceId)
 			self.players.append(player)
+			return id
 		}
+		return nil
 	}
 	
 	func deletePlayer(serviceId:Int) {

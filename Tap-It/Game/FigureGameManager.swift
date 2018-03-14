@@ -7,6 +7,7 @@ protocol FigureProtocol {
 
 protocol FigureServiceProtocol {
     func sendBlob(_ data: [String:Any])
+    func sendBlobb(_ data: Data)
     func send(deck: [Card])
 	func send(peerData: [String:Any])
     func setDelegate(_ gameManager: FigureGameManager)
@@ -65,7 +66,6 @@ class FigureGameManager {
         }
 
         if deckFigures.contains(answer) && playerFigures.contains(answer) {
-            // get my name from the gameservice
             let peer = service.getHashFromPeer()
             var data = [String:Int]()
             data["event"] = Event.Click.rawValue

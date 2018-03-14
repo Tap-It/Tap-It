@@ -214,6 +214,10 @@ extension FigureGameService: FigureServiceProtocol {
 		}
 	}
 	
+	func sendBlobb(_ data: Data) {
+		
+	}
+	
 	func getName() -> String {
 		return myPeerId.displayName
 	}

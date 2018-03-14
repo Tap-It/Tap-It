@@ -4,6 +4,7 @@ import MultipeerConnectivity
 
 protocol FigureGameServiceDelegate {
 	func receive(_ data: Any)
+	func receivee(_ data:Data)
 	func startGame()
 	func addPlayer(name:String, serviceId:Int)
 	func removePlayer(serviceId:Int)
@@ -215,7 +216,16 @@ extension FigureGameService: FigureServiceProtocol {
 	}
 	
 	func sendBlobb(_ data: Data) {
-		
+		if !isHost {
+			do {
+				try self.session.send(data, toPeers: [hostID], with: .reliable)
+			}
+			catch let error {
+				NSLog("Error for sending: \(error)")
+			}
+		} else {
+			delegate?.receive(data)
+		}
 	}
 	
 	func getName() -> String {
@@ -271,8 +281,14 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
 		print("didReceiveData: \(data)")
+		
+		self.delegate?.receivee(data)
 
-		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) {
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Any] {
+			delegate?.receive(result)
+		}
+		
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Card] {
 			delegate?.receive(result)
 		}
 	}

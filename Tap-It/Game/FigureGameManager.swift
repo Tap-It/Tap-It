@@ -66,12 +66,17 @@ class FigureGameManager {
         }
 
         if deckFigures.contains(answer) && playerFigures.contains(answer) {
-            let peer = service.getHashFromPeer()
-            var data = [String:Int]()
-            data["event"] = Event.Click.rawValue
-            data["data"] = peer
-            data["deck"] = currentDeckCard
-            service.sendBlob(data)
+			let peer:UInt8 = UInt8(self.myGameId)
+			let event:UInt8 = UInt8(Event.Click.rawValue)
+			let card:UInt8 = UInt8(self.currentDeckCard)
+			let data = Data(bytes: [event,card,peer])
+			self.service.sendBlobb(data)
+//            let peer = service.getHashFromPeer()
+//            var data = [String:Int]()
+//            data["event"] = Event.Click.rawValue
+//            data["data"] = peer
+//            data["deck"] = currentDeckCard
+//            service.sendBlob(data)
             print("got it!")
         } else {
             print("wrong. blocked!")
@@ -206,6 +211,24 @@ extension FigureGameManager: FigureGameServiceDelegate {
             }
 		}
     }
+	
+	func receivee(_ data: Data) {
+		let event = Int(data[0])
+		switch event {
+		case Event.Click.rawValue:
+			let playerDeckCard = data[1]
+			let id = data[2]
+			let player = self.scoreBoard.players.filter({ (player) -> Bool in
+				player.id == id
+			})
+			if currentDeckCard == playerDeckCard {
+				distributeCard(players: [player.first!])
+				updateDeckCard(players: self.scoreBoard.players)
+			}
+		default:
+			return
+		}
+	}
 	
 	func receive(_ data: Any) {
 		

@@ -66,9 +66,9 @@ class FigureGameManager {
         }
 
         if deckFigures.contains(answer) && playerFigures.contains(answer) {
-			let peer:UInt8 = UInt8(self.myGameId)
 			let event:UInt8 = UInt8(Event.Click.rawValue)
 			let card:UInt8 = UInt8(self.currentDeckCard)
+			let peer:UInt8 = UInt8(self.myGameId)
 			let data = Data(bytes: [event,card,peer])
 			self.service.sendBlobb(data)
 //            let peer = service.getHashFromPeer()
@@ -89,6 +89,7 @@ class FigureGameManager {
 	}
 	
 	private func distributeCard(players: [Player]) {
+		print(players)
 		for player in players {
 			player.cards.append(self.currentCard)
 
@@ -174,7 +175,20 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		if event == Event.Startgame.rawValue {
 			delegateWatingRomm?.callGameView()
 		}
-		
+		if event == Event.JoinGame.rawValue, let peer = data["data"] as? Int {
+			self.scoreBoard.playerIsJoining(serviceId: peer)
+			self.checkStartGame()
+		}
+		if event == Event.Card.rawValue {
+			let card = data["data"] as! Int
+			delegate?.updatePlayerCard(deck[card])
+			currentPlayerCard = card
+		}
+		if event == Event.Deck.rawValue {
+			let card = data["data"] as! Int
+			delegate?.updateDeck(deck[card])
+			currentDeckCard = card
+		}
 		if event == Event.PlayerId.rawValue, let id = data["data"] as? Int {
 			self.myGameId = id
 		}
@@ -195,20 +209,16 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				delegate?.updateDeck(deck[card])
                 currentDeckCard = card
 			}
-			if event == Event.JoinGame.rawValue, let peer = data["data"] {
-				self.scoreBoard.playerIsJoining(serviceId: peer)
-				self.checkStartGame()
-			}
-            if event == Event.Click.rawValue, let peer = data["data"], let playerDeckCard = data["deck"] {
-                let player = self.scoreBoard.players.filter({ (player) -> Bool in
-                    player.serviceId == peer
-                })
-                
-                if currentDeckCard == playerDeckCard {
-                    distributeCard(players: [player.first!])
-                    updateDeckCard(players: self.scoreBoard.players)
-                }
-            }
+//            if event == Event.Click.rawValue, let peer = data["data"], let playerDeckCard = data["deck"] {
+//                let player = self.scoreBoard.players.filter({ (player) -> Bool in
+//                    player.serviceId == peer
+//                })
+//
+//                if currentDeckCard == playerDeckCard {
+//                    distributeCard(players: [player.first!])
+//                    updateDeckCard(players: self.scoreBoard.players)
+//                }
+//            }
 		}
     }
 	

@@ -224,7 +224,7 @@ extension FigureGameService: FigureServiceProtocol {
 				NSLog("Error for sending: \(error)")
 			}
 		} else {
-			delegate?.receive(data)
+			delegate?.receivee(data)
 		}
 	}
 	
@@ -268,8 +268,7 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		print("peer: \(peerID), didChangeState: \(state)")
-		if state == .connected {
-			// TODO: make sure to avoid duplicate names
+		if state == .connected && isHost {
 			delegate?.addPlayer(name: peerID.displayName, serviceId:peerID.hashValue)
 		}
 		if state == .notConnected {

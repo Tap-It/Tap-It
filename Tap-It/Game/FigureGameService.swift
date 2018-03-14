@@ -4,6 +4,7 @@ import MultipeerConnectivity
 
 protocol FigureGameServiceDelegate {
 	func receive(_ data: Any)
+	func receivee(_ data:Data)
 	func startGame()
 	func addPlayer(name:String, serviceId:Int)
 	func removePlayer(serviceId:Int)
@@ -215,7 +216,32 @@ extension FigureGameService: FigureServiceProtocol {
 	}
 	
 	func sendBlobb(_ data: Data) {
-		
+		let event = Int(data[0])
+		switch event {
+		case Event.Click.rawValue:
+			if !isHost {
+				do {
+					try self.session.send(data, toPeers: [hostID], with: .reliable)
+				}
+				catch let error {
+					NSLog("Error for sending: \(error)")
+				}
+			} else {
+				delegate?.receivee(data)
+			}
+		case Event.Cards.rawValue:
+			if isHost {
+				do {
+					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
+				}
+				catch let error {
+					NSLog("Error for sending: \(error)")
+				}
+				delegate?.receivee(data)
+			}
+		default:
+			return
+		}
 	}
 	
 	func getName() -> String {
@@ -258,8 +284,7 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		print("peer: \(peerID), didChangeState: \(state)")
-		if state == .connected {
-			// TODO: make sure to avoid duplicate names
+		if state == .connected && isHost {
 			delegate?.addPlayer(name: peerID.displayName, serviceId:peerID.hashValue)
 		}
 		if state == .notConnected {
@@ -271,8 +296,14 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
 		print("didReceiveData: \(data)")
+		
+		self.delegate?.receivee(data)
 
-		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) {
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Any] {
+			delegate?.receive(result)
+		}
+		
+		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Card] {
 			delegate?.receive(result)
 		}
 	}

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0750A241205B1B9C003E83E5 /* PlayerScore.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0750A240205B1B9C003E83E5 /* PlayerScore.xib */; };
+		0750A243205B1BBA003E83E5 /* PlayerScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0750A242205B1BBA003E83E5 /* PlayerScore.swift */; };
 		079CD91F20531A2C00CF91DD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD91E20531A2C00CF91DD /* Card.swift */; };
 		079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92020534ADC00CF91DD /* FigureViewController.swift */; };
 		079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92220534DF200CF91DD /* FigureGameManager.swift */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0750A240205B1B9C003E83E5 /* PlayerScore.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayerScore.xib; sourceTree = "<group>"; };
+		0750A242205B1BBA003E83E5 /* PlayerScore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerScore.swift; sourceTree = "<group>"; };
 		079CD91E20531A2C00CF91DD /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		079CD92020534ADC00CF91DD /* FigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureViewController.swift; sourceTree = "<group>"; };
 		079CD92220534DF200CF91DD /* FigureGameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameManager.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
 				7A420D2D2055A7C400B50C6A /* CardView.swift */,
 				7A420D2B2055A43C00B50C6A /* CardView.xib */,
+				0750A242205B1BBA003E83E5 /* PlayerScore.swift */,
+				0750A240205B1B9C003E83E5 /* PlayerScore.xib */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
 				7AF0AC752056C2CB00734EF1 /* WaitingRoomViewController.swift */,
 			);
@@ -227,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0750A241205B1B9C003E83E5 /* PlayerScore.xib in Resources */,
 				7A57ED66204F43E7004815B5 /* LaunchScreen.storyboard in Resources */,
 				7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */,
 				7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */,
@@ -257,6 +264,7 @@
 				7A420D302055BA9700B50C6A /* Player.swift in Sources */,
 				7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */,
 				079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */,
+				0750A243205B1BBA003E83E5 /* PlayerScore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

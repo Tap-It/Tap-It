@@ -1,8 +1,8 @@
 import UIKit
 
-class FigureViewController: UIViewController {
+class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
     
-	var gameManager:FigureGameManager?
+    var gameManager:FigureGameManager?
 	var topCard: UIImageView!
 	var bottomCard: UIImageView!
     var first: PlayerScore!
@@ -43,6 +43,7 @@ class FigureViewController: UIViewController {
         bottomCard = UIImageView()
         bottomCard.image = UIImage(named: "card_3")
         bottomCard.translatesAutoresizingMaskIntoConstraints = false
+        bottomCard.isUserInteractionEnabled = true
         view.addSubview(bottomCard)
         
         bottomCard.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 8).isActive = true
@@ -56,12 +57,12 @@ class FigureViewController: UIViewController {
         topCard = UIImageView()
         topCard.image = UIImage(named: "card_3")
         topCard.translatesAutoresizingMaskIntoConstraints = false
+        topCard.isUserInteractionEnabled = true
         view.addSubview(topCard)
         topCard.centerXAnchor.constraint(equalTo: bottomCard.centerXAnchor, constant: 0).isActive = true
         topCard.widthAnchor.constraint(equalTo: bottomCard.widthAnchor, multiplier: 0.8).isActive = true
         topCard.heightAnchor.constraint(equalTo: bottomCard.heightAnchor, multiplier: 0.8).isActive = true
         topCard.bottomAnchor.constraint(equalTo: bottomCard.topAnchor, constant: -16).isActive = true
-        //topCard.
         
         if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
             first = scoreview
@@ -109,7 +110,11 @@ class FigureViewController: UIViewController {
 	
 	private func setupCard(_ card: Card, isDeck: Bool) {
 		if !isDeck {
-			let frame = self.bottomCard.frame
+            bottomCard.subviews.forEach({ (view) in
+                view.removeFromSuperview()
+            })
+
+            let frame = self.bottomCard.frame
 			self.imageSize = CGSize(width: frame.width * self.imageSizeRatio, height: frame.height * self.imageSizeRatio)
 			let centerPoint = CGPoint(x: frame.width / CGFloat(2), y: frame.height / CGFloat(2))
 			let images = self.getImages(center: centerPoint, card: card, containerWidth: frame.width)
@@ -117,7 +122,11 @@ class FigureViewController: UIViewController {
 				self.bottomCard.addSubview(image)
 			}
 		} else {
-			let frame = self.topCard.frame
+            topCard.subviews.forEach({ (view) in
+                view.removeFromSuperview()
+            })
+
+            let frame = self.topCard.frame
 			self.imageSize = CGSize(width: frame.width * self.imageSizeRatio, height: frame.height * self.imageSizeRatio)
 			let centerPoint = CGPoint(x: frame.width / CGFloat(2), y: frame.height / CGFloat(2))
 			let images = self.getImages(center: centerPoint, card: card, containerWidth: frame.width)
@@ -155,11 +164,26 @@ class FigureViewController: UIViewController {
 		let image = UIImageView(frame: imageRect)
 		let name = "figure_\(number)"
 		image.image = UIImage(named: name)
+        image.restorationIdentifier = "\(number)"
 		image.contentMode = .scaleAspectFit
 		image.transform = CGAffineTransform(rotationAngle: rotation)
-		return image
+        image.isUserInteractionEnabled = true
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(figureTapped(_:)))
+        tap.delegate = self
+        image.addGestureRecognizer(tap)
+
+        return image
 	}
-	
+    
+    @objc func figureTapped(_ sender: UITapGestureRecognizer) {
+        let view = sender.view as! UIImageView
+        guard let imageNumber = view.restorationIdentifier else {
+            return
+        }
+        self.gameManager?.checkAnswer(Int(imageNumber)!)
+    }
+    
 }
 
 extension FigureViewController : FigureProtocol {
@@ -174,11 +198,5 @@ extension FigureViewController : FigureProtocol {
         DispatchQueue.main.async {
 			self.deckCard = card
         }
-    }
-}
-
-extension FigureViewController : CardViewProtocol {
-    func getTapped(figureNumber: Int) {
-        gameManager?.checkAnswer(figureNumber)
     }
 }

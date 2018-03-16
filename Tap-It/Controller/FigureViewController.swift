@@ -200,6 +200,19 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 
 extension FigureViewController : FigureProtocol {
 	
+	func updateDeckCount(_ total: Int) {
+		DispatchQueue.main.async {
+			self.deckLabel.text = String(total)
+		}
+	}
+	
+	func updatePlayerScore(_ score: Int) {
+		DispatchQueue.main.async {
+			self.playerCardLabel.text = String(score)
+		}
+	}
+	
+	
 	func updateTopScore(_ rank: [(String, Int)]) {
 		DispatchQueue.main.async {
 			for i in 0..<self.topScore.count {

@@ -4,6 +4,8 @@ protocol FigureProtocol {
     func updateDeck(_ card: Card)
     func updatePlayerCard(_ card: Card)
 	func updateTopScore(_ rank:[(String, Int)])
+	func updateDeckCount(_ total: Int)
+	func updatePlayerScore(_ score: Int)
 }
 
 protocol FigureServiceProtocol {
@@ -146,6 +148,8 @@ class FigureGameManager {
 				let card = Int(data[counter + 1])
 				self.currentPlayerCard = card
 				delegate?.updatePlayerCard(deck[card])
+				let score = Int(data[counter+2])
+				delegate?.updatePlayerScore(score)
 			}
 		}
 	}
@@ -274,6 +278,8 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			let deckCard = Int(data[1])
 			self.currentDeckCard = deckCard
 			delegate?.updateDeck(deck[deckCard])
+			let deckCount = Int(data[2])
+			delegate?.updateDeckCount(deckCount)
 			self.readPlayerData(data)
 			self.readRank(data)
 		default:

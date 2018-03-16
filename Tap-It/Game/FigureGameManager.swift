@@ -267,10 +267,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
     func startGame() {
         createDeck(order: 7)
 		service.send(deck: deck)
-		// TODO: do I need this call now?
 		self.runDeck(players: self.scoreBoard.players)
-//		self.distributeCard(players: self.scoreBoard.players)
-//		self.updateDeckCard(players: self.scoreBoard.players)
     }
 	
 	func lostHost() {
@@ -291,7 +288,7 @@ extension FigureGameManager {
 			tempCard.append(p * p)
 			var tempSet = Set<Int>()
 			for item in tempCard { tempSet.insert(item) }
-			let card = Card(array: Array(tempSet))
+			let card = Card(array: Array(tempSet).shuffled())
 			deck.append(card)
 		}
 		
@@ -302,7 +299,7 @@ extension FigureGameManager {
 				tempCard.append(p * p + 1 + i)
 				var tempSet = Set<Int>()
 				for item in tempCard { tempSet.insert(item) }
-				let card = Card(array: Array(tempSet))
+				let card = Card(array: Array(tempSet).shuffled())
 				deck.append(card)
 			}
 		}
@@ -311,7 +308,7 @@ extension FigureGameManager {
 		for i in 0..<(min_factor + 1) { tempCard.append((p * p + i)) }
 		var tempSet = Set<Int>()
 		for item in tempCard { tempSet.insert(item) }
-		let card = Card(array: Array(tempSet))
+		let card = Card(array: Array(tempSet).shuffled())
 		deck.append(card)
 		self.deck = deck.shuffled()
 	}

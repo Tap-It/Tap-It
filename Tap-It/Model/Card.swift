@@ -21,7 +21,8 @@ class Figure: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(imageNumber, forKey: FigureKeys.imageNumber.rawValue)
-        aCoder.encode(rotation, forKey: FigureKeys.rotation.rawValue)
+		let rotationToEnconde = Float(self.rotation)
+        aCoder.encode(rotationToEnconde, forKey: FigureKeys.rotation.rawValue)
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
@@ -67,7 +68,8 @@ class Card: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(face, forKey: CardKeys.face.rawValue)
-		aCoder.encode(rotation, forKey: CardKeys.rotation.rawValue)
+		let rotationToEnconde = Float(self.rotation)
+		aCoder.encode(rotationToEnconde, forKey: CardKeys.rotation.rawValue)
     }
     
     convenience required init?(coder aDecoder: NSCoder) {

@@ -11,7 +11,7 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 	var hasLayout = false
 	var deckLabel:UILabel!
 	var playerCardLabel:UILabel!
-	var peersTuple:[(Int, String)]?
+	var numOfPeers: Int!
 	var card:Card? {
 		didSet {
 			if self.hasLayout {
@@ -88,7 +88,7 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		var countTopPlayers = 0
 		while countTopPlayers < 3 {
-			if self.peersTuple!.count > countTopPlayers {
+			if numOfPeers > countTopPlayers {
 				if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
 					self.topScore.append(scoreview)
 					stackview.addArrangedSubview(scoreview)
@@ -96,6 +96,7 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 			}
 			countTopPlayers += 1
 		}
+//		stackview.addArrangedSubview(topScore)
 		
 		stackview.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(stackview)
@@ -198,6 +199,15 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 }
 
 extension FigureViewController : FigureProtocol {
+	
+	func updateTopScore(_ rank: [(String, Int)]) {
+		DispatchQueue.main.async {
+			for i in 0..<self.topScore.count {
+				self.topScore[i].playerName.text = rank[i].0
+				self.topScore[i].playerScore.text = String(rank[i].1)
+			}
+		}
+	}
 	
 	func updatePlayerCard(_ card: Card) {
 		DispatchQueue.main.async {

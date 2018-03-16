@@ -3,6 +3,7 @@ import Foundation
 protocol FigureProtocol {
     func updateDeck(_ card: Card)
     func updatePlayerCard(_ card: Card)
+	func updateTopScore(_ rank:[(String, Int)])
 }
 
 protocol FigureServiceProtocol {
@@ -50,6 +51,7 @@ class FigureGameManager {
     var backupScore = [String:Int]()
 	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
 	var myGameId:Int = 0
+	var peers = [(Int, String)]()
 	
 	func initPlayer(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
@@ -57,10 +59,6 @@ class FigureGameManager {
 		self.addPlayer(name: service.getName(), serviceId: self.service.getHashFromPeer())
     }
 	
-//	func initAndSetPlayer(name: String) {
-//		
-//	}
-    
     func checkAnswer(_ answer: Int) {
         
         let deckFigures = deck[currentDeckCard].face.map { (figure) -> Int in
@@ -151,7 +149,26 @@ class FigureGameManager {
 			}
 		}
 	}
-    
+	
+	private func readRank(_ data:Data) {
+		var counter = 0
+		let iterator = 3
+		var rank = [(String, Int)]()
+		while data.count > (counter + iterator + 2) {
+			counter = counter + iterator
+			let dataId = Int(data[counter])
+			let score = Int(data[counter + 2])
+			let player = self.peers.filter({ (id,_) -> Bool in
+				id == dataId
+			})
+			let name = player.first!.1
+			rank.append((name, score))
+		}
+		let sorted = rank.sorted { (player1, player2) -> Bool in
+			return player1.1 >= player2.1
+		}
+		self.delegate?.updateTopScore(sorted)
+	}
 }
 
 extension FigureGameManager: FigureGameServiceDelegate {
@@ -195,7 +212,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		if event == Event.Peers.rawValue {
 			let ids = data["ids"] as! [Int]
 			let names = data["names"] as! [String]
-			var peers = [(Int, String)]()
+			peers.removeAll()
 			for i in 0..<ids.count {
 				peers.append((ids[i], names[i]))
 			}
@@ -258,6 +275,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			self.currentDeckCard = deckCard
 			delegate?.updateDeck(deck[deckCard])
 			self.readPlayerData(data)
+			self.readRank(data)
 		default:
 			return
 		}

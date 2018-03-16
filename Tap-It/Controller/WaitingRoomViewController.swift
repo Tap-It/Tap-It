@@ -4,7 +4,7 @@ class WaitingRoomViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var playButton: UIButton!
-	var peersTuple:[(Int, String)]!
+//	var peersTuple:[(Int, String)]!
 	var playerName:String! {
 		didSet {
 			self.initializeManager()
@@ -60,7 +60,7 @@ class WaitingRoomViewController: UIViewController {
 		if segue.identifier == "start" {
 			if let dest = segue.destination as? FigureViewController {
 				dest.gameManager = self.manager
-				dest.peersTuple = self.peersTuple
+				dest.numOfPeers = self.data.count
 			}
 		}
 	}
@@ -92,7 +92,6 @@ extension WaitingRoomViewController: GameManagerWaitingRoomProtocol {
 			self.data = peers.map({ (_,name) -> String in
 				return name
 			})
-			self.peersTuple = peers
 		}
 	}
 

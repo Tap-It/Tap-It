@@ -4,21 +4,21 @@ class WaitingRoomViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var playButton: UIButton!
+	var peersTuple:[(Int, String)]!
 	var playerName:String! {
 		didSet {
 			self.initializeManager()
 			self.data = [playerName]
 		}
 	}
-	var manager:FigureGameManager?
+	var manager = FigureGameManager()
 	
 	var data = [String]() {
 		didSet {
 			self.tableView.reloadData()
 		}
 	}
-//	let manager = FigureGameManager()
-	
+
 	override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -28,8 +28,9 @@ class WaitingRoomViewController: UIViewController {
 	}
 	
 	func initializeManager() {
-		self.manager = FigureGameManager(playerName: playerName!)
-		self.manager!.delegateWatingRomm = self
+		self.manager = FigureGameManager()
+		self.manager.delegateWatingRomm = self
+		self.manager.initPlayer(playerName: playerName!)
 	}
 
     override func didReceiveMemoryWarning() {
@@ -58,14 +59,15 @@ class WaitingRoomViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "start" {
 			if let dest = segue.destination as? FigureViewController {
-				dest.gameManager = self.manager!
+				dest.gameManager = self.manager
+				dest.peersTuple = self.peersTuple
 			}
 		}
 	}
 	
 	@IBAction func handleClick(_ sender: UIButton) {
 		sender.backgroundColor = .green
-		self.manager!.joinGame()
+		self.manager.joinGame()
 	}
 }
 
@@ -85,17 +87,20 @@ extension WaitingRoomViewController: UITableViewDataSource {
 
 extension WaitingRoomViewController: GameManagerWaitingRoomProtocol {
 	
+	func updatePeersList(_ peers: [(Int, String)]) {
+		DispatchQueue.main.async {
+			self.data = peers.map({ (_,name) -> String in
+				return name
+			})
+			self.peersTuple = peers
+		}
+	}
+
 	func callGameView() {
 		performSegue(withIdentifier: "start", sender: nil)
 	}
 
 	func closeWaitingRoom() {
 		dismiss(animated: true, completion: nil)
-	}
-
-	func updatePeersList(_ peers: [String]) {
-		DispatchQueue.main.async {
-			self.data = peers
-		}
 	}
 }

@@ -5,12 +5,13 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
     var gameManager:FigureGameManager?
 	var topCard: UIImageView!
 	var bottomCard: UIImageView!
-    var first: PlayerScore!
-    var second: PlayerScore!
-    var third: PlayerScore!
+    var topScore = [PlayerScore]()
 	let imageSizeRatio = CGFloat(65.0 / 300.0)
 	var imageSize:CGSize!
 	var hasLayout = false
+	var deckLabel:UILabel!
+	var playerCardLabel:UILabel!
+	var peersTuple:[(Int, String)]?
 	var card:Card? {
 		didSet {
 			if self.hasLayout {
@@ -63,37 +64,48 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
         topCard.widthAnchor.constraint(equalTo: bottomCard.widthAnchor, multiplier: 0.8).isActive = true
         topCard.heightAnchor.constraint(equalTo: bottomCard.heightAnchor, multiplier: 0.8).isActive = true
         topCard.bottomAnchor.constraint(equalTo: bottomCard.topAnchor, constant: -16).isActive = true
-        
-        if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
-            first = scoreview
-        }
-        
-        if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
-            second = scoreview
-        }
-        
-        if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
-            third = scoreview
-        }
-        
-        let stackview = UIStackView()
-        stackview.axis = .horizontal
-        stackview.distribution = .equalSpacing
-        //        stackview.spacing = 50.0
-        stackview.addArrangedSubview(first)
-        stackview.addArrangedSubview(second)
-        stackview.addArrangedSubview(third)
-        
-        stackview.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(stackview)
-        
-        stackview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
-        stackview.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32).isActive = true
-        stackview.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
-        stackview.bottomAnchor.constraint(equalTo: topCard.topAnchor, constant: -8).isActive = true
-        stackview.heightAnchor.constraint(equalTo: bottomCard.heightAnchor, multiplier: 0.20).isActive = true
-        
+		
+
+		deckLabel = UILabel()
+		deckLabel.translatesAutoresizingMaskIntoConstraints = false
+		self.view.addSubview(deckLabel)
+		deckLabel.bottomAnchor.constraint(equalTo: topCard.bottomAnchor, constant: 0.0).isActive = true
+		deckLabel.rightAnchor.constraint(equalTo: topCard.leftAnchor, constant: 0.0).isActive = true
+		deckLabel.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 8.0).isActive = true
+		deckLabel.text = String("0")
+
+		playerCardLabel = UILabel()
+		playerCardLabel.translatesAutoresizingMaskIntoConstraints = false
+		self.view.addSubview(playerCardLabel)
+		playerCardLabel.bottomAnchor.constraint(equalTo: bottomCard.bottomAnchor, constant: 8.0).isActive = true
+		playerCardLabel.rightAnchor.constraint(equalTo: bottomCard.leftAnchor, constant: 0.0).isActive = true
+		playerCardLabel.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 8.0).isActive = true
+		playerCardLabel.text = String("0")
+		
+		let stackview = UIStackView()
+		stackview.axis = .horizontal
+		stackview.distribution = .equalSpacing
+		
+		var countTopPlayers = 0
+		while countTopPlayers < 3 {
+			if self.peersTuple!.count > countTopPlayers {
+				if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
+					self.topScore.append(scoreview)
+					stackview.addArrangedSubview(scoreview)
+				}
+			}
+			countTopPlayers += 1
+		}
+		
+		stackview.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(stackview)
+		
+		stackview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+		stackview.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32).isActive = true
+		stackview.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
+		stackview.bottomAnchor.constraint(equalTo: topCard.topAnchor, constant: -8).isActive = true
+		stackview.heightAnchor.constraint(equalTo: bottomCard.heightAnchor, multiplier: 0.20).isActive = true
+		
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
     }
@@ -183,7 +195,6 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         self.gameManager?.checkAnswer(Int(imageNumber)!)
     }
-    
 }
 
 extension FigureViewController : FigureProtocol {

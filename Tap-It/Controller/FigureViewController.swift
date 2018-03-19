@@ -7,6 +7,8 @@ class FigureViewController: UIViewController {
 	var topCard: UIImageView!
 	var stackView: UIStackView!
 	var cardCover: UIImageView!
+	var roundedView:UIView!
+	var counterView:UIView!
     var topScore = [PlayerScore]()
     var deckLabel: UILabel!
     var playerCardLabel: UILabel!
@@ -34,12 +36,7 @@ class FigureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-        let gradientLayer = CAGradientLayer()
-        let topColor = UIColor(red: 250.0/255.0, green: 215.0/255.0, blue: 95.0/255.0, alpha: 1.0).cgColor
-        let bottomColor = UIColor(red: 245.0/255.0, green: 125.0/255.0, blue: 55.0/255.0, alpha: 1.0).cgColor
-        gradientLayer.colors = [topColor, bottomColor]
-        gradientLayer.frame = view.frame
-        view.layer.insertSublayer(gradientLayer, at: 0)
+        view.layer.insertSublayer(self.getGradientBackground(), at: 0)
 		
         deckLabel = UILabel()
         playerCardLabel = UILabel()
@@ -47,6 +44,15 @@ class FigureViewController: UIViewController {
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
     }
+	
+	private func getGradientBackground() -> CAGradientLayer {
+		let gradientLayer = CAGradientLayer()
+		let topColor = UIColor(red: 250.0/255.0, green: 215.0/255.0, blue: 95.0/255.0, alpha: 1.0).cgColor
+		let bottomColor = UIColor(red: 245.0/255.0, green: 125.0/255.0, blue: 55.0/255.0, alpha: 1.0).cgColor
+		gradientLayer.colors = [topColor, bottomColor]
+		gradientLayer.frame = view.frame
+		return gradientLayer
+	}
 	
 	override func viewDidLayoutSubviews() {
         
@@ -230,21 +236,28 @@ extension FigureViewController {
                 countTopPlayers += 1
             }
 			
-			cardCover = UIImageView()
-			cardCover.image = UIImage(named: "card_1")
-			cardCover.frame.size = topCard.frame.size
-			cardCover.frame.origin = CGPoint(x: topCard.frame.origin.x, y: topCard.frame.origin.y)
-			let labelSize = CGSize(width: 30.0, height: 30.0)
-			let labelOrigin = CGPoint(x: (cardCover.frame.width / 2) - (labelSize.width / 2), y: (cardCover.frame.height / 2) - (labelSize.height / 2))
+			counterView = UIView()
+			counterView.frame = self.view.frame
+			counterView.layer.insertSublayer(self.getGradientBackground(), at: 0)
+			
+			roundedView = UIView()
+			roundedView.backgroundColor = UIColor(red: 243.0/255.0, green: 238.0/255.0, blue: 238.0/255.0, alpha: 1.0)
+			let roundedSize = CGSize(width: counterView.frame.width * 0.5, height: counterView.frame.width * 0.5)
+			let roundedOrigin = CGPoint(x: (counterView.frame.width / 2) - (roundedSize.width / 2), y: (counterView.frame.height / 2) - (roundedSize.height / 2))
+			let roundedFrame = CGRect(origin: roundedOrigin, size: roundedSize)
+			roundedView.frame = roundedFrame
+			roundedView.layer.cornerRadius = roundedSize.width / 2.0
+			let labelSize = CGSize(width: 50.0, height: 50.0)
+			let labelOrigin = CGPoint(x: (roundedView.frame.width / 2) - (labelSize.width / 2), y: (roundedView.frame.height / 2) - (labelSize.height / 2))
 			let counterLabel = UILabel(frame: CGRect(origin: labelOrigin, size: labelSize))
-			let customFont = UIFont(name: "American Typewriter", size: 25.0)
-//			counterLabel.text = String(second)
+			let customFont = UIFont(name: "American Typewriter", size: 30.0)
 			counterLabel.font = customFont
 			counterLabel.textColor = .black
 			counterLabel.numberOfLines = 1
 			counterLabel.textAlignment = .center
-			cardCover.addSubview(counterLabel)
-			view.addSubview(cardCover)
+			roundedView.addSubview(counterLabel)
+			counterView.addSubview(roundedView)
+			view.addSubview(counterView)
 			
             layouted = true
 			self.gameManager?.informReady()
@@ -256,9 +269,17 @@ extension FigureViewController : FigureProtocol {
 	
 	func updateCounter(_ second: Int) {
 		DispatchQueue.main.async {
-			let label = self.cardCover.subviews.first! as! UILabel
+			let label = self.roundedView.subviews.first! as! UILabel
+			if second == 0 {
+				UIView.transition(with: self.counterView, duration: 0.5, options: .curveEaseIn, animations: {
+					self.counterView.frame.origin.y = self.view.frame.size.height + 50
+				}, completion: { (_) in
+					self.counterView.removeFromSuperview()
+				})
+				return
+			}
 			label.text = String(second)
-			UIView.transition(with: self.cardCover, duration: 0.5, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+			UIView.transition(with: self.roundedView, duration: 0.5, options: .transitionFlipFromLeft, animations: nil, completion: nil)
 		}
 	}
 	

@@ -3,9 +3,10 @@ import UIKit
 class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var layouted = false
-    let bottomCard = UIImageView()
-    let topCard = UIImageView()
-    let stackView = UIStackView()
+	var bottomCard:UIImageView!
+	var topCard:UIImageView!
+	var stackView:UIStackView!
+	var cardCover:UIImageView!
     var topScore = [PlayerScore]()
     var deckLabel = UILabel()
     var playerCardLabel = UILabel()
@@ -39,7 +40,7 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
         gradientLayer.colors = [topColor, bottomColor]
         gradientLayer.frame = view.frame
         view.layer.insertSublayer(gradientLayer, at: 0)
-
+		
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
     }
@@ -141,7 +142,8 @@ extension FigureViewController {
             let safeTop = view.safeAreaInsets.top
             
             // BOTTOM CARD - PLAYER
-            
+			
+			bottomCard = UIImageView()
             bottomCard.image = UIImage(named: "card_1")
             
             var tempHeight = CGFloat(0.0)
@@ -155,7 +157,8 @@ extension FigureViewController {
             view.addSubview(bottomCard)
             
             // TOP CARD - DECK
-            
+			
+			topCard = UIImageView()
             topCard.image = UIImage(named: "card_3")
             
             tempHeight = frame.height * 0.37
@@ -166,7 +169,8 @@ extension FigureViewController {
             view.addSubview(topCard)
             
             // STACK VIEW - SCORE
-            
+			
+			stackView = UIStackView()
             stackView.axis = .horizontal
             stackView.distribution = .equalSpacing
             
@@ -224,15 +228,46 @@ extension FigureViewController {
                 }
                 countTopPlayers += 1
             }
-
-            
+			
+			cardCover = UIImageView()
+			cardCover.image = UIImage(named: "card_1")
+			cardCover.frame.size = topCard.frame.size
+			cardCover.frame.origin = CGPoint(x: topCard.frame.origin.x, y: topCard.frame.origin.y)
+			let labelSize = CGSize(width: 30.0, height: 30.0)
+			let labelOrigin = CGPoint(x: (cardCover.frame.width / 2) - (labelSize.width / 2), y: (cardCover.frame.height / 2) - (labelSize.height / 2))
+			let counterLabel = UILabel(frame: CGRect(origin: labelOrigin, size: labelSize))
+			let customFont = UIFont(name: "American Typewriter", size: 25.0)
+//			counterLabel.text = String(second)
+			counterLabel.font = customFont
+			counterLabel.textColor = .black
+			counterLabel.numberOfLines = 1
+			counterLabel.textAlignment = .center
+			cardCover.addSubview(counterLabel)
+			view.addSubview(cardCover)
+			
             layouted = true
+			self.gameManager?.informReady()
         }
-        
     }
 }
 
 extension FigureViewController : FigureProtocol {
+	
+	func updateCounter(_ second: Int) {
+		DispatchQueue.main.async {
+//			let labelSize = CGSize(width: 30.0, height: 30.0)
+			let label = self.cardCover.subviews.first! as! UILabel
+			label.text = String(second)
+			UIView.transition(with: self.cardCover, duration: 0.5, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+//			let labelOrigin = CGPoint(x: (self.cardCover.frame.width / 2) - (labelSize.width / 2), y: (self.cardCover.frame.height / 2) - (labelSize.height / 2))
+//			let counterLabel = UILabel(frame: CGRect(origin: labelOrigin, size: labelSize))
+//			let customFont = UIFont(name: "American Typewriter", size: 25.0)
+//			counterLabel.text = String(second)
+//			counterLabel.font = customFont
+//			counterLabel.textColor = .black
+//			counterLabel.numberOfLines = 1
+		}
+	}
 	
 	func updateDeckCount(_ total: Int) {
 		DispatchQueue.main.async {

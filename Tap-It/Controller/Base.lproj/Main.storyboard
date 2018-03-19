@@ -9,6 +9,12 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AmericanTypewriter.ttc">
+            <string>AmericanTypewriter</string>
+            <string>AmericanTypewriter-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Figure View Controller-->
         <scene sceneID="sDu-lp-8EB">
@@ -25,20 +31,14 @@
             </objects>
             <point key="canvasLocation" x="1180" y="776.76161919040487"/>
         </scene>
-        <!--View Controller-->
+        <!--Splash View Controller-->
         <scene sceneID="ZHo-05-6AO">
             <objects>
-                <viewController id="GgN-2n-4Ko" sceneMemberID="viewController">
-                    <button key="view" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TSN-k5-9YG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                        <state key="normal" title="Let's play!"/>
-                        <connections>
-                            <segue destination="6lb-3t-89m" kind="presentation" id="Hrs-xc-Acf"/>
-                        </connections>
-                    </button>
+                <viewController id="GgN-2n-4Ko" customClass="SplashViewController" customModule="Tap_It" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="2Va-q6-Ksh"/>
+                    <connections>
+                        <segue destination="6lb-3t-89m" kind="presentation" identifier="waiting" id="VLY-16-r8k"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fF7-K7-smV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -52,76 +52,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Players found" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9D-HC-c9p">
-                                <rect key="frame" x="67" y="52" width="240" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Players" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1DV-dE-gPb">
+                                <rect key="frame" x="95" y="40" width="184" height="58"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="msJ-uG-WJm"/>
-                                    <constraint firstAttribute="height" constant="21" id="rG4-pe-ew9"/>
+                                    <constraint firstAttribute="width" constant="184" id="oCK-kx-etV"/>
+                                    <constraint firstAttribute="height" constant="58" id="vKo-X9-BIL"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQN-Ph-tbO">
-                                <rect key="frame" x="-0.5" y="617" width="375" height="50"/>
-                                <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JgY-CS-RU4">
+                                <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="YcC-K8-AAd"/>
+                                    <constraint firstAttribute="height" constant="100" id="BBQ-1V-jn6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <state key="normal" title="Let's play!">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
+                                <state key="normal" title="Tap to play!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="handleClick:" destination="6lb-3t-89m" eventType="touchUpInside" id="u0W-RB-hTA"/>
+                                    <action selector="handleClick:" destination="6lb-3t-89m" eventType="touchUpInside" id="hjy-av-o21"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="EjM-AQ-Q03">
-                                <rect key="frame" x="32" y="133" width="311" height="400"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="400" id="8kX-TW-25b"/>
-                                </constraints>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="yGc-X2-GHN" style="IBUITableViewCellStyleDefault" id="j3l-rR-WuV">
-                                        <rect key="frame" x="0.0" y="28" width="311" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="j3l-rR-WuV" id="737-Cn-Rwk">
-                                            <rect key="frame" x="0.0" y="0.0" width="311" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yGc-X2-GHN">
-                                                    <rect key="frame" x="15" y="0.0" width="281" height="43.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="6lb-3t-89m" id="Z5U-ej-P5i"/>
-                                </connections>
-                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="t9D-HC-c9p" firstAttribute="centerX" secondItem="z9H-CN-bfP" secondAttribute="centerX" id="6VV-Cc-bCA"/>
-                            <constraint firstItem="EjM-AQ-Q03" firstAttribute="top" secondItem="t9D-HC-c9p" secondAttribute="bottom" constant="60" id="MEa-Yo-u05"/>
-                            <constraint firstItem="z9H-CN-bfP" firstAttribute="trailing" secondItem="EjM-AQ-Q03" secondAttribute="trailing" constant="32" id="OFn-Fu-rbO"/>
-                            <constraint firstItem="EjM-AQ-Q03" firstAttribute="leading" secondItem="z9H-CN-bfP" secondAttribute="leading" constant="32" id="SBp-m0-fi5"/>
-                            <constraint firstItem="t9D-HC-c9p" firstAttribute="top" secondItem="z9H-CN-bfP" secondAttribute="top" constant="32" id="bEU-SV-LNx"/>
-                            <constraint firstItem="z9H-CN-bfP" firstAttribute="bottom" secondItem="BQN-Ph-tbO" secondAttribute="bottom" id="d9o-0i-eqe"/>
-                            <constraint firstItem="BQN-Ph-tbO" firstAttribute="width" secondItem="x1W-7a-beo" secondAttribute="width" id="hpz-ov-N50"/>
-                            <constraint firstItem="BQN-Ph-tbO" firstAttribute="centerX" secondItem="z9H-CN-bfP" secondAttribute="centerX" id="u09-eu-fwJ"/>
+                            <constraint firstItem="z9H-CN-bfP" firstAttribute="bottom" secondItem="JgY-CS-RU4" secondAttribute="bottom" id="9nB-Sr-Ri4"/>
+                            <constraint firstItem="1DV-dE-gPb" firstAttribute="centerX" secondItem="z9H-CN-bfP" secondAttribute="centerX" id="R5v-pr-pc6"/>
+                            <constraint firstItem="JgY-CS-RU4" firstAttribute="leading" secondItem="z9H-CN-bfP" secondAttribute="leading" id="STe-Jh-4n6"/>
+                            <constraint firstItem="z9H-CN-bfP" firstAttribute="trailing" secondItem="JgY-CS-RU4" secondAttribute="trailing" id="fcu-A8-0Kp"/>
+                            <constraint firstItem="1DV-dE-gPb" firstAttribute="top" secondItem="z9H-CN-bfP" secondAttribute="top" constant="20" id="sg8-KT-hRe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="z9H-CN-bfP"/>
                     </view>
                     <connections>
-                        <outlet property="playButton" destination="BQN-Ph-tbO" id="d2u-yq-UBr"/>
-                        <outlet property="tableView" destination="EjM-AQ-Q03" id="alq-hP-BKq"/>
+                        <outlet property="startButton" destination="JgY-CS-RU4" id="lHR-Aw-HV0"/>
+                        <outlet property="titleLabel" destination="1DV-dE-gPb" id="da9-ge-aGs"/>
                         <segue destination="Wz2-9e-0YV" kind="presentation" identifier="start" id="qoM-qf-Es3"/>
                     </connections>
                 </viewController>

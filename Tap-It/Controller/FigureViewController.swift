@@ -7,8 +7,8 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
     let topCard = UIImageView()
     let stackView = UIStackView()
     var topScore = [PlayerScore]()
-    var deckLabel:UILabel!
-    var playerCardLabel:UILabel!
+    var deckLabel = UILabel()
+    var playerCardLabel = UILabel()
 
     var gameManager:FigureGameManager?
 	let imageSizeRatio = CGFloat(65.0 / 300.0)
@@ -46,9 +46,7 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	override func viewDidLayoutSubviews() {
         
-        
         loadLayout()
-        
         
 		if self.card != nil && self.hasLayout == false {
 			self.setupCard(card!, isDeck: false)
@@ -179,23 +177,43 @@ extension FigureViewController {
             
             view.addSubview(stackView)
             
+
+            // LEFT ARROW
             
-            deckLabel = UILabel()
-            deckLabel.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(deckLabel)
-            deckLabel.bottomAnchor.constraint(equalTo: topCard.bottomAnchor, constant: 0.0).isActive = true
-            deckLabel.rightAnchor.constraint(equalTo: topCard.leftAnchor, constant: 0.0).isActive = true
-            deckLabel.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 8.0).isActive = true
-            deckLabel.text = String("0")
+            tempHeight = tempHeight * 0.7
+            tempWidth = tempHeight/1.73
+
+            let arrowUp = UIImageView(image: UIImage(named: "arrow_up"))
+            arrowUp.contentMode = .scaleAspectFit
+            arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(topCard.frame.maxY*0.25), width: tempWidth, height: tempHeight)
+            view.addSubview(arrowUp)
             
-            playerCardLabel = UILabel()
-            playerCardLabel.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(playerCardLabel)
-            playerCardLabel.bottomAnchor.constraint(equalTo: bottomCard.bottomAnchor, constant: 8.0).isActive = true
-            playerCardLabel.rightAnchor.constraint(equalTo: bottomCard.leftAnchor, constant: 0.0).isActive = true
-            playerCardLabel.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 8.0).isActive = true
-            playerCardLabel.text = String("0")
             
+            deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*0.87, height: tempWidth*0.73)
+            deckLabel.font = UIFont(name: "Futura", size: 50)
+            deckLabel.adjustsFontSizeToFitWidth = true
+            deckLabel.minimumScaleFactor = 0.1
+            deckLabel.numberOfLines = 0
+            deckLabel.text = String("20")
+
+            view.addSubview(deckLabel)
+
+            // RIGHT ARROW
+            
+            let arrowDown = UIImageView(image: UIImage(named: "arrow_down"))
+            arrowDown.contentMode = .scaleAspectFit
+            arrowDown.frame = CGRect(x: bottomCard.frame.maxX-tempWidth, y: bottomCard.frame.minY, width: tempWidth, height: tempHeight)
+            view.addSubview(arrowDown)
+
+            playerCardLabel.font = UIFont(name: "Futura", size: 50)
+            playerCardLabel.adjustsFontSizeToFitWidth = true
+            playerCardLabel.minimumScaleFactor = 0.1
+            playerCardLabel.numberOfLines = 0
+            playerCardLabel.text = String("20")
+
+            playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-(tempWidth*0.73)-4, width: tempWidth*0.87, height: tempWidth*0.73)
+            view.addSubview(playerCardLabel)
+
             var countTopPlayers = 0
             while countTopPlayers < 3 {
                 if numOfPeers > countTopPlayers {

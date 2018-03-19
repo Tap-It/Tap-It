@@ -41,7 +41,7 @@ class WaitingRoomViewController: UIViewController {
     }
 	
 	override func viewDidAppear(_ animated: Bool) {
-		self.generatePlayerName()
+		self.generatePlayerName(message: "enter your name")
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -108,11 +108,10 @@ class WaitingRoomViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 	
-	private func generatePlayerName() {
-		let alert = UIAlertController(title: "Player Name", message: "Enter your name",
+	private func generatePlayerName(message: String) {
+		let alert = UIAlertController(title: "Player Name", message: message,
 									  preferredStyle: UIAlertControllerStyle.alert)
 		alert.addTextField { (textField: UITextField) in
-			textField.placeholder = "player name"
 			textField.textColor = .blue
 			textField.clearButtonMode = .whileEditing
 			textField.borderStyle = .roundedRect
@@ -121,6 +120,8 @@ class WaitingRoomViewController: UIViewController {
 			let textField = alert.textFields![0]
 			if textField.text != nil && textField.text != "" {
 				self.playerName = textField.text!
+			} else {
+				self.generatePlayerName(message: "You must enter a name")
 			}
 		}
 		alert.addAction(ok)
@@ -137,7 +138,9 @@ class WaitingRoomViewController: UIViewController {
 	}
 	
 	@IBAction func handleClick(_ sender: UIButton) {
-		sender.backgroundColor = .green
+		sender.titleLabel?.lineBreakMode = .byWordWrapping
+		sender.titleLabel?.textAlignment = .center
+		sender.setTitle("Ready!\n (waiting for players)", for: .normal)
 		self.manager.joinGame()
 	}
 }

@@ -2,7 +2,7 @@ import Foundation
 
 protocol FigureProtocol {
     func updateDeck(_ card: Card)
-    func updatePlayerCard(_ card: Card)
+	func updatePlayerCard(_ card: Card, _ gotAnswer: Bool)
 	func updateTopScore(_ rank:[(String, Int)])
 	func updateDeckCount(_ total: Int)
 	func updatePlayerScore(_ score: Int)
@@ -50,6 +50,7 @@ class FigureGameManager {
 	var currentCard:Int = 0
     var currentDeckCard:Int = 0
     var currentPlayerCard:Int = 0
+	var previousDeckCard: Int = 0
     var delegate: FigureProtocol?
     var service: FigureServiceProtocol!
     var scoreBoard = Scoreboard()
@@ -180,7 +181,9 @@ class FigureGameManager {
 			if self.myGameId == id {
 				let card = Int(data[counter + 1])
 				self.currentPlayerCard = card
-				delegate?.updatePlayerCard(deck[card])
+				let gotAnswer = self.currentPlayerCard == previousDeckCard
+
+				delegate?.updatePlayerCard(deck[card], gotAnswer)
 				let score = Int(data[counter+2])
 				delegate?.updatePlayerScore(score)
 			}
@@ -264,7 +267,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		}
 		if event == Event.Card.rawValue {
 			let card = data["data"] as! Int
-			delegate?.updatePlayerCard(deck[card])
+			delegate?.updatePlayerCard(deck[card], false)
 			currentPlayerCard = card
 		}
 		if event == Event.Deck.rawValue {
@@ -284,7 +287,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			
 			if event == Event.Card.rawValue {
 				let card = data["data"]!
-				delegate?.updatePlayerCard(deck[card])
+				delegate?.updatePlayerCard(deck[card], false)
                 currentPlayerCard = card
 			}
 			if event == Event.Deck.rawValue {
@@ -308,13 +311,16 @@ extension FigureGameManager: FigureGameServiceDelegate {
 				runDeck(players: [player.first!])
 			}
 		case Event.Cards.rawValue:
-			let deckCard = Int(data[1])
-			self.currentDeckCard = deckCard
-			delegate?.updateDeck(deck[deckCard])
-			let deckCount = Int(data[2])
-			delegate?.updateDeckCount(deckCount)
-			self.readPlayerData(data)
-			self.readRank(data)
+			DispatchQueue.main.async {
+				let deckCard = Int(data[1])
+				self.previousDeckCard = self.currentDeckCard
+				self.currentDeckCard = deckCard
+				self.delegate?.updateDeck(self.deck[deckCard])
+				let deckCount = Int(data[2])
+				self.delegate?.updateDeckCount(deckCount)
+				self.readPlayerData(data)
+				self.readRank(data)
+			}
 		case Event.Ready.rawValue:
 			self.shouldStartCountdown()
 		case Event.Seconds.rawValue:

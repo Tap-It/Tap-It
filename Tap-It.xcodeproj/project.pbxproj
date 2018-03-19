@@ -13,6 +13,7 @@
 		079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92020534ADC00CF91DD /* FigureViewController.swift */; };
 		079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92220534DF200CF91DD /* FigureGameManager.swift */; };
 		079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92420534FF000CF91DD /* FigureGameService.swift */; };
+		7A41F8DB205F6A03008BC3FC /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F8DA205F6A03008BC3FC /* SplashViewController.swift */; };
 		7A420D2C2055A43C00B50C6A /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A420D2B2055A43C00B50C6A /* CardView.xib */; };
 		7A420D2E2055A7C400B50C6A /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2D2055A7C400B50C6A /* CardView.swift */; };
 		7A420D302055BA9700B50C6A /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2F2055BA9700B50C6A /* Player.swift */; };
@@ -42,6 +43,7 @@
 		079CD92020534ADC00CF91DD /* FigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureViewController.swift; sourceTree = "<group>"; };
 		079CD92220534DF200CF91DD /* FigureGameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameManager.swift; sourceTree = "<group>"; };
 		079CD92420534FF000CF91DD /* FigureGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameService.swift; sourceTree = "<group>"; };
+		7A41F8DA205F6A03008BC3FC /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		7A420D2B2055A43C00B50C6A /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		7A420D2D2055A7C400B50C6A /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		7A420D2F2055BA9700B50C6A /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				0750A242205B1BBA003E83E5 /* PlayerScore.swift */,
 				0750A240205B1B9C003E83E5 /* PlayerScore.xib */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
+				7A41F8DA205F6A03008BC3FC /* SplashViewController.swift */,
 				7AF0AC752056C2CB00734EF1 /* WaitingRoomViewController.swift */,
 			);
 			path = Controller;
@@ -265,6 +268,7 @@
 				7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */,
 				079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */,
 				0750A243205B1BBA003E83E5 /* PlayerScore.swift in Sources */,
+				7A41F8DB205F6A03008BC3FC /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

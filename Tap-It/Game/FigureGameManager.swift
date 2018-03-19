@@ -58,7 +58,7 @@ class FigureGameManager {
 	var myGameId:Int = 0
 	var peers = [(Int, String)]()
 	var numOfPeersReady = 0
-	var counter = 0
+	var counter = 3
 
 	func initPlayer(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
@@ -96,12 +96,12 @@ class FigureGameManager {
 		self.numOfPeersReady += 1
 		if self.numOfPeersReady == self.scoreBoard.players.count {
 			Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
-				self.counter += 1
 				let event:UInt8 = UInt8(Event.Seconds.rawValue)
 				let second:UInt8 = UInt8(self.counter)
 				let data = Data(bytes: [event,second])
 				self.service.sendBlobb(data)
-				if self.counter == 3 {
+				self.counter -= 1
+				if self.counter == -1 {
 					timer.invalidate()
 				}
 			})

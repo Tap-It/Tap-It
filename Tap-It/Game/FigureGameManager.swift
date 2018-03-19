@@ -6,6 +6,7 @@ protocol FigureProtocol {
 	func updateTopScore(_ rank:[(String, Int)])
 	func updateDeckCount(_ total: Int)
 	func updatePlayerScore(_ score: Int)
+	func updateCounter(_ second: Int)
 }
 
 protocol FigureServiceProtocol {
@@ -38,7 +39,9 @@ enum Event: Int {
 	JoinGame = 9,
 	Startgame = 10,
 	PlayerId = 11,
-	Cards = 12
+	Cards = 12,
+	Ready = 13,
+	Seconds = 14
 }
 
 class FigureGameManager {
@@ -54,7 +57,9 @@ class FigureGameManager {
 	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
 	var myGameId:Int = 0
 	var peers = [(Int, String)]()
-	
+	var numOfPeersReady = 0
+	var counter = 0
+
 	func initPlayer(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
         self.service.setDelegate(self)
@@ -85,6 +90,33 @@ class FigureGameManager {
 	func shouldStartGame() {
 		self.service.shouldStartGame()
 		self.service.stopAdvertising()
+	}
+	
+	func shouldStartCountdown() {
+		self.numOfPeersReady += 1
+		if self.numOfPeersReady == self.scoreBoard.players.count {
+			Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
+				self.counter += 1
+				let event:UInt8 = UInt8(Event.Seconds.rawValue)
+				let second:UInt8 = UInt8(self.counter)
+				let data = Data(bytes: [event,second])
+				self.service.sendBlobb(data)
+				if self.counter == 3 {
+					timer.invalidate()
+				}
+			})
+		}
+	}
+	
+	func countdown() {
+		
+	}
+	
+	func informReady() {
+		let event:UInt8 = UInt8(Event.Ready.rawValue)
+		let peer:UInt8 = UInt8(self.myGameId)
+		let data = Data(bytes: [event,peer])
+		self.service.sendBlobb(data)
 	}
 	
 	private func runDeck(players: [Player]) {
@@ -282,6 +314,11 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			delegate?.updateDeckCount(deckCount)
 			self.readPlayerData(data)
 			self.readRank(data)
+		case Event.Ready.rawValue:
+			self.shouldStartCountdown()
+		case Event.Seconds.rawValue:
+			let second = Int(data[1])
+			self.delegate?.updateCounter(second)
 		default:
 			return
 		}

@@ -218,7 +218,7 @@ extension FigureGameService: FigureServiceProtocol {
 	func sendBlobb(_ data: Data) {
 		let event = Int(data[0])
 		switch event {
-		case Event.Click.rawValue:
+		case Event.Click.rawValue, Event.Ready.rawValue:
 			if !isHost {
 				do {
 					try self.session.send(data, toPeers: [hostID], with: .reliable)
@@ -229,7 +229,7 @@ extension FigureGameService: FigureServiceProtocol {
 			} else {
 				delegate?.receivee(data)
 			}
-		case Event.Cards.rawValue:
+		case Event.Cards.rawValue, Event.Seconds.rawValue:
 			if isHost {
 				do {
 					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)

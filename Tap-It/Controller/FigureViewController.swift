@@ -6,7 +6,8 @@ class FigureViewController: UIViewController {
 	var firstShow = true
 	var bottomCard: UIImageView!
 	var topCard: UIImageView!
-	var copyTopCard: UIImageView!
+    var copyBottomCard: UIImageView!
+    var copyTopCard: UIImageView!
 	var stackView: UIStackView!
 	var cardCover: UIImageView!
 	var roundedView:UIView!
@@ -80,7 +81,6 @@ class FigureViewController: UIViewController {
 				let image = image as! UIImageView
 				copyTopCard.addSubview(image)
 			}
-			self.view.addSubview(copyTopCard)
 		}
 		
 		// UPDATE DECK CARD
@@ -92,18 +92,60 @@ class FigureViewController: UIViewController {
 		self.loadTopCard()
 		
 		if gotAnswer {
-			UIView.transition(with: copyTopCard, duration: 0.7, options: .curveEaseOut, animations: {
-				self.copyTopCard.frame = self.bottomCard.frame
-			}, completion: { (_) in
-				self.bottomCard.subviews.forEach({ (view) in
-					view.removeFromSuperview()
-				})
-				
-				self.loadBottomCard()
-				
-				self.copyTopCard.removeFromSuperview()
-			})
+            
+            copyBottomCard = UIImageView()
+            copyBottomCard.frame = bottomCard.frame
+            copyBottomCard.image = bottomCard.image
+            for image in bottomCard.subviews {
+                let image = image as! UIImageView
+                copyBottomCard.addSubview(image)
+            }
+            
+            self.view.addSubview(copyBottomCard)
+            self.view.addSubview(copyTopCard)
+
+            
+            self.bottomCard.subviews.forEach({ (view) in
+                view.removeFromSuperview()
+            })
+
+            self.loadBottomCard()
+
+            UIView.animate(withDuration: 1.2, delay: 0.1, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseOut, animations: {
+                self.copyTopCard.image = UIImage(named: "card_1")
+                self.copyTopCard.frame = self.bottomCard.frame
+                
+                for image in self.copyTopCard.subviews {
+                    let bottomImage = self.bottomCard.subviews.filter({ (bottom) -> Bool in
+                        bottom.restorationIdentifier == image.restorationIdentifier
+                    })
+                    image.frame = bottomImage.first!.frame
+                    image.bounds = bottomImage.first!.bounds
+                }
+            }, completion: { (_) in
+                self.copyTopCard.removeFromSuperview()
+                self.copyBottomCard.removeFromSuperview()
+            })
+            
+//            UIView.transition(with: copyTopCard, duration: 0.7, options: ., animations: {
+//                self.copyTopCard.image = UIImage(named: "card_1")
+//                self.copyTopCard.frame = self.bottomCard.frame
+//
+//                for image in self.copyTopCard.subviews {
+//                    let bottomImage = self.bottomCard.subviews.filter({ (bottom) -> Bool in
+//                        bottom.restorationIdentifier == image.restorationIdentifier
+//                    })
+//                    image.frame = bottomImage.first!.frame
+//                    image.bounds = bottomImage.first!.bounds
+//                }
+//
+//
+//            }, completion: { (_) in
+//                self.copyTopCard.removeFromSuperview()
+//                self.copyBottomCard.removeFromSuperview()
+//            })
 		} else {
+            self.view.addSubview(copyTopCard)
 			UIView.transition(with: copyTopCard, duration: 0.7, options: .curveEaseOut, animations: {
 				self.copyTopCard.frame.origin.x = self.view.frame.size.width + 50
 			}, completion: { (_) in
@@ -197,7 +239,7 @@ extension FigureViewController {
 			var tempHeight = CGFloat(0.0)
 			var tempWidth = CGFloat(0.0)
 			
-			tempHeight = frame.height * 0.42
+			tempHeight = frame.height * 0.47
 			tempWidth = tempHeight
 			
 			bottomCard.frame = CGRect(x: (frame.width/2)-(tempWidth/2), y: frame.height+safeTop-tempHeight-8, width: tempWidth, height: tempHeight)
@@ -210,7 +252,7 @@ extension FigureViewController {
 			topCard.image = UIImage(named: "card_3")
 			topCard.isUserInteractionEnabled = true
 			
-			tempHeight = frame.height * 0.42
+			tempHeight = frame.height * 0.37
 			tempWidth = tempHeight
 			
 			topCard.frame = CGRect(x: (frame.width/2)-(tempWidth/2), y: bottomCard.frame.minY-tempHeight-8, width: tempWidth, height: tempHeight)
@@ -241,7 +283,7 @@ extension FigureViewController {
 			view.addSubview(arrowUp)
 			
 			deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*0.87, height: tempWidth*0.73)
-			deckLabel.font = UIFont(name: "Futura", size: 50)
+			deckLabel.font = UIFont(name: "Janda Safe and Sound Solid", size: 50)
 			deckLabel.adjustsFontSizeToFitWidth = true
 			deckLabel.minimumScaleFactor = 0.1
 			deckLabel.numberOfLines = 0
@@ -255,7 +297,7 @@ extension FigureViewController {
 			arrowDown.frame = CGRect(x: bottomCard.frame.maxX-tempWidth, y: bottomCard.frame.minY, width: tempWidth, height: tempHeight)
 			view.addSubview(arrowDown)
 			
-			playerCardLabel.font = UIFont(name: "Futura", size: 50)
+			playerCardLabel.font = UIFont(name: "Janda Safe and Sound Solid", size: 50)
 			playerCardLabel.adjustsFontSizeToFitWidth = true
 			playerCardLabel.minimumScaleFactor = 0.1
 			playerCardLabel.numberOfLines = 0

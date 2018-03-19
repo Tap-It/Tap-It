@@ -10,13 +10,11 @@
 		0750A241205B1B9C003E83E5 /* PlayerScore.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0750A240205B1B9C003E83E5 /* PlayerScore.xib */; };
 		0750A243205B1BBA003E83E5 /* PlayerScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0750A242205B1BBA003E83E5 /* PlayerScore.swift */; };
 		07909D6E20606EC300CDEB4E /* Janda.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07909D6D20606EC200CDEB4E /* Janda.ttf */; };
-		079CD91F20531A2C00CF91DD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD91E20531A2C00CF91DD /* Card.swift */; };
+		07909D7120607B7900CDEB4E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD91E20531A2C00CF91DD /* Card.swift */; };
 		079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92020534ADC00CF91DD /* FigureViewController.swift */; };
 		079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92220534DF200CF91DD /* FigureGameManager.swift */; };
 		079CD92520534FF000CF91DD /* FigureGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079CD92420534FF000CF91DD /* FigureGameService.swift */; };
 		7A41F8DB205F6A03008BC3FC /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F8DA205F6A03008BC3FC /* SplashViewController.swift */; };
-		7A420D2C2055A43C00B50C6A /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A420D2B2055A43C00B50C6A /* CardView.xib */; };
-		7A420D2E2055A7C400B50C6A /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2D2055A7C400B50C6A /* CardView.swift */; };
 		7A420D302055BA9700B50C6A /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D2F2055BA9700B50C6A /* Player.swift */; };
 		7A420D322055C52300B50C6A /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A420D312055C52300B50C6A /* Scoreboard.swift */; };
 		7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57ED5B204F43E7004815B5 /* AppDelegate.swift */; };
@@ -46,8 +44,6 @@
 		079CD92220534DF200CF91DD /* FigureGameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameManager.swift; sourceTree = "<group>"; };
 		079CD92420534FF000CF91DD /* FigureGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureGameService.swift; sourceTree = "<group>"; };
 		7A41F8DA205F6A03008BC3FC /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
-		7A420D2B2055A43C00B50C6A /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
-		7A420D2D2055A7C400B50C6A /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		7A420D2F2055BA9700B50C6A /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		7A420D312055C52300B50C6A /* Scoreboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoreboard.swift; sourceTree = "<group>"; };
 		7A57ED58204F43E7004815B5 /* Tap-It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tap-It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,8 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				079CD92020534ADC00CF91DD /* FigureViewController.swift */,
-				7A420D2D2055A7C400B50C6A /* CardView.swift */,
-				7A420D2B2055A43C00B50C6A /* CardView.xib */,
 				0750A242205B1BBA003E83E5 /* PlayerScore.swift */,
 				0750A240205B1B9C003E83E5 /* PlayerScore.xib */,
 				7A57ED5F204F43E7004815B5 /* Main.storyboard */,
@@ -244,7 +238,6 @@
 				07909D6E20606EC300CDEB4E /* Janda.ttf in Resources */,
 				7A57ED63204F43E7004815B5 /* Assets.xcassets in Resources */,
 				7A57ED61204F43E7004815B5 /* Main.storyboard in Resources */,
-				7A420D2C2055A43C00B50C6A /* CardView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,9 +255,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A420D2E2055A7C400B50C6A /* CardView.swift in Sources */,
+				07909D7120607B7900CDEB4E /* Card.swift in Sources */,
 				079CD92120534ADC00CF91DD /* FigureViewController.swift in Sources */,
-				079CD91F20531A2C00CF91DD /* Card.swift in Sources */,
 				079CD92320534DF200CF91DD /* FigureGameManager.swift in Sources */,
 				7AF0AC762056C2CB00734EF1 /* WaitingRoomViewController.swift in Sources */,
 				7A57ED5C204F43E7004815B5 /* AppDelegate.swift in Sources */,

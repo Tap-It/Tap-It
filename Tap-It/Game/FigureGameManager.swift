@@ -7,6 +7,7 @@ protocol FigureProtocol {
 	func updateDeckCount(_ total: Int)
 	func updatePlayerScore(_ score: Int)
 	func updateCounter(_ second: Int)
+    func blockPlayer()
 	func gameOver()
 }
 
@@ -87,6 +88,7 @@ class FigureGameManager {
 			self.service.sendBlobb(data)
             print("got it!")
         } else {
+            delegate?.blockPlayer()
             print("wrong. blocked!")
         }
     }
@@ -369,7 +371,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 	}
     
     func startGame() {
-        createDeck(order: 2)
+        createDeck(order: 7)
 		service.send(deck: deck)
 		self.runDeck(players: self.scoreBoard.players)
     }

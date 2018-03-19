@@ -70,6 +70,7 @@ class FigureViewController: UIViewController {
 			return
 		}
 		print(gotAnswer, "EH EH EH EH EH EH", gotAnswer)
+        blockClick()
 		
 		// COPY OF DECK CARD
 		
@@ -125,31 +126,15 @@ class FigureViewController: UIViewController {
             }, completion: { (_) in
                 self.copyTopCard.removeFromSuperview()
                 self.copyBottomCard.removeFromSuperview()
+                self.unblockClick()
             })
-            
-//            UIView.transition(with: copyTopCard, duration: 0.7, options: ., animations: {
-//                self.copyTopCard.image = UIImage(named: "card_1")
-//                self.copyTopCard.frame = self.bottomCard.frame
-//
-//                for image in self.copyTopCard.subviews {
-//                    let bottomImage = self.bottomCard.subviews.filter({ (bottom) -> Bool in
-//                        bottom.restorationIdentifier == image.restorationIdentifier
-//                    })
-//                    image.frame = bottomImage.first!.frame
-//                    image.bounds = bottomImage.first!.bounds
-//                }
-//
-//
-//            }, completion: { (_) in
-//                self.copyTopCard.removeFromSuperview()
-//                self.copyBottomCard.removeFromSuperview()
-//            })
-		} else {
+        } else {
             self.view.addSubview(copyTopCard)
 			UIView.transition(with: copyTopCard, duration: 0.7, options: .curveEaseOut, animations: {
 				self.copyTopCard.frame.origin.x = self.view.frame.size.width + 50
 			}, completion: { (_) in
 				self.copyTopCard.removeFromSuperview()
+                self.unblockClick()
 			})
 		}
 
@@ -221,6 +206,16 @@ class FigureViewController: UIViewController {
 		}
 		self.gameManager?.checkAnswer(Int(imageNumber)!)
 	}
+    
+    private func blockClick() {
+        topCard.isUserInteractionEnabled = false
+        bottomCard.isUserInteractionEnabled = false
+    }
+    
+    private func unblockClick() {
+        topCard.isUserInteractionEnabled = true
+        bottomCard.isUserInteractionEnabled = true
+    }
 }
 
 extension FigureViewController {
@@ -404,4 +399,14 @@ extension FigureViewController : FigureProtocol {
 	func updateDeck(_ card: Card) {
 		self.deckCard = card
 	}
+    
+    func blockPlayer() {
+        blockClick()
+        
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { (timer) in
+            self.unblockClick()
+            timer.invalidate()
+        })
+    }
+
 }

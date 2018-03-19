@@ -40,6 +40,21 @@ class FigureViewController: UIViewController {
 		
         deckLabel = UILabel()
         playerCardLabel = UILabel()
+		
+		stackView = UIStackView()
+
+		var countTopPlayers = 0
+		while countTopPlayers < 3 {
+			if numOfPeers > countTopPlayers {
+				if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
+					self.topScore.append(scoreview)
+					stackView.addArrangedSubview(scoreview)
+				}
+			}
+			countTopPlayers += 1
+		}
+		
+
 
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
@@ -180,7 +195,6 @@ extension FigureViewController {
             
             // STACK VIEW - SCORE
 			
-			stackView = UIStackView()
             stackView.axis = .horizontal
             stackView.distribution = .equalSpacing
             
@@ -225,17 +239,18 @@ extension FigureViewController {
             playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-(tempWidth*0.73)-4, width: tempWidth*0.87, height: tempWidth*0.73)
             view.addSubview(playerCardLabel)
 
-            var countTopPlayers = 0
-            while countTopPlayers < 3 {
-                if numOfPeers > countTopPlayers {
-                    if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
-                        self.topScore.append(scoreview)
-                        stackView.addArrangedSubview(scoreview)
-                    }
-                }
-                countTopPlayers += 1
-            }
-			
+//            var countTopPlayers = 0
+//            while countTopPlayers < 3 {
+//                if numOfPeers > countTopPlayers {
+//                    if let objects = Bundle.main.loadNibNamed("PlayerScore", owner: self, options: nil), let scoreview = objects.first as? PlayerScore {
+//                        self.topScore.append(scoreview)
+//                        stackView.addArrangedSubview(scoreview)
+//                    }
+//                }
+//                countTopPlayers += 1
+//            }
+//
+
 			counterView = UIView()
 			counterView.frame = self.view.frame
 			counterView.layer.insertSublayer(self.getGradientBackground(), at: 0)

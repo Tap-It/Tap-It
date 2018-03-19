@@ -93,7 +93,7 @@ class FigureGameManager {
 	}
 	
 	func shouldStartCountdown() {
-		self.numOfPeersReady += 1
+		
 		if self.numOfPeersReady == self.scoreBoard.players.count {
 			Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
 				let event:UInt8 = UInt8(Event.Seconds.rawValue)
@@ -156,6 +156,7 @@ class FigureGameManager {
 	}
 	
 	func checkStartGame() {
+		self.numOfPeersReady += 1
 		if self.scoreBoard.hasEverybodyJoined() {
 			var data = [String:Int]()
 			data["event"] = Event.Startgame.rawValue

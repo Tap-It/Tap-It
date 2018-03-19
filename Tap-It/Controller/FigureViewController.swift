@@ -315,6 +315,7 @@ extension FigureViewController : FigureProtocol {
 	}
 	
 	@objc func handleGameOverButton() {
+//		self.gameManager?.restartGame()
 		self.performSegue(withIdentifier: "gameover", sender: nil)
 	}
 

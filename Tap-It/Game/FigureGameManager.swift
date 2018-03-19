@@ -20,6 +20,7 @@ protocol FigureServiceProtocol {
 	func shouldStartGame()
 	func stopAdvertising()
 	func getHashFromPeer() -> Int
+	func restartGame()
 }
 
 protocol GameManagerWaitingRoomProtocol {
@@ -89,6 +90,10 @@ class FigureGameManager {
             print("wrong. blocked!")
         }
     }
+	
+	func restartGame() {
+		self.service.restartGame()
+	}
 	
 	func shouldStartGame() {
 		self.service.shouldStartGame()
@@ -337,7 +342,9 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			let second = Int(data[1])
 			self.delegate?.updateCounter(second)
 		case Event.GameOver.rawValue:
-			self.delegate?.gameOver()
+			DispatchQueue.main.async {
+				self.delegate?.gameOver()
+			}
 		default:
 			return
 		}
@@ -362,7 +369,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 	}
     
     func startGame() {
-        createDeck(order: 1)
+        createDeck(order: 2)
 		service.send(deck: deck)
 		self.runDeck(players: self.scoreBoard.players)
     }

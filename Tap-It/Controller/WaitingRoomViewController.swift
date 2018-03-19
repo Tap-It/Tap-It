@@ -15,7 +15,8 @@ class WaitingRoomViewController: UIViewController {
 			self.players = [(1,playerName)]
 		}
 	}
-	var manager = FigureGameManager()
+//	var manager = FigureGameManager()
+	var manager:FigureGameManager!
 	
 	var players = [(Int, String)]() {
 		willSet {
@@ -147,6 +148,8 @@ class WaitingRoomViewController: UIViewController {
 	
 	@IBAction func unwindFromGame(segue: UIStoryboardSegue) {
 		print("just got back!")
+		self.players = []
+		startButton.setTitle("Tap to play!", for: .normal)
 	}
 }
 

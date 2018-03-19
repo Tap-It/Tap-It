@@ -94,6 +94,12 @@ extension FigureGameService: FigureServiceProtocol {
 	func stopAdvertising() {
 		self.service.stopAdvertisingPeer()
 	}
+	
+	func restartGame() {
+		self.service.startAdvertisingPeer()
+		self.browser.startBrowsingForPeers()
+		self.isHost = true
+	}
 
 	func shouldStartGame() {
 		if isHost {

@@ -173,7 +173,7 @@ extension FigureViewController {
             var tempHeight = CGFloat(0.0)
             var tempWidth = CGFloat(0.0)
             
-            tempHeight = frame.height * 0.47
+            tempHeight = frame.height * 0.42
             tempWidth = tempHeight
             
             bottomCard.frame = CGRect(x: (frame.width/2)-(tempWidth/2), y: frame.height+safeTop-tempHeight-8, width: tempWidth, height: tempHeight)
@@ -186,7 +186,7 @@ extension FigureViewController {
             topCard.image = UIImage(named: "card_3")
             topCard.isUserInteractionEnabled = true
 
-            tempHeight = frame.height * 0.37
+            tempHeight = frame.height * 0.42
             tempWidth = tempHeight
             
             topCard.frame = CGRect(x: (frame.width/2)-(tempWidth/2), y: bottomCard.frame.minY-tempHeight-8, width: tempWidth, height: tempHeight)
@@ -213,7 +213,7 @@ extension FigureViewController {
 
             let arrowUp = UIImageView(image: UIImage(named: "arrow_up"))
             arrowUp.contentMode = .scaleAspectFit
-            arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(topCard.frame.maxY*0.25), width: tempWidth, height: tempHeight)
+            arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(topCard.frame.maxY*0.125), width: tempWidth, height: tempHeight)
             view.addSubview(arrowUp)
             
             deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*0.87, height: tempWidth*0.73)

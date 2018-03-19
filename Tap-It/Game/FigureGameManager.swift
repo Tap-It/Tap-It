@@ -7,6 +7,7 @@ protocol FigureProtocol {
 	func updateDeckCount(_ total: Int)
 	func updatePlayerScore(_ score: Int)
 	func updateCounter(_ second: Int)
+	func gameOver()
 }
 
 protocol FigureServiceProtocol {
@@ -41,7 +42,8 @@ enum Event: Int {
 	PlayerId = 11,
 	Cards = 12,
 	Ready = 13,
-	Seconds = 14
+	Seconds = 14,
+	GameOver = 15
 }
 
 class FigureGameManager {
@@ -127,8 +129,16 @@ class FigureGameManager {
 			self.currentCard += 1
 		}
 		let deckCard = UInt8(self.currentCard)
-		let cardsInDeck = UInt8(self.deck.count - currentCard)
-		var data = Data(bytes: [event, deckCard, cardsInDeck])
+		let cardsInDeck = self.deck.count - currentCard
+		print(cardsInDeck)
+		if Int(cardsInDeck) == 0 {
+			let event:UInt8 = UInt8(Event.GameOver.rawValue)
+			let data = Data(bytes: [event])
+			service.sendBlobb(data)
+			return
+		}
+		let cardsInDeckUInt = UInt8(cardsInDeck)
+		var data = Data(bytes: [event, deckCard, cardsInDeckUInt])
 		for player in self.scoreBoard.players {
 			let id = UInt8(player.id)
 			let playerCard = UInt8(player.cards.last!)
@@ -326,6 +336,8 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		case Event.Seconds.rawValue:
 			let second = Int(data[1])
 			self.delegate?.updateCounter(second)
+		case Event.GameOver.rawValue:
+			self.delegate?.gameOver()
 		default:
 			return
 		}
@@ -350,7 +362,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 	}
     
     func startGame() {
-        createDeck(order: 7)
+        createDeck(order: 1)
 		service.send(deck: deck)
 		self.runDeck(players: self.scoreBoard.players)
     }

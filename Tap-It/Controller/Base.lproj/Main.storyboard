@@ -26,8 +26,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="mpy-Dz-5ey"/>
                     </view>
+                    <connections>
+                        <segue destination="Cib-Zf-o1b" kind="unwind" identifier="gameover" unwindAction="unwindFromGameWithSegue:" id="RPk-52-kbg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kEW-0w-dzL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Cib-Zf-o1b" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1180" y="776.76161919040487"/>
         </scene>

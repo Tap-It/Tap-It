@@ -90,6 +90,7 @@ class WaitingRoomViewController: UIViewController {
 
 			let playerViewColor = UIColor(red: 245.0/255.0, green: 241.0/255.0, blue: 241.0/255.0, alpha: 1.0)
 			playerView.backgroundColor = playerViewColor
+//			playerView.backgroundColor = .clear
 			
 			self.playersSlots.append(playerView)
 			self.view.addSubview(playerView)
@@ -142,6 +143,10 @@ class WaitingRoomViewController: UIViewController {
 		sender.titleLabel?.textAlignment = .center
 		sender.setTitle("Ready!\n (waiting for players)", for: .normal)
 		self.manager.joinGame()
+	}
+	
+	@IBAction func unwindFromGame(segue: UIStoryboardSegue) {
+		print("just got back!")
 	}
 }
 

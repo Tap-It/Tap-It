@@ -94,6 +94,12 @@ extension FigureGameService: FigureServiceProtocol {
 	func stopAdvertising() {
 		self.service.stopAdvertisingPeer()
 	}
+	
+	func restartGame() {
+		self.service.startAdvertisingPeer()
+		self.browser.startBrowsingForPeers()
+		self.isHost = true
+	}
 
 	func shouldStartGame() {
 		if isHost {
@@ -229,7 +235,7 @@ extension FigureGameService: FigureServiceProtocol {
 			} else {
 				delegate?.receivee(data)
 			}
-		case Event.Cards.rawValue, Event.Seconds.rawValue:
+		case Event.Cards.rawValue, Event.Seconds.rawValue, Event.GameOver.rawValue:
 			if isHost {
 				do {
 					try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)

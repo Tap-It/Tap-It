@@ -152,8 +152,7 @@ class FigureViewController: UIViewController {
 				self.copyTopCard.removeFromSuperview()
 			})
 		}
-		
-		
+
 	}
 	
 	private func loadTopCard() {
@@ -305,6 +304,8 @@ extension FigureViewController {
 			playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-(tempWidth*0.73)-4, width: tempWidth*0.87, height: tempWidth*0.73)
 			view.addSubview(playerCardLabel)
 			
+			// SET THE COUNTER VIEW
+			
 			counterView = UIView()
 			counterView.frame = self.view.frame
 			counterView.layer.insertSublayer(self.getGradientBackground(), at: 0)
@@ -336,6 +337,29 @@ extension FigureViewController {
 
 extension FigureViewController : FigureProtocol {
 	
+	func gameOver() {
+		let rankView = UIView()
+		rankView.frame.size = self.view.frame.size
+		rankView.frame.origin = CGPoint(x: self.view.frame.origin.x, y: self.view.frame.size.height + 50)
+		rankView.layer.insertSublayer(self.getGradientBackground(), at: 0)
+		let overButton = UIButton()
+		let buttonSize = CGSize(width: self.view.frame.width * 0.6, height: self.view.frame.width * 0.6)
+		let buttonOrigin = CGPoint(x: (self.view.frame.size.width / 2.0) - (buttonSize.width / 2.0), y: (self.view.frame.size.height / 2.0) - (buttonSize.height / 2.0))
+		overButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+		overButton.setTitle("Exit", for: .normal)
+		overButton.setTitleColor(.white, for: .normal)
+		overButton.addTarget(self, action: #selector(handleGameOverButton), for: UIControlEvents.touchUpInside)
+		rankView.addSubview(overButton)
+		self.view.addSubview(rankView)
+		UIView.transition(with: rankView, duration: 0.5, options: .curveEaseIn, animations: {
+			rankView.frame.origin.y = self.view.frame.origin.y
+		}, completion: nil)
+	}
+	
+	@objc func handleGameOverButton() {
+		self.performSegue(withIdentifier: "gameover", sender: nil)
+	}
+
 	func updateCounter(_ second: Int) {
 		DispatchQueue.main.async {
 			let label = self.roundedView.subviews.first! as! UILabel

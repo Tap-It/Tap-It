@@ -1,15 +1,15 @@
 import UIKit
 
-class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
+class FigureViewController: UIViewController {
     
     var layouted = false
-	var bottomCard:UIImageView!
-	var topCard:UIImageView!
-	var stackView:UIStackView!
-	var cardCover:UIImageView!
+	var bottomCard: UIImageView!
+	var topCard: UIImageView!
+	var stackView: UIStackView!
+	var cardCover: UIImageView!
     var topScore = [PlayerScore]()
-    var deckLabel = UILabel()
-    var playerCardLabel = UILabel()
+    var deckLabel: UILabel!
+    var playerCardLabel: UILabel!
 
     var gameManager:FigureGameManager?
 	let imageSizeRatio = CGFloat(65.0 / 300.0)
@@ -41,6 +41,9 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
         gradientLayer.frame = view.frame
         view.layer.insertSublayer(gradientLayer, at: 0)
 		
+        deckLabel = UILabel()
+        playerCardLabel = UILabel()
+
         gameManager!.delegate = self
 		gameManager!.shouldStartGame()
     }
@@ -120,7 +123,6 @@ class FigureViewController: UIViewController, UIGestureRecognizerDelegate {
         image.isUserInteractionEnabled = true
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(figureTapped(_:)))
-        tap.delegate = self
         image.addGestureRecognizer(tap)
 
         return image
@@ -145,7 +147,8 @@ extension FigureViewController {
 			
 			bottomCard = UIImageView()
             bottomCard.image = UIImage(named: "card_1")
-            
+            bottomCard.isUserInteractionEnabled = true
+
             var tempHeight = CGFloat(0.0)
             var tempWidth = CGFloat(0.0)
             
@@ -160,7 +163,8 @@ extension FigureViewController {
 			
 			topCard = UIImageView()
             topCard.image = UIImage(named: "card_3")
-            
+            topCard.isUserInteractionEnabled = true
+
             tempHeight = frame.height * 0.37
             tempWidth = tempHeight
             
@@ -192,13 +196,11 @@ extension FigureViewController {
             arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(topCard.frame.maxY*0.25), width: tempWidth, height: tempHeight)
             view.addSubview(arrowUp)
             
-            
             deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*0.87, height: tempWidth*0.73)
             deckLabel.font = UIFont(name: "Futura", size: 50)
             deckLabel.adjustsFontSizeToFitWidth = true
             deckLabel.minimumScaleFactor = 0.1
             deckLabel.numberOfLines = 0
-            deckLabel.text = String("20")
 
             view.addSubview(deckLabel)
 
@@ -213,7 +215,6 @@ extension FigureViewController {
             playerCardLabel.adjustsFontSizeToFitWidth = true
             playerCardLabel.minimumScaleFactor = 0.1
             playerCardLabel.numberOfLines = 0
-            playerCardLabel.text = String("20")
 
             playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-(tempWidth*0.73)-4, width: tempWidth*0.87, height: tempWidth*0.73)
             view.addSubview(playerCardLabel)
@@ -255,29 +256,21 @@ extension FigureViewController : FigureProtocol {
 	
 	func updateCounter(_ second: Int) {
 		DispatchQueue.main.async {
-//			let labelSize = CGSize(width: 30.0, height: 30.0)
 			let label = self.cardCover.subviews.first! as! UILabel
 			label.text = String(second)
 			UIView.transition(with: self.cardCover, duration: 0.5, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-//			let labelOrigin = CGPoint(x: (self.cardCover.frame.width / 2) - (labelSize.width / 2), y: (self.cardCover.frame.height / 2) - (labelSize.height / 2))
-//			let counterLabel = UILabel(frame: CGRect(origin: labelOrigin, size: labelSize))
-//			let customFont = UIFont(name: "American Typewriter", size: 25.0)
-//			counterLabel.text = String(second)
-//			counterLabel.font = customFont
-//			counterLabel.textColor = .black
-//			counterLabel.numberOfLines = 1
 		}
 	}
 	
 	func updateDeckCount(_ total: Int) {
 		DispatchQueue.main.async {
-//            self.deckLabel.text = String(total)
+            self.deckLabel.text = String(total)
 		}
 	}
 	
 	func updatePlayerScore(_ score: Int) {
 		DispatchQueue.main.async {
-//            self.playerCardLabel.text = String(score)
+            self.playerCardLabel.text = String(score)
 		}
 	}
 	

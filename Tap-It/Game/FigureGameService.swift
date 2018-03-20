@@ -60,11 +60,9 @@ class FigureGameService: NSObject {
 extension FigureGameService: MCNearbyServiceAdvertiserDelegate {
 	
 	func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-		print("didNotStartAdvertisingPeer \(error)")
 	}
 	
 	func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-		print("didReceiveInvitationFromPeer \(peerID)")
 		var hostTimer = TimeInterval()
 		if let hostContext = context {
 			hostTimer = hostContext.withUnsafeBytes { (ptr: UnsafePointer<TimeInterval>) -> TimeInterval in
@@ -75,7 +73,6 @@ extension FigureGameService: MCNearbyServiceAdvertiserDelegate {
 		let isPeerOlder = (hostTimer > peerRunningTime)
 		invitationHandler(isPeerOlder, self.session)
 		if isPeerOlder {
-			print(#line, "accepting invitation from \(peerID)")
 			self.browser.stopBrowsingForPeers()
 			self.isHost = false
 			self.hostID = peerID
@@ -179,7 +176,6 @@ extension FigureGameService: FigureServiceProtocol {
 							delegate?.receive(dict)
 						} else {
 							guard let peer = self.getPeerId(serviceId: player.serviceId!) else {
-								print("Fatal error")
 								return
 							}
 							do {
@@ -267,13 +263,10 @@ extension FigureGameService: FigureServiceProtocol {
 extension FigureGameService: MCNearbyServiceBrowserDelegate {
 	
 	func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-		print("lostPeer \(peerID)")
 		delegate?.removePlayer(serviceId: peerID.hashValue)
 	}
 	
 	func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-		print("foundPeer \(peerID)")
-		print("invitePeer \(peerID)")
 		let toUseSession = self.session
 		var runningTime = -sessionInitTime.timeIntervalSinceNow
 		let data = Data(buffer: UnsafeBufferPointer(start: &runningTime, count: 1))
@@ -281,7 +274,6 @@ extension FigureGameService: MCNearbyServiceBrowserDelegate {
 	}
 	
 	func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-		print("didNotStartBrowsingForPeers \(error)")
 	}
 	
 }
@@ -289,7 +281,6 @@ extension FigureGameService: MCNearbyServiceBrowserDelegate {
 extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-		print("peer: \(peerID), didChangeState: \(state)")
 		if state == .connected && isHost {
 			delegate?.addPlayer(name: peerID.displayName, serviceId:peerID.hashValue)
 		}
@@ -301,8 +292,7 @@ extension FigureGameService: MCSessionDelegate {
 	}
 	
 	func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-		print("didReceiveData: \(data)")
-		
+
 		self.delegate?.receivee(data)
 
 		if let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String:Any] {
@@ -315,14 +305,11 @@ extension FigureGameService: MCSessionDelegate {
 	}
 	
 	func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-		print("didReceiveStream")
 	}
 	
 	func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-		print("didFinishReceivingResourceWithName")
 	}
 	
 	func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-		print("didFinishReceivingResourceWithName")
 	}
 }

@@ -99,17 +99,17 @@ class FigureGameManager {
         }
 
 		// 4: check para ver se a carta escolhida foi a correta
-//        if deckFigures.contains(answer) && playerFigures.contains(answer) {
+        if deckFigures.contains(answer) && playerFigures.contains(answer) {
 			let event:UInt8 = UInt8(Event.Click.rawValue)
 			let card:UInt8 = UInt8(self.currentDeckCard)
 			let peer:UInt8 = UInt8(self.myGameId)
 			let data = Data(bytes: [event,card,peer])
 			// 5: manda para o host o evento do click correto
 			self.service.sendBlobb(data)
-//        } else {
+        } else {
 			// 6: chama o delegate method que bloqueia o jogador
-//            delegate?.blockPlayer()
-//        }
+            delegate?.blockPlayer()
+        }
     }
 	
 	func restartGame() {
@@ -152,7 +152,6 @@ class FigureGameManager {
 		}
 		let deckCard = UInt8(self.currentCard)
 		let cardsInDeck = self.deck.count - currentCard
-		print(cardsInDeck)
 		if Int(cardsInDeck) == 0 {
 			let event:UInt8 = UInt8(Event.GameOver.rawValue)
 			var data = Data(bytes: [event])

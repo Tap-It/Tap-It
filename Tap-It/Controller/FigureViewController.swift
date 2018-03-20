@@ -72,8 +72,6 @@ class FigureViewController: UIViewController {
 			firstShow = false
 			return
 		}
-		print(gotAnswer, "EH EH EH EH EH EH", gotAnswer)
-		
 		self.gameManager?.canProcessCache = false
         blockClick()
 		
@@ -150,21 +148,25 @@ class FigureViewController: UIViewController {
                     image.bounds = bottomImage.first!.bounds
                 }
             }, completion: { (_) in
-                self.copyTopCard.removeFromSuperview()
-                self.copyBottomCard.removeFromSuperview()
-                self.unblockClick()
-				self.gameManager?.canProcessCache = true
-				self.gameManager?.processDataCache()
+				DispatchQueue.main.async {
+					self.copyTopCard.removeFromSuperview()
+					self.copyBottomCard.removeFromSuperview()
+					self.unblockClick()
+					self.gameManager?.canProcessCache = true
+					self.gameManager?.processDataCache()
+				}
             })
         } else {
             self.view.addSubview(copyTopCard)
             UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseOut, animations: {
 				self.copyTopCard.frame.origin.x = self.view.frame.size.width + 50
 			}, completion: { (_) in
-				self.copyTopCard.removeFromSuperview()
-                self.unblockClick()
-				self.gameManager?.canProcessCache = true
-				self.gameManager?.processDataCache()
+				DispatchQueue.main.async {
+					self.copyTopCard.removeFromSuperview()
+					self.unblockClick()
+					self.gameManager?.canProcessCache = true
+					self.gameManager?.processDataCache()
+				}
 			})
 		}
 
@@ -318,7 +320,6 @@ extension FigureViewController {
 			
 			tempHeight = tempHeight * 0.7
 			tempWidth = tempHeight/1.73
-            print(tempWidth, "WI WI WI WI DTH!")
             //33.4 * x = 40
 
 			let arrowUp = UIImageView(image: UIImage(named: "arrow_up"))
@@ -545,7 +546,6 @@ extension FigureViewController : FigureProtocol {
 		
 		// 11: cria um timer que desbloqueia a tela do jogador
         timerBlock = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { (timer) in
-//            print("unblock")
             self.unblockClick()
         })
         

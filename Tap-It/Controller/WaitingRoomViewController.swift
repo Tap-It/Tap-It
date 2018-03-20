@@ -147,7 +147,6 @@ class WaitingRoomViewController: UIViewController {
 	}
 	
 	@IBAction func unwindFromGame(segue: UIStoryboardSegue) {
-		print("just got back!")
 		self.players = []
 		startButton.setTitle("Tap to play!", for: .normal)
 	}

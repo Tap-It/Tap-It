@@ -1,9 +1,12 @@
 import UIKit
+import AudioToolbox
 
 class FigureViewController: UIViewController {
 	
 	var layouted = false
 	var firstShow = true
+    var timerBlock = Timer()
+    
 	var bottomCard: UIImageView!
 	var topCard: UIImageView!
     var copyBottomCard: UIImageView!
@@ -83,7 +86,17 @@ class FigureViewController: UIViewController {
 				copyTopCard.addSubview(image)
 			}
 		}
-		
+
+        for view in copyTopCard.subviews {
+            if let view = view as? UIImageView {
+                view.layer.shadowColor = UIColor.green.cgColor
+                view.layer.shadowOffset = CGSize(width: 0, height: 1)
+                view.layer.shadowOpacity = 1
+                view.layer.shadowRadius = 2.0
+                view.clipsToBounds = false
+            }
+        }
+
 		// UPDATE DECK CARD
 		
 		topCard.subviews.forEach({ (view) in
@@ -94,6 +107,17 @@ class FigureViewController: UIViewController {
 		
 		if gotAnswer {
             
+            for view in bottomCard.subviews {
+                if let view = view as? UIImageView {
+                    view.layer.shadowColor = UIColor.green.cgColor
+                    view.layer.shadowOffset = CGSize(width: 0, height: 1)
+                    view.layer.shadowOpacity = 1
+                    view.layer.shadowRadius = 2.0
+                    view.clipsToBounds = false
+                }
+            }
+
+
             copyBottomCard = UIImageView()
             copyBottomCard.frame = bottomCard.frame
             copyBottomCard.image = bottomCard.image
@@ -215,6 +239,18 @@ class FigureViewController: UIViewController {
     private func unblockClick() {
         topCard.isUserInteractionEnabled = true
         bottomCard.isUserInteractionEnabled = true
+        
+        for view in bottomCard.subviews {
+            if let view = view as? UIImageView {
+                view.layer.shadowColor = UIColor.clear.cgColor
+            }
+        }
+        
+        for view in topCard.subviews {
+            if let view = view as? UIImageView {
+                view.layer.shadowColor = UIColor.clear.cgColor
+            }
+        }
     }
 }
 
@@ -391,6 +427,7 @@ extension FigureViewController : FigureProtocol {
 	
 	func updatePlayerCard(_ card: Card, _ gotAnswer: Bool) {
 		self.card = card
+        timerBlock.invalidate()
 		if layouted {
 			setupCard(gotAnswer)
 		}
@@ -402,11 +439,34 @@ extension FigureViewController : FigureProtocol {
     
     func blockPlayer() {
         blockClick()
+
+        for view in bottomCard.subviews {
+            if let view = view as? UIImageView {
+                view.layer.shadowColor = UIColor.red.cgColor
+                view.layer.shadowOffset = CGSize(width: 0, height: 1)
+                view.layer.shadowOpacity = 1
+                view.layer.shadowRadius = 2.0
+                view.clipsToBounds = false
+            }
+        }
+
+        for view in topCard.subviews {
+            if let view = view as? UIImageView {
+                view.layer.shadowColor = UIColor.red.cgColor
+                view.layer.shadowOffset = CGSize(width: 0, height: 1)
+                view.layer.shadowOpacity = 1
+                view.layer.shadowRadius = 2.0
+                view.clipsToBounds = false
+            }
+        }
+
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { (timer) in
+        timerBlock = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { (timer) in
+            print("unblock")
             self.unblockClick()
-            timer.invalidate()
         })
+        
     }
 
 }

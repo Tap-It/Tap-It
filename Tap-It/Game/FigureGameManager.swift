@@ -64,6 +64,15 @@ class FigureGameManager {
 	var peers = [(Int, String)]()
 	var numOfPeersReady = 0
 	var counter = 3
+	var canProcessCache = true
+	var dataCache = [Data]() {
+		didSet {
+			if dataCache.count > 0 && canProcessCache {
+				let data = self.dataCache.removeFirst()
+				self.loadCardsBlob(data: data)
+			}
+		}
+	}
 
 	func initPlayer(playerName: String) {
 		self.service = FigureGameService(playerName: playerName)
@@ -71,26 +80,36 @@ class FigureGameManager {
 		self.addPlayer(name: service.getName(), serviceId: self.service.getHashFromPeer())
     }
 	
+	func processDataCache() {
+		if dataCache.count > 0 && canProcessCache {
+			let data = self.dataCache.removeFirst()
+			self.loadCardsBlob(data: data)
+		}
+	}
+	
     func checkAnswer(_ answer: Int) {
-        
+		
+		// 2: todos numeros das imagens do deck
         let deckFigures = deck[currentDeckCard].face.map { (figure) -> Int in
             return figure.imageNumber
         }
+		// 3: todos os numeros das imagens da carta do player
         let playerFigures = deck[currentPlayerCard].face.map { (figure) -> Int in
             return figure.imageNumber
         }
 
-        if deckFigures.contains(answer) && playerFigures.contains(answer) {
+		// 4: check para ver se a carta escolhida foi a correta
+//        if deckFigures.contains(answer) && playerFigures.contains(answer) {
 			let event:UInt8 = UInt8(Event.Click.rawValue)
 			let card:UInt8 = UInt8(self.currentDeckCard)
 			let peer:UInt8 = UInt8(self.myGameId)
 			let data = Data(bytes: [event,card,peer])
+			// 5: manda para o host o evento do click correto
 			self.service.sendBlobb(data)
-            print("got it!")
-        } else {
-            delegate?.blockPlayer()
-            print("wrong. blocked!")
-        }
+//        } else {
+			// 6: chama o delegate method que bloqueia o jogador
+//            delegate?.blockPlayer()
+//        }
     }
 	
 	func restartGame() {
@@ -316,6 +335,17 @@ extension FigureGameManager: FigureGameServiceDelegate {
 		}
     }
 	
+	private func loadCardsBlob(data:Data) {
+		let deckCard = Int(data[1])
+		self.previousDeckCard = self.currentDeckCard
+		self.currentDeckCard = deckCard
+		self.delegate?.updateDeck(self.deck[deckCard])
+		let deckCount = Int(data[2])
+		self.delegate?.updateDeckCount(deckCount)
+		self.readPlayerData(data)
+		self.readRank(data)
+	}
+	
 	func receivee(_ data: Data) {
 		let event = Int(data[0])
 		switch event {
@@ -330,14 +360,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			}
 		case Event.Cards.rawValue:
 			DispatchQueue.main.async {
-				let deckCard = Int(data[1])
-				self.previousDeckCard = self.currentDeckCard
-				self.currentDeckCard = deckCard
-				self.delegate?.updateDeck(self.deck[deckCard])
-				let deckCount = Int(data[2])
-				self.delegate?.updateDeckCount(deckCount)
-				self.readPlayerData(data)
-				self.readRank(data)
+				self.dataCache.append(data)
 			}
 		case Event.Ready.rawValue:
 			self.shouldStartCountdown()

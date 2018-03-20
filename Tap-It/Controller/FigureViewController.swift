@@ -73,6 +73,8 @@ class FigureViewController: UIViewController {
 			return
 		}
 		print(gotAnswer, "EH EH EH EH EH EH", gotAnswer)
+		
+		self.gameManager?.canProcessCache = false
         blockClick()
 		
 		// COPY OF DECK CARD
@@ -151,6 +153,8 @@ class FigureViewController: UIViewController {
                 self.copyTopCard.removeFromSuperview()
                 self.copyBottomCard.removeFromSuperview()
                 self.unblockClick()
+				self.gameManager?.canProcessCache = true
+				self.gameManager?.processDataCache()
             })
         } else {
             self.view.addSubview(copyTopCard)
@@ -159,6 +163,8 @@ class FigureViewController: UIViewController {
 			}, completion: { (_) in
 				self.copyTopCard.removeFromSuperview()
                 self.unblockClick()
+				self.gameManager?.canProcessCache = true
+				self.gameManager?.processDataCache()
 			})
 		}
 
@@ -224,6 +230,8 @@ class FigureViewController: UIViewController {
 	}
 	
 	@objc func figureTapped(_ sender: UITapGestureRecognizer) {
+		// 1: independente do tipo de click, a view deveria perder o userinteraction pois espera por instrucoes do host ou errou
+//		self.blockClick()
 		let view = sender.view as! UIImageView
 		guard let imageNumber = view.restorationIdentifier else {
 			return
@@ -232,20 +240,24 @@ class FigureViewController: UIViewController {
 	}
     
     private func blockClick() {
+		// 12: tira a userinteraction das cartas de cima e de baixo
         topCard.isUserInteractionEnabled = false
         bottomCard.isUserInteractionEnabled = false
     }
     
     private func unblockClick() {
+		// 13: coloca de volta a userinteraction nas cartas
         topCard.isUserInteractionEnabled = true
         bottomCard.isUserInteractionEnabled = true
-        
+		
+		// 14: limpa o background das imagens
         for view in bottomCard.subviews {
             if let view = view as? UIImageView {
                 view.layer.shadowColor = UIColor.clear.cgColor
             }
         }
-        
+		
+		// 15: limpa o background das imagens
         for view in topCard.subviews {
             if let view = view as? UIImageView {
                 view.layer.shadowColor = UIColor.clear.cgColor
@@ -490,7 +502,9 @@ extension FigureViewController : FigureProtocol {
 	
 	func updatePlayerCard(_ card: Card, _ gotAnswer: Bool) {
 		self.card = card
-        timerBlock.invalidate()
+		if timerBlock.isValid {
+			timerBlock.invalidate()
+		}
 		if layouted {
 			setupCard(gotAnswer)
 		}
@@ -501,8 +515,10 @@ extension FigureViewController : FigureProtocol {
 	}
     
     func blockPlayer() {
+		// 7: bloqueia o click do jogador (ja nao poderiamos ter feito isso no inicio do tap gesture?)
         blockClick()
 
+		// 8: pinta de vermelho as imagens da carta do jogador
         for view in bottomCard.subviews {
             if let view = view as? UIImageView {
                 view.layer.shadowColor = UIColor.red.cgColor
@@ -513,6 +529,7 @@ extension FigureViewController : FigureProtocol {
             }
         }
 
+		// 9: pinta de vermelho as imagens do deck
         for view in topCard.subviews {
             if let view = view as? UIImageView {
                 view.layer.shadowColor = UIColor.red.cgColor
@@ -523,10 +540,12 @@ extension FigureViewController : FigureProtocol {
             }
         }
 
+		// 10: vibra o iphone
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-        
+		
+		// 11: cria um timer que desbloqueia a tela do jogador
         timerBlock = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { (timer) in
-            print("unblock")
+//            print("unblock")
             self.unblockClick()
         })
         

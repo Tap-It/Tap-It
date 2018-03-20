@@ -370,7 +370,7 @@ extension FigureViewController {
 
 extension FigureViewController : FigureProtocol {
 	
-	func gameOver() {
+	func gameOver(winner:String, winCount:Int, playerPos:String, playerCount:Int) {
 		
 		let overView = UIView()
 		overView.frame = self.view.frame
@@ -408,7 +408,7 @@ extension FigureViewController : FigureProtocol {
 		resultLabel.lineBreakMode = .byWordWrapping
 		resultLabel.textAlignment = .center
 		
-		resultLabel.text = "Player 1 won!\n(35 cards)"
+		resultLabel.text = "\(winner) won!\n(\(winCount) cards)"
 		winnerView.addSubview(resultLabel)
 		rankView.addSubview(winnerView)
 		
@@ -422,7 +422,11 @@ extension FigureViewController : FigureProtocol {
 		playerLabel.lineBreakMode = .byWordWrapping
 		playerLabel.textColor = .black
 		playerLabel.textAlignment = .center
-		playerLabel.text = "You finished 2nd!\n(35 cards)"
+		if winner == "You" {
+			playerLabel.text = "Congratulations!"
+		} else {
+			playerLabel.text = "You finished \(playerPos)!\n(\(playerCount) cards)"
+		}
 		rankView.addSubview(playerLabel)
 		
 		// EXIT BUTTON

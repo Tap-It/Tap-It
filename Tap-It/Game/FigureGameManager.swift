@@ -8,7 +8,7 @@ protocol FigureProtocol {
 	func updatePlayerScore(_ score: Int)
 	func updateCounter(_ second: Int)
     func blockPlayer()
-	func gameOver()
+	func gameOver(winner:String, winCount:Int, playerPos:String, playerCount:Int)
 }
 
 protocol FigureServiceProtocol {
@@ -118,10 +118,6 @@ class FigureGameManager {
 		}
 	}
 	
-	func countdown() {
-		
-	}
-	
 	func informReady() {
 		let event:UInt8 = UInt8(Event.Ready.rawValue)
 		let peer:UInt8 = UInt8(self.myGameId)
@@ -140,7 +136,12 @@ class FigureGameManager {
 		print(cardsInDeck)
 		if Int(cardsInDeck) == 0 {
 			let event:UInt8 = UInt8(Event.GameOver.rawValue)
-			let data = Data(bytes: [event])
+			var data = Data(bytes: [event])
+			for player in self.scoreBoard.players {
+				let id = UInt8(player.id)
+				let numPlayerCards = UInt8(player.cards.count)
+				data.append(contentsOf: [id, numPlayerCards])
+			}
 			service.sendBlobb(data)
 			return
 		}
@@ -345,7 +346,52 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			self.delegate?.updateCounter(second)
 		case Event.GameOver.rawValue:
 			DispatchQueue.main.async {
-				self.delegate?.gameOver()
+				
+				var players = [(Int,String,Int)]()
+				let initIterator = 1
+				let interval = 2
+				for tick in stride(from: initIterator, to: data.count, by: interval) {
+					let id = Int(data[tick])
+					var name = "-"
+					if id == self.myGameId {
+						name = "You"
+					} else {
+						name = self.peers.filter({ (peer) -> Bool in peer.0 == id }).first!.1
+					}
+					let count = Int(data[tick + 1])
+					let player = (id, name, count)
+					players.append(player)
+				}
+				
+				let rank = players.sorted(by: { (player1, player2) -> Bool in
+					player1.2 >= player2.2
+				})
+				
+				let winnerName = rank[0].1
+				let winnerCount = rank[0].2
+				
+				var myPosition = 1
+				for player in rank {
+					if player.0 == self.myGameId {break}
+					myPosition += 1
+				}
+				
+				var stringPos = "-"
+				switch myPosition {
+				case 1: stringPos = "1st"
+				case 2: stringPos = "2nd"
+				case 3: stringPos = "3rd"
+				case 4: stringPos = "4th"
+				case 5: stringPos = "5th"
+				case 6: stringPos = "6th"
+				case 7: stringPos = "7th"
+				case 8: stringPos = "8th"
+				default: stringPos = "-"
+				}
+				
+				let playerCount = rank[myPosition - 1].2
+				
+				self.delegate?.gameOver(winner: winnerName, winCount: winnerCount, playerPos: stringPos, playerCount: playerCount)
 			}
 		default:
 			return

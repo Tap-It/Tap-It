@@ -371,22 +371,79 @@ extension FigureViewController {
 extension FigureViewController : FigureProtocol {
 	
 	func gameOver() {
+		
+		let overView = UIView()
+		overView.frame = self.view.frame
+		overView.layer.insertSublayer(self.getGradientBackground(), at: 0)
+
 		let rankView = UIView()
-		rankView.frame.size = self.view.frame.size
-		rankView.frame.origin = CGPoint(x: self.view.frame.origin.x, y: self.view.frame.size.height + 50)
-		rankView.layer.insertSublayer(self.getGradientBackground(), at: 0)
+		let rankSize = CGSize(width: self.view.frame.width * 0.9, height: self.view.frame.height * 0.9)
+		let rankOrigin = CGPoint(x: (self.view.frame.width / 2.0) - (rankSize.width / 2.0), y: (self.view.frame.height / 2.0) - (rankSize.height / 2.0))
+		rankView.frame = CGRect(origin: rankOrigin, size: rankSize)
+		rankView.backgroundColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 0.4)
+		rankView.layer.cornerRadius = rankView.frame.width / 13
+		
+		// WINNER VIEW
+		let winnerView = UIView()
+		let resultSize = CGSize(width: rankView.frame.width, height: (rankView.frame.height / 2))
+		let resultOrigin = CGPoint(x: 0.0, y: 40.0)
+		winnerView.frame = CGRect(origin: resultOrigin, size: resultSize)
+		
+		// CROWN
+		let crown = UIImageView()
+		let crownSize = CGSize(width: (winnerView.frame.width / 2), height: (winnerView.frame.width / 2))
+		let crownOrigin = CGPoint(x: (winnerView.frame.width / 2.0) - (crownSize.width / 2), y: 10.0)
+		crown.frame = CGRect(origin: crownOrigin, size: crownSize)
+		crown.image = UIImage(named: "trophy")
+		winnerView.addSubview(crown)
+		
+		// WINNER LABEL 1
+		let resultLabel = UILabel()
+		let labelSize = CGSize(width: winnerView.frame.width, height: 120.0)
+		let labelOrigin   = CGPoint(x: (winnerView.frame.width / 2) - (labelSize.width / 2), y: (crown.frame.origin.y) + (crown.frame.size.height) + 10.0)
+		resultLabel.frame = CGRect(origin: labelOrigin, size: labelSize)
+		resultLabel.font = UIFont(name: "American Typewriter", size: 30.0)
+		resultLabel.textColor = .black
+		resultLabel.numberOfLines = 0
+		resultLabel.lineBreakMode = .byWordWrapping
+		resultLabel.textAlignment = .center
+		
+		resultLabel.text = "Player 1 won!\n(35 cards)"
+		winnerView.addSubview(resultLabel)
+		rankView.addSubview(winnerView)
+		
+		// PLAYER LABEL
+		let playerLabel = UILabel()
+		let playerSize = CGSize(width: rankView.frame.width, height: 120.0)
+		let playerOrigin = CGPoint(x: (rankView.frame.width / 2) - (playerSize.width / 2), y: (winnerView.frame.origin.y) + (winnerView.frame.size.height) + 20.0)
+		playerLabel.frame = CGRect(origin: playerOrigin, size: playerSize)
+		playerLabel.font = UIFont(name: "American Typewriter", size: 30.0)
+		playerLabel.numberOfLines = 0
+		playerLabel.lineBreakMode = .byWordWrapping
+		playerLabel.textColor = .black
+		playerLabel.textAlignment = .center
+		playerLabel.text = "You finished 2nd!\n(35 cards)"
+		rankView.addSubview(playerLabel)
+		
+		// EXIT BUTTON
 		let overButton = UIButton()
-		let buttonSize = CGSize(width: self.view.frame.width * 0.6, height: self.view.frame.width * 0.6)
-		let buttonOrigin = CGPoint(x: (self.view.frame.size.width / 2.0) - (buttonSize.width / 2.0), y: (self.view.frame.size.height / 2.0) - (buttonSize.height / 2.0))
+		let buttonSize = CGSize(width: rankView.frame.width, height: 80.0)
+		let buttonOrigin = CGPoint(x: 0.0, y: rankView.frame.size.height - buttonSize.height)
 		overButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
 		overButton.setTitle("Exit", for: .normal)
-		overButton.setTitleColor(.white, for: .normal)
+		overButton.backgroundColor = UIColor(red: 245.0/255.0, green: 125.0/255.0, blue: 55.0/255.0, alpha: 0.4)
+		overButton.titleLabel?.font = UIFont(name: "American Typewriter", size: 25.0)
 		overButton.addTarget(self, action: #selector(handleGameOverButton), for: UIControlEvents.touchUpInside)
+		overButton.setTitleColor(.white, for: .normal)
 		rankView.addSubview(overButton)
-		self.view.addSubview(rankView)
-		UIView.transition(with: rankView, duration: 0.5, options: .curveEaseIn, animations: {
-			rankView.frame.origin.y = self.view.frame.origin.y
-		}, completion: nil)
+		
+		rankView.clipsToBounds = true
+		overView.addSubview(rankView)
+		self.view.addSubview(overView)
+		
+//		UIView.transition(with: rankView, duration: 0.5, options: .curveEaseIn, animations: {
+//			rankView.frame.origin.y = self.view.frame.origin.y
+//		}, completion: nil)
 	}
 	
 	@objc func handleGameOverButton() {

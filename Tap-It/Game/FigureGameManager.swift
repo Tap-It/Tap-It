@@ -371,7 +371,7 @@ extension FigureGameManager: FigureGameServiceDelegate {
 	}
     
     func startGame() {
-        createDeck(order: 7)
+        createDeck(order: 2)
 		service.send(deck: deck)
 		self.runDeck(players: self.scoreBoard.players)
     }

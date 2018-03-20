@@ -136,7 +136,7 @@ class FigureViewController: UIViewController {
 
             self.loadBottomCard()
 
-            UIView.animate(withDuration: 1.2, delay: 0.1, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseOut, animations: {
                 self.copyTopCard.image = UIImage(named: "card_1")
                 self.copyTopCard.frame = self.bottomCard.frame
                 
@@ -154,7 +154,7 @@ class FigureViewController: UIViewController {
             })
         } else {
             self.view.addSubview(copyTopCard)
-			UIView.transition(with: copyTopCard, duration: 0.7, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseOut, animations: {
 				self.copyTopCard.frame.origin.x = self.view.frame.size.width + 50
 			}, completion: { (_) in
 				self.copyTopCard.removeFromSuperview()

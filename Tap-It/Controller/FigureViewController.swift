@@ -306,13 +306,15 @@ extension FigureViewController {
 			
 			tempHeight = tempHeight * 0.7
 			tempWidth = tempHeight/1.73
-			
+            print(tempWidth, "WI WI WI WI DTH!")
+            //33.4 * x = 40
+
 			let arrowUp = UIImageView(image: UIImage(named: "arrow_up"))
 			arrowUp.contentMode = .scaleAspectFit
-			arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(topCard.frame.maxY*0.125), width: tempWidth, height: tempHeight)
+			arrowUp.frame = CGRect(x: bottomCard.frame.minX, y: topCard.frame.maxY-(tempWidth*2.65), width: tempWidth, height: tempHeight)
 			view.addSubview(arrowUp)
 			
-			deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*0.87, height: tempWidth*0.73)
+			deckLabel.frame = CGRect(x: arrowUp.frame.midX-10, y: arrowUp.frame.maxY+4, width: tempWidth*1.21, height: tempWidth)
 			deckLabel.font = UIFont(name: "Janda Safe and Sound Solid", size: 50)
 			deckLabel.adjustsFontSizeToFitWidth = true
 			deckLabel.minimumScaleFactor = 0.1
@@ -332,7 +334,7 @@ extension FigureViewController {
 			playerCardLabel.minimumScaleFactor = 0.1
 			playerCardLabel.numberOfLines = 0
 			
-			playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-(tempWidth*0.73)-4, width: tempWidth*0.87, height: tempWidth*0.73)
+			playerCardLabel.frame = CGRect(x: arrowDown.frame.midX-16, y: arrowDown.frame.minY-tempWidth-4, width: tempWidth*1.21, height: tempWidth)
 			view.addSubview(playerCardLabel)
 			
 			// SET THE COUNTER VIEW
@@ -351,7 +353,7 @@ extension FigureViewController {
 			let labelSize = CGSize(width: 50.0, height: 50.0)
 			let labelOrigin = CGPoint(x: (roundedView.frame.width / 2) - (labelSize.width / 2), y: (roundedView.frame.height / 2) - (labelSize.height / 2))
 			let counterLabel = UILabel(frame: CGRect(origin: labelOrigin, size: labelSize))
-			let customFont = UIFont(name: "American Typewriter", size: 30.0)
+			let customFont = UIFont(name: "Janda Safe and Sound Solid", size: 30.0)
 			counterLabel.font = customFont
 			counterLabel.textColor = .black
 			counterLabel.numberOfLines = 1

@@ -127,7 +127,7 @@ class WaitingRoomViewController: UIViewController {
 		}
 		let ok = UIAlertAction(title: "That's me!", style: UIAlertActionStyle.default) { (action: UIAlertAction) in
             let textField = alert.textFields![0].text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            if textField != nil && textField != "" && (textField?.count)! < 16 {
+            if textField != nil && textField != "" && (textField?.count)! < 31 {
 				self.playerName = textField
 			} else {
 				self.generatePlayerName(message: "You must enter a valid name.")
@@ -157,6 +157,7 @@ class WaitingRoomViewController: UIViewController {
 	
 	@IBAction func unwindFromGame(segue: UIStoryboardSegue) {
 		self.players = []
+        isWaiting = true
 		startButton.setTitle("Tap to play!", for: .normal)
 	}
 }

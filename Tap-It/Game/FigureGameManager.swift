@@ -87,7 +87,7 @@ class FigureGameManager {
 		}
 	}
 	
-    func checkAnswer(_ answer: Int) {
+    func checkAnswer(_ answer: Int) -> Bool {
 		
 		// 2: todos numeros das imagens do deck
         let deckFigures = deck[currentDeckCard].face.map { (figure) -> Int in
@@ -106,9 +106,11 @@ class FigureGameManager {
 			let data = Data(bytes: [event,card,peer])
 			// 5: manda para o host o evento do click correto
 			self.service.sendBlobb(data)
+			return true
         } else {
 			// 6: chama o delegate method que bloqueia o jogador
             delegate?.blockPlayer()
+			return false
         }
     }
 	

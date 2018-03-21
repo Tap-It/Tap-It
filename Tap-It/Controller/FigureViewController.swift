@@ -1,5 +1,6 @@
 import UIKit
 import AudioToolbox
+import AVFoundation
 
 class FigureViewController: UIViewController {
 	
@@ -18,6 +19,7 @@ class FigureViewController: UIViewController {
 	var topScore = [PlayerScore]()
 	var deckLabel: UILabel!
 	var playerCardLabel: UILabel!
+	var audioPlayer: AVAudioPlayer?
 	
 	var gameManager:FigureGameManager?
 	let imageSizeRatio = CGFloat(65.0 / 300.0)
@@ -64,6 +66,24 @@ class FigureViewController: UIViewController {
 		loadLayout()
 	}
 	
+	private func playSound(gotAnswer:Bool) {
+		
+		let resourceName = gotAnswer ? "right" : "wrong"
+		guard let url = Bundle.main.url(forResource: resourceName, withExtension: "wav") else { return }
+		
+		do {
+			try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+			try AVAudioSession.sharedInstance().setActive(true)
+			audioPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
+			/* iOS 10 and earlier require the following line:
+			player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+			guard let audioPlayer = audioPlayer else { return }
+			audioPlayer.play()
+		} catch let error {
+			print(error.localizedDescription)
+		}
+	}
+	
 	private func setupCard(_ gotAnswer: Bool) {
 		
 		if firstShow {
@@ -106,6 +126,8 @@ class FigureViewController: UIViewController {
 		self.loadTopCard()
 		
 		if gotAnswer {
+			
+			self.playSound(gotAnswer: true)
             
             for view in bottomCard.subviews {
                 if let view = view as? UIImageView {
@@ -238,7 +260,10 @@ class FigureViewController: UIViewController {
 		guard let imageNumber = view.restorationIdentifier else {
 			return
 		}
-		self.gameManager?.checkAnswer(Int(imageNumber)!)
+		let result = self.gameManager?.checkAnswer(Int(imageNumber)!)
+		if !result! {
+			self.playSound(gotAnswer: false)
+		}
 	}
     
     private func blockClick() {

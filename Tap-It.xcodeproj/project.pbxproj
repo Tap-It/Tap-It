@@ -82,6 +82,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07D2A08C2062D04600BD90AB /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				7AD43EDE2062B356005F2117 /* rightt.wav */,
+				7AD43EDA2062A9C7005F2117 /* right.wav */,
+				7AD43EDB2062A9C7005F2117 /* wrong.wav */,
+				07909D6D20606EC200CDEB4E /* Janda.ttf */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		7A420D332055D67C00B50C6A /* Game */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,9 +128,6 @@
 		7A57ED4F204F43E7004815B5 = {
 			isa = PBXGroup;
 			children = (
-				7AD43EDE2062B356005F2117 /* rightt.wav */,
-				7AD43EDA2062A9C7005F2117 /* right.wav */,
-				7AD43EDB2062A9C7005F2117 /* wrong.wav */,
 				7A57ED5A204F43E7004815B5 /* Tap-It */,
 				7A57ED6F204F43E7004815B5 /* Tap-ItTests */,
 				7A57ED59204F43E7004815B5 /* Products */,
@@ -143,7 +151,7 @@
 				7A420D342055D69E00B50C6A /* Model */,
 				7A420D352055D6AF00B50C6A /* Controller */,
 				7A57ED62204F43E7004815B5 /* Assets.xcassets */,
-				07909D6D20606EC200CDEB4E /* Janda.ttf */,
+				07D2A08C2062D04600BD90AB /* Support */,
 				7A57ED64204F43E7004815B5 /* LaunchScreen.storyboard */,
 				7A57ED67204F43E7004815B5 /* Info.plist */,
 			);

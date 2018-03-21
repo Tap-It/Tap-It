@@ -68,7 +68,7 @@ class FigureViewController: UIViewController {
 	
 	private func playSound(gotAnswer:Bool) {
 		
-		let resourceName = gotAnswer ? "right" : "wrong"
+		let resourceName = gotAnswer ? "rightt" : "wrong"
 		guard let url = Bundle.main.url(forResource: resourceName, withExtension: "wav") else { return }
 		
 		do {

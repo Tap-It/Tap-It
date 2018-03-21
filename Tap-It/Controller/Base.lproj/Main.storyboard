@@ -72,7 +72,7 @@
                                     <constraint firstAttribute="height" constant="100" id="BBQ-1V-jn6"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
-                                <state key="normal" title="Tap to play!">
+                                <state key="normal" title="Waiting for more players...">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>

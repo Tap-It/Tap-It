@@ -28,6 +28,15 @@ class WaitingRoomViewController: UIViewController {
 			for i in 0..<self.players.count {
 				self.addPlayerToView(name: self.players[i].1, imageNum:self.players[i].0, slot: i)
 			}
+			self.updateButtonLabel()
+		}
+	}
+	
+	func updateButtonLabel() {
+		if self.players.count > 1 {
+			self.startButton.setTitle("Tap to play!", for: .normal)
+		} else {
+			self.startButton.setTitle("Waiting for more players...", for: .normal)
 		}
 	}
 
@@ -140,10 +149,12 @@ class WaitingRoomViewController: UIViewController {
 	}
 	
 	@IBAction func handleClick(_ sender: UIButton) {
-		sender.titleLabel?.lineBreakMode = .byWordWrapping
-		sender.titleLabel?.textAlignment = .center
-		sender.setTitle("Ready!\n (waiting for players)", for: .normal)
-		self.manager.joinGame()
+		if self.players.count > 1 {
+			sender.titleLabel?.lineBreakMode = .byWordWrapping
+			sender.titleLabel?.textAlignment = .center
+			sender.setTitle("Ready!\n (waiting for players)", for: .normal)
+			self.manager.joinGame()
+		}
 	}
 	
 	@IBAction func unwindFromGame(segue: UIStoryboardSegue) {

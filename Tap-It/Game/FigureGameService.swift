@@ -288,6 +288,9 @@ extension FigureGameService: MCSessionDelegate {
 			if peerID == self.hostID {
 				delegate?.lostHost()
 			}
+            if isHost && session.connectedPeers.count == 0 {
+                delegate?.lostHost()
+            }
 		}
 	}
 	

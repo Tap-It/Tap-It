@@ -1,11 +1,3 @@
-//
-//  Tap_ItTests.swift
-//  Tap-ItTests
-//
-//  Created by Jonathan Oliveira on 06/03/18.
-//  Copyright © 2018 Jonathan Oliveira. All rights reserved.
-//
-
 import XCTest
 @testable import Tap_It
 

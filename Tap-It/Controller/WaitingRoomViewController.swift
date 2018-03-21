@@ -128,11 +128,11 @@ class WaitingRoomViewController: UIViewController {
 			textField.borderStyle = .roundedRect
 		}
 		let ok = UIAlertAction(title: "That's me!", style: UIAlertActionStyle.default) { (action: UIAlertAction) in
-			let textField = alert.textFields![0]
-			if textField.text != nil && textField.text != "" {
-				self.playerName = textField.text!
+            let textField = alert.textFields![0].text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            if textField != nil && textField != "" && (textField?.count)! < 16 {
+				self.playerName = textField
 			} else {
-				self.generatePlayerName(message: "You must enter a name")
+				self.generatePlayerName(message: "You must enter a valid name.")
 			}
 		}
 		alert.addAction(ok)

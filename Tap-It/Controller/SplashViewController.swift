@@ -35,10 +35,6 @@ class SplashViewController: UIViewController {
 
 		Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(enterWatingRoom), userInfo: nil, repeats: false)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
 	
 	@objc func enterWatingRoom() {
 		self.performSegue(withIdentifier: "waiting", sender: nil)

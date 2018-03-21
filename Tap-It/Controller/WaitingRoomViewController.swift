@@ -1,4 +1,5 @@
 import UIKit
+import GameKit
 
 class WaitingRoomViewController: UIViewController {
 
@@ -8,6 +9,7 @@ class WaitingRoomViewController: UIViewController {
 	var playersViews = [UIView]()
 	var hasLayoutSlots = false
 	var chosenImages = Set<Int>()
+    var isWaiting = true
 
 	var playerName:String! {
 		didSet {
@@ -115,10 +117,6 @@ class WaitingRoomViewController: UIViewController {
 		self.manager.initPlayer(playerName: playerName!)
 	}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-	
 	private func generatePlayerName(message: String) {
 		let alert = UIAlertController(title: "Player Name", message: message,
 									  preferredStyle: UIAlertControllerStyle.alert)
@@ -172,10 +170,15 @@ extension WaitingRoomViewController: GameManagerWaitingRoomProtocol {
 	}
 
 	func callGameView() {
+        isWaiting = false
 		performSegue(withIdentifier: "start", sender: nil)
 	}
 
 	func closeWaitingRoom() {
-		dismiss(animated: true, completion: nil)
+        if !isWaiting {
+            isWaiting = true
+            dismiss(animated: true, completion: nil)
+        }
 	}
 }
+

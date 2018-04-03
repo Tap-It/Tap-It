@@ -10,7 +10,7 @@ Test your observational skills and your reflexes with your friends. A game of fa
 
 ### Rules
 
-Each player can see the top card from the deck (top card) and your own card (bottom card). The objective is to found the figure repeated on both cards. If you click faster than the other players, you get the card and the deck card changes to everyone. If you tap the wrong figure, you get block by 3 seconds or until other player find their respective figure. When deck cards are out, win who owns the largest number of cards.
+Each player sees two cards: the communal card (top card) and their private card (the bottom card). The goal is to find and be the first one to tap the single figure that is repeated on both cards. If you tap faster than all the other players, you get to steal the communal card to yourself and a new communal card is presented to everyone. If you tap the wrong figure, you get blocked for 3 seconds or until any other player find their respective figure. When the communal cards are out, the game ends and wins whoever owns the largest number of cards.
 
 ### The Game
 
@@ -30,7 +30,7 @@ Tapping the wrong image:
 
 ![Gameplay 4](Documentation/Gameplay_4.gif)
 
-Final of the game:
+The final score:
 
 ![Gameplay 5](Documentation/Gameplay_5.png)
 
@@ -38,25 +38,24 @@ Final of the game:
 
 * Swift
 * MultipeerConnectivity
-* Binary Data Structure
 * UIKit
 
 ### Multipeer Connectivity
 
 The game was made to play offline, between nearby devices. The app choose the best connection option (WiFi or Bluetooth) and create a server for the others players.
 
-### Binary Data Structure
-
-We decide to use the binary data structure to minimize the data flow between the peers, avoiding lag during the game.
-
 ### UIKit
 
 As a final project of Lighthouse Labs, we decide to use the UIKit as a challenge and to show that is possible to make a fun game without libraries as GameKit and SpriteKit.
 
+### Binary Data Structure
+
+We decide to use the binary data structure to minimize the data flow between the peers, avoiding lag during the game.
+
 ## Future Directions
 
-Features we would like to include in future version:
-* Connectivity multi-plataform
+Features we would like to include in future versions:
+* Multi-plataform connectivity (Android)
 * History of plays and statistics (e.g. avg time to found, number of wins)
 
 

@@ -245,6 +245,12 @@ class FigureGameManager {
 }
 
 extension FigureGameManager: FigureGameServiceDelegate {
+	
+	func restartService(name: String, serviceId: Int) {
+		self.removePlayer(serviceId: serviceId)
+		self.service = nil
+		self.initPlayer(playerName: name)
+	}
 
 	func addPlayer(name: String, serviceId:Int) {
 		if let newId = self.scoreBoard.addPlayer(name: name, serviceId: serviceId) {
@@ -491,7 +497,8 @@ extension MutableCollection {
 		guard c > 1 else { return }
 		
 		for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
-			let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+			let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+//			let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
 			let i = index(firstUnshuffled, offsetBy: d)
 			swapAt(firstUnshuffled, i)
 		}

@@ -9,6 +9,7 @@ protocol FigureGameServiceDelegate {
 	func addPlayer(name:String, serviceId:Int)
 	func removePlayer(serviceId:Int)
 	func lostHost()
+	func restartService(name:String, serviceId:Int)
 }
 
 class FigureGameService: NSObject {
@@ -289,7 +290,8 @@ extension FigureGameService: MCSessionDelegate {
 				delegate?.lostHost()
 			}
             if isHost && session.connectedPeers.count == 0 {
-                delegate?.lostHost()
+//                delegate?.lostHost()
+				delegate?.restartService(name: self.myPeerId.displayName, serviceId: self.getHashFromPeer())
             }
 		}
 	}

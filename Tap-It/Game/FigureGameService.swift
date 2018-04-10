@@ -42,11 +42,12 @@ class FigureGameService: NSObject {
 	}
 	
 	deinit {
+        self.delegate = nil
 		self.service.stopAdvertisingPeer()
 		self.browser.stopBrowsingForPeers()
 	}
 	
-	private func replicateFromHost(_ peerData: [String:String]) {
+    private func replicateFromHost(_ peerData: [String:String]) {
 		do {
 			let data = NSKeyedArchiver.archivedData(withRootObject: peerData)
 			try self.session.send(data, toPeers: session.connectedPeers, with: .reliable)
@@ -290,8 +291,8 @@ extension FigureGameService: MCSessionDelegate {
 				delegate?.lostHost()
 			}
             if isHost && session.connectedPeers.count == 0 {
-//                delegate?.lostHost()
-				delegate?.restartService(name: self.myPeerId.displayName, serviceId: self.getHashFromPeer())
+                delegate?.lostHost()
+//                delegate?.restartService(name: self.myPeerId.displayName, serviceId: self.getHashFromPeer())
             }
 		}
 	}

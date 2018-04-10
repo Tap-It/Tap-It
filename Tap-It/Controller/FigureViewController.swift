@@ -72,7 +72,7 @@ class FigureViewController: UIViewController {
 		guard let url = Bundle.main.url(forResource: resourceName, withExtension: "wav") else { return }
 		
 		do {
-			try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+			try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
 			try AVAudioSession.sharedInstance().setActive(true)
 			audioPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
 			/* iOS 10 and earlier require the following line:

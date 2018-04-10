@@ -17,7 +17,6 @@ class WaitingRoomViewController: UIViewController {
 			self.players = [(1,playerName)]
 		}
 	}
-//	var manager = FigureGameManager()
 	var manager:FigureGameManager!
 	
 	var players = [(Int, String)]() {

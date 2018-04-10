@@ -62,7 +62,6 @@ class FigureGameManager {
 	var delegateWatingRomm: GameManagerWaitingRoomProtocol?
 	var myGameId:Int = 0
 	var peers = [(Int, String)]()
-	var numOfPeersReady = 0
 	var counter = 3
 	var canProcessCache = true
 	var dataCache = [Data]() {
@@ -124,8 +123,6 @@ class FigureGameManager {
 	}
 	
 	func shouldStartCountdown() {
-		
-		if self.numOfPeersReady == self.scoreBoard.players.count {
 			Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
 				let event:UInt8 = UInt8(Event.Seconds.rawValue)
 				let second:UInt8 = UInt8(self.counter)
@@ -136,7 +133,6 @@ class FigureGameManager {
 					timer.invalidate()
 				}
 			})
-		}
 	}
 	
 	func informReady() {
@@ -195,7 +191,6 @@ class FigureGameManager {
 	}
 	
 	func checkStartGame() {
-		self.numOfPeersReady += 1
 		if self.scoreBoard.hasEverybodyJoined() {
 			var data = [String:Int]()
 			data["event"] = Event.Startgame.rawValue
@@ -496,7 +491,7 @@ extension MutableCollection {
 		guard c > 1 else { return }
 		
 		for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
-			let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+			let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
 			let i = index(firstUnshuffled, offsetBy: d)
 			swapAt(firstUnshuffled, i)
 		}

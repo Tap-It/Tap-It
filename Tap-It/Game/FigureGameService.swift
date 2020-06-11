@@ -85,7 +85,7 @@ extension FigureGameService: MCNearbyServiceAdvertiserDelegate {
 extension FigureGameService: FigureServiceProtocol {
 	
 	func getHashFromPeer() -> Int {
-		return self.myPeerId.hashValue
+        return self.myPeerId.displayName.hashValue
 	}
 	
 	// TODO: create a method that will rename the peer id name
@@ -150,7 +150,7 @@ extension FigureGameService: FigureServiceProtocol {
 				}
 			case Event.PlayerId.rawValue:
 				let serviceId = peerData["peer"] as? Int
-				if serviceId! == self.myPeerId.hashValue {
+                if serviceId! == self.myPeerId.displayName.hashValue {
 					delegate?.receive(peerData)
 				} else {
 					do {
@@ -174,7 +174,7 @@ extension FigureGameService: FigureServiceProtocol {
 				if isHost {
 					if let player = data["data"] as? Player {
 						let dict = ["event":Event.Card.rawValue ,"data":player.cards.last!]
-						if player.serviceId == self.myPeerId.hashValue {
+                        if player.serviceId == self.myPeerId.displayName.hashValue {
 							delegate?.receive(dict)
 						} else {
 							guard let peer = self.getPeerId(serviceId: player.serviceId!) else {
@@ -254,7 +254,7 @@ extension FigureGameService: FigureServiceProtocol {
 	
 	private func getPeerId(serviceId: Int) -> MCPeerID? {
 		for peer in session.connectedPeers {
-			if peer.hashValue == serviceId {
+            if peer.displayName.hashValue == serviceId {
 				return peer
 			}
 		}
@@ -265,7 +265,7 @@ extension FigureGameService: FigureServiceProtocol {
 extension FigureGameService: MCNearbyServiceBrowserDelegate {
 	
 	func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-		delegate?.removePlayer(serviceId: peerID.hashValue)
+        delegate?.removePlayer(serviceId: peerID.displayName.hashValue)
 	}
 	
 	func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
@@ -284,7 +284,7 @@ extension FigureGameService: MCSessionDelegate {
 	
 	func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
 		if state == .connected && isHost {
-			delegate?.addPlayer(name: peerID.displayName, serviceId:peerID.hashValue)
+            delegate?.addPlayer(name: peerID.displayName, serviceId:peerID.displayName.hashValue)
 		}
 		if state == .notConnected {
 			if peerID == self.hostID {

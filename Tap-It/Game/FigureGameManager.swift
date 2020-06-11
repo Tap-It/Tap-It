@@ -186,7 +186,8 @@ class FigureGameManager {
 	func joinGame() {
 		var data = [String:Any]()
 		data["event"] = Event.JoinGame.rawValue
-		data["data"] = self.service.getHashFromPeer()
+//		data["data"] = self.service.getHashFromPeer()
+        data["name"] = self.service.getName()
 		service.send(peerData: data)
 	}
 	
@@ -298,10 +299,12 @@ extension FigureGameManager: FigureGameServiceDelegate {
 			self.delegateWatingRomm?.updatePeersList(peers)
 		}
 		if event == Event.Startgame.rawValue {
-			delegateWatingRomm?.callGameView()
+            DispatchQueue.main.async {
+                self.delegateWatingRomm?.callGameView()
+            }
 		}
-		if event == Event.JoinGame.rawValue, let peer = data["data"] as? Int {
-			self.scoreBoard.playerIsJoining(serviceId: peer)
+		if event == Event.JoinGame.rawValue, let peerName = data["name"] as? String {
+            self.scoreBoard.playerIsJoining(playerName: peerName)
 			self.checkStartGame()
 		}
 		if event == Event.Card.rawValue {

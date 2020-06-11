@@ -41,9 +41,9 @@ class Scoreboard {
 		return true
 	}
 	
-	func playerIsJoining(serviceId: Int) {
+	func playerIsJoining(playerName: String) {
 		if let index = self.players.index(where: { (player) -> Bool in
-			return player.serviceId == serviceId
+			return player.name == playerName
 		}) {
 			self.players[index].hasJoined = true
 		}
